@@ -2,11 +2,11 @@
 require 'transfer/base'
 require 'pp'
 
-module CORE4
+module Fulmar
 
   module Transfer
 
-    class RsyncWithVersions < CORE4::Transfer::Base
+    class RsyncWithVersions < Fulmar::Transfer::Base
 
       DEFAULT_CONFIG = {
           temp_dir: 'temp',
@@ -34,7 +34,7 @@ module CORE4
 
       def prepare
         super
-        @remote_shell = CORE4::Service::Shell.new @config[:remote_path], ssh_user_and_host
+        @remote_shell = Fulmar::Service::Shell.new @config[:remote_path], ssh_user_and_host
         @remote_shell.debug = @config[:debug]
       end
 

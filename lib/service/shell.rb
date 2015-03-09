@@ -1,6 +1,6 @@
 require 'open3'
 
-module CORE4
+module Fulmar
 
   module Service
 

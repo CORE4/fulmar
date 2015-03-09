@@ -2,7 +2,7 @@
 require 'core'
 require 'service/shell'
 
-module CORE4
+module Fulmar
 
   module Transfer
 
@@ -29,7 +29,7 @@ module CORE4
       end
 
       def prepare
-        @local_shell = CORE4::Service::Shell.new @config[:local_path]
+        @local_shell = Fulmar::Service::Shell.new @config[:local_path]
         @local_shell.debug = @config[:debug]
         @prepared = true
       end

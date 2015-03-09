@@ -13,7 +13,7 @@ Gem::Specification.new do |s|
   s.files         = `git ls-files -z`.split("\x0")
   s.executables   = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }
   s.test_files    = spec.files.grep(%r{^(test|spec|features)/})
-  s.homepage      = 'http://git.core4.lan/core4internal/deploy'
+  s.homepage      = 'http://git.core4.lan/core4internal/fulmar_file_sync'
   s.license       = 'proprietary'
   s.require_paths = ['lib']
 end

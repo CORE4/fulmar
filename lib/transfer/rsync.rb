@@ -1,7 +1,7 @@
 
 require 'transfer/base'
 
-module CORE4
+module Fulmar
 
   module Transfer
 

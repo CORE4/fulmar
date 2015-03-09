@@ -28,7 +28,7 @@ module CORE4
 
       case @config[:type]
         when :rsync_with_versions
-          @deploy_service = CORE4::Transfer::RsyncWithVersions.new(@config)
+          @deploy_service = Fulmar::Transfer::RsyncWithVersions.new(@config)
         else
           raise "Transfer type '#{@config[:type]}' is not valid."
       end
