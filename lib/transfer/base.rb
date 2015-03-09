@@ -1,5 +1,4 @@
 
-require 'core'
 require 'service/shell'
 
 module Fulmar
