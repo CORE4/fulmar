@@ -1,0 +1,61 @@
+#!/usr/bin/env ruby
+
+require 'deploy'
+require 'yaml'
+require 'pp'
+
+###########################
+# This will all be put into a gem
+# Did not have my code from home so I found this on stackoverflow:
+symbolize = lambda do |h|
+ Hash === h ?
+   Hash[
+     h.map do |k, v|
+       [k.respond_to?(:to_sym) ? k.to_sym : k, symbolize[v]]
+     end
+   ] : h
+end
+
+###########################
+
+if !ARGV[0] or ARGV[0].empty? or !ARGV[1] or ARGV[1].empty?
+  STDERR.puts 'Usage: deploy path/to/config_file.yml <environment>'
+  exit 1
+end
+
+CONFIG_FILE = ARGV[0]
+ENVIRONMENT = ARGV[1].to_sym
+
+unless File.exists? CONFIG_FILE
+  STDERR.puts 'Config file not found'
+  exit 2
+end
+
+config = YAML.load_file(CONFIG_FILE)
+
+# convert key strings into symbols
+config = symbolize[config]
+
+unless config[:environments]
+  STDERR.puts 'Cannot read environment config'
+  exit 3
+end
+
+unless config[:environments][ENVIRONMENT]
+  STDERR.puts "Environment #{ENVIRONMENT} not configured."
+  exit 3
+end
+
+# Make sure a globally set vars get into the environment if not explicitly specified
+global_vars = [:local_path, :debug]
+global_vars.each do |key|
+  if config[:environments][:all][key] and not config[:environments][ENVIRONMENT][key]
+    config[:environments][ENVIRONMENT][key] = config[:environments][:all][key]
+  end
+end
+
+#pp config['environments'][ENVIRONMENT]
+
+deploy = CORE4::Deploy.new(config[:environments][ENVIRONMENT])
+
+puts "Deployed #{deploy.deploy}."
