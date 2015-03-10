@@ -22,8 +22,21 @@ module Fulmar
 
         def method_missing(name)
           if configuration[:environments][name]
-            prepare_environment(name)
+            get_environment(name)
           end
+        end
+
+        def environment(name)
+          environment = configuration[:environments][name.to_sym]
+
+          # Make sure a globally set vars get into the environment if not explicitly specified
+          global_vars = [:local_path, :debug]
+          global_vars.each do |key|
+            if configuration[:environments][:all][key] and not environment[key]
+              environment[key] = configuration[:environments][:all][key]
+            end
+          end
+          environment
         end
 
         protected
@@ -43,18 +56,6 @@ module Fulmar
           YAML.load_file(base_path + '/' + DEPLOYMENT_CONFIG_FILE).symbolize
         end
 
-        def prepare_environment(name)
-          environment = configuration[:environments][name.to_sym]
-
-          # Make sure a globally set vars get into the environment if not explicitly specified
-          global_vars = [:local_path, :debug]
-          global_vars.each do |key|
-            if configuration[:environments][:all][key] and not environment[key]
-              environment[key] = configuration[:environments][:all][key]
-            end
-          end
-          environment
-        end
       end
     end
   end

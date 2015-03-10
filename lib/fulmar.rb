@@ -7,6 +7,7 @@ require 'fulmar/domain/service/initialization_service'
 require 'fulmar/domain/service/application_service'
 require 'fulmar/domain/service/configuration_service'
 require 'fulmar/domain/service/common_helper_service'
+require 'fulmar_shell'
 
 require 'fulmar/infrastructure/service/composer_service'
 
