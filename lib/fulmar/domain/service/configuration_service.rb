@@ -5,12 +5,15 @@ module Fulmar
         FULMAR_FILE = 'Fulmarfile'
         FULMAR_CONFIGURATION = 'FulmarConfiguration'
 
-        attr_reader :base_path
-
         def initialize
-          @base_path = get_base_path
-          puts "Base path: #{@base_path}"
+          puts "Base path: #{base_path}"
         end
+
+        def base_path
+          @base_path ||= get_base_path
+        end
+
+        protected
 
         def get_base_path
           fulmar_file = Fulmar::Service::HelperService.reverse_file_lookup(Dir.pwd, FULMAR_FILE)
