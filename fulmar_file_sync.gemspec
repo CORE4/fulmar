@@ -10,9 +10,8 @@ Gem::Specification.new do |s|
   s.description   = 'This gem adds file sync functionality to the fulmar deployment tool. It can be used standalone though.'
   s.authors       = ['Gerrit Visscher']
   s.email         = 'g.visscher@core4.de'
-  s.files         = `git ls-files -z`.split("\x0")
-  s.executables   = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }
-  s.test_files    = spec.files.grep(%r{^(test|spec|features)/})
+  s.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
+  s.executables   = s.files.grep(%r{^bin/}) { |f| File.basename(f) }
   s.homepage      = 'http://git.core4.lan/core4internal/fulmar_file_sync'
   s.license       = 'proprietary'
   s.require_paths = ['lib']
