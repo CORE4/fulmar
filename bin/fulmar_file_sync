@@ -3,20 +3,7 @@
 require 'fulmar_file_sync'
 require 'yaml'
 require 'pp'
-
-###########################
-# This will all be put into a gem
-# Did not have my code from home so I found this on stackoverflow:
-symbolize = lambda do |h|
- Hash === h ?
-   Hash[
-     h.map do |k, v|
-       [k.respond_to?(:to_sym) ? k.to_sym : k, symbolize[v]]
-     end
-   ] : h
-end
-
-###########################
+require 'ruby_wings'
 
 if !ARGV[0] or ARGV[0].empty? or !ARGV[1] or ARGV[1].empty?
   STDERR.puts 'Usage: deploy path/to/config_file.yml <environment>'
@@ -31,10 +18,7 @@ unless File.exists? CONFIG_FILE
   exit 2
 end
 
-config = YAML.load_file(CONFIG_FILE)
-
-# convert key strings into symbols
-config = symbolize[config]
+config = YAML.load_file(CONFIG_FILE).symbolize
 
 unless config[:environments]
   STDERR.puts 'Cannot read environment config'
