@@ -7,5 +7,7 @@ require 'fulmar/domain/service/initialization_service'
 require 'fulmar/domain/service/application_service'
 require 'fulmar/domain/service/configuration_service'
 
+require 'ruby_wings'
+
 bootstrap = Fulmar::Service::BootstrapService.new
 bootstrap.fly

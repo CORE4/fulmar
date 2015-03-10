@@ -1,9 +1,12 @@
+require 'yaml'
+
 module Fulmar
   module Domain
     module Service
       class ConfigurationService
         FULMAR_FILE = 'Fulmarfile'
         FULMAR_CONFIGURATION = 'FulmarConfiguration'
+        DEPLOYMENT_CONFIG_FILE = 'deployment.yml'
 
         def initialize
           puts "Base path: #{base_path}"
@@ -11,6 +14,16 @@ module Fulmar
 
         def base_path
           @base_path ||= get_base_path
+        end
+
+        def configuration
+          @config ||= load_configuration
+        end
+
+        def method_missing(name)
+          if configuration[:environments][name]
+            prepare_environment(name)
+          end
         end
 
         protected
@@ -24,6 +37,23 @@ module Fulmar
           end
 
           File.dirname(fulmar_file)
+        end
+
+        def load_configuration
+          YAML.load_file(base_path + '/' + DEPLOYMENT_CONFIG_FILE).symbolize
+        end
+
+        def prepare_environment(name)
+          environment = configuration[:environments][name.to_sym]
+
+          # Make sure a globally set vars get into the environment if not explicitly specified
+          global_vars = [:local_path, :debug]
+          global_vars.each do |key|
+            if configuration[:environments][:all][key] and not environment[key]
+              environment[key] = configuration[:environments][:all][key]
+            end
+          end
+          environment
         end
       end
     end
