@@ -57,11 +57,6 @@ module Fulmar
         wait_thr.value == 0
       end
 
-      def double_escape_single_quotes(text)
-        #text.gsub('\\', '\\\\\\\\').gsub("'", '\\\\\\\\\'') #triple
-        text.gsub('\\', '\\\\\\\\').gsub("'", "\\\\\\\\'")
-      end
-
       def escape_for_sh(text)
         text.gsub('\\', '\\\\').gsub("'", "'\\\\''")
       end
