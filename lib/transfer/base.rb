@@ -1,5 +1,5 @@
 
-require 'service/shell'
+require 'fulmar_shell'
 
 module Fulmar
 
@@ -28,7 +28,7 @@ module Fulmar
       end
 
       def prepare
-        @local_shell = Fulmar::Service::Shell.new @config[:local_path]
+        @local_shell = Fulmar::Infrastructure::Service::ShellService.new @config[:local_path]
         @local_shell.debug = @config[:debug]
         @prepared = true
       end

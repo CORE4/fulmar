@@ -34,7 +34,7 @@ module Fulmar
 
       def prepare
         super
-        @remote_shell = Fulmar::Service::Shell.new @config[:remote_path], ssh_user_and_host
+        @remote_shell = Fulmar::Infrastructure::Service::ShellService.new @config[:remote_path], ssh_user_and_host
         @remote_shell.debug = @config[:debug]
       end
 
