@@ -3,7 +3,7 @@ require 'transfer/rsync_with_versions'
 require 'bundler'
 require 'ruby_wings'
 
-module CORE4
+module Fulmar
 
   class FileSync
 
