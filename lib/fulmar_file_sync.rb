@@ -5,7 +5,7 @@ require 'ruby_wings'
 
 module CORE4
 
-  class Deploy
+  class FileSync
 
     DEFAULT_CONFIG = {
         debug: false,

@@ -40,6 +40,6 @@ end
 
 #pp config['environments'][ENVIRONMENT]
 
-deploy = CORE4::Deploy.new(config[:environments][ENVIRONMENT])
+deploy = Fulmar::FileSync.new(config[:environments][ENVIRONMENT])
 
 puts "Deployed #{deploy.deploy}."
