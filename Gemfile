@@ -1,6 +1,8 @@
-source 'https://rubygems.org'
+source 'http://dione.core4.lan:9292'
 
 # Specify your gem's dependencies in fulmar.gemspec
 gemspec
 
-gem 'ruby_wings', :git => 'https://github.com/kayssun/ruby_wings.git'
+gem 'ruby_wings'
+gem 'fulmar_shell'
+gem 'fulmar_file_sync'
