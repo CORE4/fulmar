@@ -20,9 +20,7 @@ module Fulmar
 
           def initialize(config)
             @config = DEFAULT_CONFIG.deep_merge(config)
-
-            # Add one slash at the end of the local path (rsync specific)
-            @config[:local_path] = @config[:local_path].chomp('/') + '/'
+            super(@config)
           end
 
           def transfer
@@ -38,7 +36,7 @@ module Fulmar
             options << "--chmod='#{@config[:rsync][:chmod]}'" if @config[:rsync][:chmod]
             options << '--delete' if @config[:rsync][:delete]
 
-            "rsync #{options.join(' ')} '#{@config[:local_path]}' '#{ssh_user_and_host}:#{@config[:remote_path]}'"
+            "rsync #{options.join(' ')} '#{@config[:local_path]}/' '#{ssh_user_and_host}:#{@config[:remote_path]}'"
           end
         end
 

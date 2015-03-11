@@ -22,6 +22,11 @@ module Fulmar
 
           def initialize(config)
             @config = DEFAULT_CONFIG.merge(config)
+
+            # Remove trailing slashes
+            @config[:local_path] = @config[:local_path].chomp('/') if @config[:local_path]
+            @config[:remote_path] = @config[:remote_path].chomp('/') if @config[:remote_path]
+
             @prepared = false
           end
 

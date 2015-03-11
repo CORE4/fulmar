@@ -28,10 +28,6 @@ module Fulmar
             @config = DEFAULT_CONFIG.deep_merge(config)
             super(@config)
             @release_time = Time.now
-
-            # Remove trailing slashes
-            @config[:local_path] = @config[:local_path].chomp('/') if @config[:local_path]
-            @config[:remote_path] = @config[:remote_path].chomp('/') if @config[:remote_path]
           end
 
           def prepare
