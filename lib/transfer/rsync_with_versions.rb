@@ -84,7 +84,7 @@ protected
       end
 
       def create_symlink
-        @remote_shell.run ["rm #{@config[:remote_path]}current", "ln -s #{release_path} current"]
+        @remote_shell.run ["rm -f #{@config[:remote_path]}/current", "ln -s #{release_dir} current"]
       end
 
     end
