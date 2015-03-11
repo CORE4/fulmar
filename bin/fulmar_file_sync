@@ -40,6 +40,7 @@ end
 
 #pp config['environments'][ENVIRONMENT]
 
-deploy = Fulmar::FileSync.new(config[:environments][ENVIRONMENT])
+deploy = Fulmar::FileSync.create_transfer(config[:environments][ENVIRONMENT])
 
-puts "Deployed #{deploy.deploy}."
+puts "Deployed #{deploy.transfer}."
+puts "Changes are #{deploy.publish ? '' : 'not '}live."

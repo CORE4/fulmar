@@ -7,30 +7,38 @@ module Fulmar
 
     class Base
 
-      DEFAULT_CONFIG = { debug: false }
+      DEFAULT_CONFIG = {
+          debug: false,
+          host: nil,
+          user: '',
+          password: '',
+          remote_path: nil,
+          local_path: '.',
+          type: :rsync_with_versions
+      }
 
       attr_accessor :config
 
       def initialize(config)
         @config = DEFAULT_CONFIG.merge(config)
         @prepared = false
-
-        unless config_valid?
-          raise 'Config invalid!'
-        end
-
       end
 
       # Test the supplied config for required parameters
-      def config_valid?
+      def test_config
         required = [:host, :remote_path, :local_path]
-        required.inject(true) {|prev, required_key| (prev and @config.include?(required_key) and not @config[required_key].empty?) }
+        required.each {|key| raise "Configuration is missing required setting '#{key}'." if !@config.include?(key) or @config[key].empty? }
       end
 
       def prepare
         @local_shell = Fulmar::Infrastructure::Service::ShellService.new @config[:local_path]
         @local_shell.debug = @config[:debug]
         @prepared = true
+      end
+
+      def publish
+        # Placeholder for consistent api, currently only implemented in rsync_with_versions
+        true
       end
 
       protected

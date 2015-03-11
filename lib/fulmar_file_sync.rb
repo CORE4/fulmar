@@ -7,42 +7,19 @@ module Fulmar
 
   class FileSync
 
-    DEFAULT_CONFIG = {
-        debug: false,
-        host: nil,
-        user: '',
-        password: '',
-        remote_path: nil,
-        local_path: '.',
-        type: :rsync_with_versions
-    }
-
-    attr_accessor :config
-
-    def initialize(config = [])
-      self.config = config
-    end
-
-    def config=(config)
-      @config = DEFAULT_CONFIG.deep_merge(config)
-
-      case @config[:type]
-        when :rsync_with_versions
-          @deploy_service = Fulmar::Transfer::RsyncWithVersions.new(@config)
+    def self.create_transfer(config)
+      case config[:type]
+        when 'rsync_with_versions'
+          transfer_model = Fulmar::Transfer::RsyncWithVersions.new(config)
+        when 'rsync'
+          transfer_model = Fulmar::Transfer::Rsync.new(config)
         else
-          raise "Transfer type '#{@config[:type]}' is not valid."
+          help = ''
+          help = 'Add a "type: " field to your deployment yaml file. ' if config[:type] == ''
+          raise "Transfer type '#{config[:type]}' is not valid. #{help}Valid values are: rsync, rsync_with_versions."
       end
 
-      if @deploy_service.config_valid?
-        true
-      else
-        STDERR.puts 'Config not valid.'
-        false
-      end
-    end
-
-    def deploy
-      @deploy_service.transfer
+      transfer_model
     end
 
   end
