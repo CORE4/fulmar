@@ -1,5 +1,6 @@
 
 require 'transfer/rsync_with_versions'
+require 'transfer/rsync'
 require 'bundler'
 require 'ruby_wings'
 
