@@ -8,10 +8,6 @@ module Fulmar
         FULMAR_CONFIGURATION = 'FulmarConfiguration'
         DEPLOYMENT_CONFIG_FILE = 'deployment.yml'
 
-        def initialize
-          puts "Base path: #{base_path}"
-        end
-
         def base_path
           @base_path ||= get_base_path
         end
