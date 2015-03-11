@@ -5,4 +5,4 @@ gemspec
 
 gem 'ruby_wings'
 gem 'fulmar_shell'
-gem 'fulmar_file_sync'
+gem 'fulmar_file_sync', '>= 0.3.1'

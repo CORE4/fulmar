@@ -32,6 +32,10 @@ module Fulmar
           @remote_shell ||= Fulmar::Infrastructure::Service::ShellService.new configuration[:remote_path], configuration[:host]
         end
 
+        def file_sync
+          @file_sync ||= Fulmar::FileSync.create_transfer configuration
+        end
+
       end
 
     end
