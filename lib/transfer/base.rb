@@ -34,6 +34,7 @@ module Fulmar
           def test_config
             required = [:host, :remote_path, :local_path]
             required.each {|key| raise "Configuration is missing required setting '#{key}'." if !@config.include?(key) or @config[key].empty? }
+            raise ':remote_path must be absolute' if @config[:remote_path][0,1] != '/'
           end
 
           def prepare
