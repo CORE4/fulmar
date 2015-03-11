@@ -14,8 +14,7 @@ module Fulmar
         when 'rsync'
           transfer_model = Fulmar::Infrastructure::Service::Transfer::Rsync.new(config)
         else
-          help = ''
-          help = 'Add a "type: " field to your deployment yaml file. ' if config[:type] == ''
+          help = config[:type] == '' ? 'Add a "type: " field to your deployment yaml file. ' : ''
           raise "Transfer type '#{config[:type]}' is not valid. #{help}Valid values are: rsync, rsync_with_versions."
       end
 
