@@ -4,7 +4,7 @@ require 'transfer/rsync_with_versions'
 class RsyncWithVersionsTest < MiniTest::Unit::TestCase
 
   def setup
-    @transfer = Fulmar::Transfer::RsyncWithVersions.new({
+    @transfer = Fulmar::Infrastructure::Service::Transfer::RsyncWithVersions.new({
                                           host: 'example.com',
                                           remote_dir: '/tmp',
                                           rsync: {

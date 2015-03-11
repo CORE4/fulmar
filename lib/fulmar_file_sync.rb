@@ -10,9 +10,9 @@ module Fulmar
     def self.create_transfer(config)
       case config[:type]
         when 'rsync_with_versions'
-          transfer_model = Fulmar::Transfer::RsyncWithVersions.new(config)
+          transfer_model = Fulmar::Infrastructure::Service::Transfer::RsyncWithVersions.new(config)
         when 'rsync'
-          transfer_model = Fulmar::Transfer::Rsync.new(config)
+          transfer_model = Fulmar::Infrastructure::Service::Transfer::Rsync.new(config)
         else
           help = ''
           help = 'Add a "type: " field to your deployment yaml file. ' if config[:type] == ''
