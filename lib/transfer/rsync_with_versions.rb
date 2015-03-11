@@ -47,9 +47,6 @@ module Fulmar
             create_paths
             @local_shell.run rsync_command
             copy_temp_to_release
-
-            # Return release_path for other tasks to use later
-            release_path
           end
 
           def publish
