@@ -20,6 +20,11 @@ module Fulmar
 
           def initialize(config)
             @config = DEFAULT_CONFIG.deep_merge(config)
+
+            if @config[:rsync][:exclude_file].blank? and File.exists?(@config[:local_path]+'/.rsyncignore')
+              @config[:rsync][:exclude_file] = @config[:local_path]+'/.rsyncignore'
+            end
+
             super(@config)
           end
 

@@ -16,7 +16,7 @@ module Fulmar
               shared_dir: 'shared',
               rsync: {
                   exclude: nil,
-                  exclude_file: '.rsyncignore',
+                  exclude_file: nil,
                   chown: nil,
                   chmod: nil,
                   delete: true
@@ -26,6 +26,11 @@ module Fulmar
 
           def initialize(config)
             @config = DEFAULT_CONFIG.deep_merge(config)
+
+            if @config[:rsync][:exclude_file].blank? and File.exists?(@config[:local_path]+'/.rsyncignore')
+              @config[:rsync][:exclude_file] = @config[:local_path]+'/.rsyncignore'
+            end
+
             super(@config)
             @release_time = Time.now
           end
