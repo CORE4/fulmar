@@ -1,5 +1,5 @@
 
-require 'transfer/base'
+require 'fulmar/infrastructure/service/transfer/base'
 
 module Fulmar
   module Infrastructure

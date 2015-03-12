@@ -1,8 +1,6 @@
 
-require 'transfer/rsync_with_versions'
-require 'transfer/rsync'
-require 'bundler'
-require 'ruby_wings'
+require 'fulmar/infrastructure/service/transfer/rsync'
+require 'fulmar/infrastructure/service/transfer/rsync_with_versions'
 
 module Fulmar
 

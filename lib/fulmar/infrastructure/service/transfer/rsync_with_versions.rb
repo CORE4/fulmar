@@ -1,6 +1,5 @@
 
-require 'transfer/base'
-require 'pp'
+require 'fulmar/infrastructure/service/transfer/base'
 require 'time'
 require 'ruby_wings'
 
