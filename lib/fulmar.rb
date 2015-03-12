@@ -7,7 +7,7 @@ require 'fulmar/service/logger_service'
 require 'fulmar/domain/service/initialization_service'
 require 'fulmar/domain/service/application_service'
 require 'fulmar/domain/service/configuration_service'
-require 'fulmar/domain/service/common_helper_service'
+require 'fulmar/service/common_helper_service'
 require 'fulmar/domain/service/file_sync_service'
 
 require 'fulmar/infrastructure/service/composer_service'
