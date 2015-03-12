@@ -29,7 +29,8 @@ module Fulmar
                   delete: true
               },
               symlinks: {},
-              limit_releases: 10
+              limit_releases: 10,
+              shared: []
           }
 
           def initialize(config)
@@ -55,7 +56,7 @@ module Fulmar
           def transfer
             prepare unless @prepared
 
-            create_paths and @local_shell.run(rsync_command) and copy_temp_to_release
+            create_paths and @local_shell.run(rsync_command) and copy_temp_to_release and add_shared
           end
 
           # Publishes the current release (i.e. sets the 'current' symlink)
@@ -161,6 +162,19 @@ module Fulmar
           # @return [true, false] success
           def create_symlink(release = nil)
             @remote_shell.run ["rm -f #{@config[:remote_path]}/current", "ln -s #{release ? @config[:releases_dir]+'/'+release : release_dir} current"]
+          end
+
+          # Creates symlinks into the shared folder
+          #
+          # An entry in :shared might be "data/resources/images", so we first need to create
+          # the directory "data/resources" in the release dir and afterwards create the link
+          def add_shared
+            @config[:shared].each do |dir|
+              @remote_shell.run [
+                  "mkdir -p \"#{release_dir}/#{File.dirname(dir)}\"",
+                  "ln \"#{@config[:shared_dir]}/#{dir}\" \"#{release_dir}/#{dir}\""
+              ]
+            end
           end
         end
 
