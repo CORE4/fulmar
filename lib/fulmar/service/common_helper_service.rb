@@ -13,11 +13,11 @@ module Fulmar
         end
 
         def full_configuration
-          @config_service ||= Fulmar::Domain::Service::ConfigurationService.new
+          (@config_service ||= Fulmar::Domain::Service::ConfigurationService.new).configuration
         end
 
         def configuration
-          full_configuration.environment(@environment)
+          (@config_service ||= Fulmar::Domain::Service::ConfigurationService.new).environment(@environment)
         end
 
         def composer(command, arguments = [])
