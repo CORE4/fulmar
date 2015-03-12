@@ -11,7 +11,7 @@ Gem::Specification.new do |spec|
   spec.summary       = %q{A deployment task manager.}
   spec.description   = %q{Fulmar is a task manager for deployments.}
   spec.homepage      = 'http://git.core4.de/core4internal/fulmar'
-  spec.license       = 'proprietary'
+  spec.license       = 'MIT'
 
   spec.files         = `git ls-files -z`.split("\x0")
   spec.executables   = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }
