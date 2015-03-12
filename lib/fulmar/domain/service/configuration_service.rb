@@ -18,7 +18,7 @@ module Fulmar
 
         def method_missing(name)
           if configuration[:environments][name]
-            get_environment(name)
+            environment(name)
           end
         end
 
