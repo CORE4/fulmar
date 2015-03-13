@@ -1,13 +1,7 @@
 module Fulmar
   module Domain
     module Service
-      class InitializationService
-
-        def initialize
-
-        end
-
-      end
+      class InitializationService; end
     end
   end
 end

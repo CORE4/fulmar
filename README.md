@@ -1,6 +1,6 @@
 # Fulmar
 
-Fulmar is a task manager for deployments
+Fulmar is a task manager for deployments.
 
 ## Installation
 

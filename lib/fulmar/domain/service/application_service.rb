@@ -3,11 +3,11 @@ require 'rake'
 module Fulmar
   module Domain
     module Service
+      # The main application which extends rake
       class ApplicationService < Rake::Application
-
         def initialize
           super
-          @rakefiles = %w{fulmarfile Fulmarfile fulmarfile.rb Fulmarfile.rb}
+          @rakefiles = %w(fulmarfile Fulmarfile fulmarfile.rb Fulmarfile.rb)
           @rakefiles.push(*fulmar_tasks)
         end
 
@@ -22,7 +22,7 @@ module Fulmar
 
         # Add fulmar application tasks
         def fulmar_tasks
-          Dir.glob(File.expand_path(File.join(File.dirname(__FILE__),'../','task')) + '/*.rake')
+          Dir.glob(File.expand_path(File.join(File.dirname(__FILE__), '../', 'task')) + '/*.rake')
         end
       end
     end

@@ -1,11 +1,11 @@
 module Fulmar
   module Service
+    # Provides internal helper methods
     class HelperService
       class << self
         ##
-        # Reverse file lookup in path 
-        # @param path [String] 
-        #
+        # Reverse file lookup in path
+        # @param path [String]
         def reverse_file_lookup(path, filename)
           paths = get_parent_directory_paths(path)
 
@@ -29,11 +29,7 @@ module Fulmar
 
           parent_dir_path = File.expand_path('..', path)
 
-          unless parent_dir_path === '/'
-            paths = get_parent_directory_paths(parent_dir_path, paths)
-          end
-
-          paths
+          parent_dir_path == '/' ? paths : get_parent_directory_paths(parent_dir_path, paths)
         end
       end
     end

@@ -1,16 +1,11 @@
 require 'fulmar/domain/service/configuration_service'
 
 module Fulmar
-
   module Domain
-
     module Service
-
+      # Provides the helper methods used in the tasks
       module CommonHelperService
-
-        def use_environment(name)
-          @environment = name
-        end
+        attr_accessor :environment
 
         def full_configuration
           (@config_service ||= Fulmar::Domain::Service::ConfigurationService.new).configuration
@@ -35,11 +30,7 @@ module Fulmar
         def file_sync
           @file_sync ||= Fulmar::FileSync.create_transfer configuration
         end
-
       end
-
     end
-
   end
-
 end
