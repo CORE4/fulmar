@@ -168,13 +168,23 @@ module Fulmar
           #
           # An entry in :shared might be "data/resources/images", so we first need to create
           # the directory "data/resources" in the release dir and afterwards create the link
+          # @return [true, false] success
           def add_shared
+            commands = [] # Collect all remote commands first, then execute them in one step to avoid reconnecting very often
             @config[:shared].each do |dir|
-              @remote_shell.run [
-                  "mkdir -p \"#{release_dir}/#{File.dirname(dir)}\"",
-                  "ln \"#{@config[:shared_dir]}/#{dir}\" \"#{release_dir}/#{dir}\""
-              ]
+              shared_exists = @remote_shell.run "test -d \"#{@config[:shared_dir]}/#{dir}\""
+              original_exists = @remote_shell.run "test -d \"#{release_dir}/#{dir}\""
+              if original_exists and not shared_exists
+                commands << "mkdir -p \"#{@config[:shared_dir]}/#{File.dirname(dir)}\""
+                commands << "cp -r \"#{release_dir}/#{dir}\" \"#{@config[:shared_dir]}/#{File.dirname(dir)}\""
+              end
+
+              commands << "rm -fr \"#{release_dir}/#{dir}\""
+              commands << "mkdir -p \"#{release_dir}/#{File.dirname(dir)}\"" unless original_exists
+              commands << "ln \"#{@config[:shared_dir]}/#{dir}\" \"#{release_dir}/#{dir}\""
             end
+
+            @remote_shell.run commands
           end
         end
 
