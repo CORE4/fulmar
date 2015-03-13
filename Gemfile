@@ -7,5 +7,5 @@ gem 'rake'
 
 source 'http://dione.core4.lan:9292' do
   gem 'ruby_wings'
-  gem 'fulmar_shell'
+  gem 'fulmar-shell', '>= 1.1.0'
 end

@@ -11,8 +11,8 @@ require 'fulmar/service/common_helper_service'
 require 'fulmar/domain/service/file_sync_service'
 
 require 'fulmar/infrastructure/service/composer_service'
+require 'fulmar/infrastructure/service/shell_service'
 
-require 'fulmar_shell'
 require 'ruby_wings'
 
 bootstrap = Fulmar::Service::BootstrapService.new
