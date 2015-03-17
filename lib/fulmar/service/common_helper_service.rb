@@ -8,11 +8,11 @@ module Fulmar
         attr_accessor :environment
 
         def full_configuration
-          (@config_service ||= Fulmar::Domain::Service::ConfigurationService.new).configuration
+          (@config_service ||= Fulmar::Domain::Service::ConfigurationService.instance).configuration
         end
 
         def configuration
-          (@config_service ||= Fulmar::Domain::Service::ConfigurationService.new).environment(@environment)
+          (@config_service ||= Fulmar::Domain::Service::ConfigurationService.instance)
         end
 
         def composer(command, arguments = [])
