@@ -83,13 +83,11 @@ module Fulmar
             prepare unless @prepared
             @remote_shell.run "ls -1 '#{@config[:releases_dir]}'"
             list = @remote_shell.last_output.select { |dir| dir.match(/^\d{4}-\d{2}-\d{2}_\d{6}/) }
-            if plain
-              list
-            else
-              current = current_release
-              list.collect do |item|
-                Time.strptime(item, TIME_FOLDER).strftime(TIME_READABLE) + (item == current ? ' *' : '')
-              end
+            return list if plain
+
+            current = current_release
+            list.collect do |item|
+              Time.strptime(item, TIME_FOLDER).strftime(TIME_READABLE) + (item == current ? ' *' : '')
             end
           end
 
