@@ -1,4 +1,4 @@
-require 'fulmar-shell'
+require 'fulmar/shell'
 
 module Fulmar
   module Infrastructure
