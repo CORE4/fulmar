@@ -4,6 +4,7 @@ module Fulmar
   module Domain
     module Service
       # Loads and prepares the configuration from the yaml file
+      # TODO: Clone target configuration when used as a parameter to another service so an environment change won't affect it
       class ConfigurationService
         FULMAR_FILE = 'Fulmarfile'
         FULMAR_CONFIGURATION = 'FulmarConfiguration'
