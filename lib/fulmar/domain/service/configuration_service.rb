@@ -26,7 +26,7 @@ module Fulmar
         # Allow access of configuration via array/hash access methods (write access)
         def []=(id, value)
           if @environment && @target
-            configuration[@environment][@target][id] = value
+            configuration[:environments][@environment][@target][id] = value
           else
             fail 'Environment or target not set. Please set both variables via configuration.environment = \'xxx\' / '\
                  'configuration.target = \'yyy\''
