@@ -10,7 +10,7 @@ module Fulmar
           DEFAULT_CONFIG = {
             rsync: {
               exclude: nil,
-              exclude_file: '.rsyncignore',
+              exclude_file: nil,
               chown: nil,
               chmod: nil,
               delete: true
