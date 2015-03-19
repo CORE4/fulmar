@@ -13,7 +13,8 @@ module Fulmar
               exclude_file: nil,
               chown: nil,
               chmod: nil,
-              delete: true
+              delete: true,
+              direction: 'up'
             }
           }
 
@@ -40,7 +41,15 @@ module Fulmar
             options << "--chmod='#{@config[:rsync][:chmod]}'" if @config[:rsync][:chmod]
             options << '--delete' if @config[:rsync][:delete]
 
-            "rsync #{options.join(' ')} '#{@config[:local_path]}/' '#{ssh_user_and_host}:#{@config[:remote_path]}'"
+            if @config[:rsync][:direction] == 'up'
+              from = @config[:local_path]
+              to = ssh_user_and_host + ':' + @config[:remote_path]
+            else
+              from = ssh_user_and_host + ':' + @config[:remote_path]
+              to = @config[:local_path]
+            end
+
+            "rsync #{options.join(' ')} '#{from}/' '#{to}'"
           end
         end
       end
