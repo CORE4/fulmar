@@ -30,6 +30,10 @@ module Fulmar
         def file_sync
           @file_sync ||= Fulmar::FileSync.create_transfer configuration
         end
+
+        def database
+          @_database ||= Fulmar::Infrastructure::Service::Database::DatabaseService.new configuration
+        end
       end
     end
   end

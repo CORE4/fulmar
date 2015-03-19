@@ -4,6 +4,7 @@ source 'https://rubygems.org'
 gemspec
 
 gem 'rake'
+gem 'mysql2'
 
 source 'http://dione.core4.lan:9292' do
   gem 'ruby_wings'
