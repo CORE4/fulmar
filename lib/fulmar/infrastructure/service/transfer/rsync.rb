@@ -6,7 +6,7 @@ module Fulmar
     module Service
       module Transfer
         # Implements the rsync transfer
-        class Rsync < Fulmar::Infrastructure::Service::Transfer::Base
+        class Rsync < Base
           DEFAULT_CONFIG = {
             rsync: {
               exclude: nil,
