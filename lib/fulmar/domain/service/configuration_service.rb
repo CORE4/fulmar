@@ -49,6 +49,16 @@ module Fulmar
           environment(name) if configuration[:environments][name]
         end
 
+        # Merge another configuration into the currently active one
+        # Useful for supplying a default configuration, as values are not overwritten.
+        # Hashes are merged.
+        # @param [Hash] other
+        def merge(other)
+          if @environment && @target
+            configuration[:environments][@environment][@target] = other.deep_merge(configuration[:environments][@environment][@target])
+          end
+        end
+
         protected
 
         def lookup_base_path
