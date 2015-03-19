@@ -34,7 +34,7 @@ module Fulmar
         end
 
         def to_hash
-          configuration
+          (@environment.nil? || @target.nil?) ? configuration : configuration[:environments][@environment][@target]
         end
 
         def base_path
