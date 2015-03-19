@@ -9,7 +9,6 @@ module Fulmar
         class Base
           DEFAULT_CONFIG = {
             debug: false,
-            host: nil,
             user: '',
             password: '',
             remote_path: nil,
@@ -50,7 +49,7 @@ module Fulmar
           protected
 
           def ssh_user_and_host
-            (@config[:user] && !@config[:user].empty?) ? @config[:user] + '@' + @config[:host] : @config[:host]
+            @config[:user].blank? ? @config[:hostname] : @config[:user] + '@' + @config[:hostname]
           end
         end
       end
