@@ -34,6 +34,10 @@ module Fulmar
         def database
           @_database ||= Fulmar::Infrastructure::Service::Database::DatabaseService.new configuration
         end
+
+        def render_templates
+          (Fulmar::Domain::Service::ConfigRenderingService.new configuration).render
+        end
       end
     end
   end
