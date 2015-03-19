@@ -20,7 +20,7 @@ module Fulmar
 
         # Allow access of configuration via array/hash access methods (read access)
         def [](id)
-          @environment.nil? || @target.nil? ? nil : configuration[@environment][@target][id]
+          (@environment.nil? || @target.nil?) ? nil : configuration[:environments][@environment][@target][id]
         end
 
         # Allow access of configuration via array/hash access methods (write access)
