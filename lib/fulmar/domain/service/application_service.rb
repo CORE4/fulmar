@@ -20,6 +20,23 @@ module Fulmar
           super
         end
 
+        def define_task(task_class, *args, &block)
+          super(task_class, *args, &wrap_environment(&block))
+        end
+
+        def wrap_environment
+          Proc.new do
+            configuration = Fulmar::Domain::Service::ConfigurationService.instance
+            environment = configuration.environment
+            target = configuration.target
+
+            yield
+
+            configuration.environment = environment
+            configuration.target = target
+          end
+        end
+
         # Add fulmar application tasks
         def fulmar_tasks
           Dir.glob(File.expand_path(File.join(File.dirname(__FILE__), '../', 'task')) + '/*.rake')
