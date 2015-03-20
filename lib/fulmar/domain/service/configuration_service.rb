@@ -80,8 +80,10 @@ module Fulmar
 
           unless @config[:environments][env][target][:host].blank?
             host = @config[:environments][env][target][:host].to_sym
-            if @config[:hosts][host].each
+            if @config[:hosts] && @config[:hosts][host]
+              @config[:hosts][host].each do
               @config[:environments][env][target] = @config[:hosts][host].deep_merge(@config[:environments][env][target])
+              end
             else
               fail "Host #{host} is not configured."
             end
