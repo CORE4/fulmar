@@ -181,7 +181,7 @@ module Fulmar
               commands << "ln \"#{@config[:shared_dir]}/#{dir}\" \"#{release_dir}/#{dir}\""
             end
 
-            @remote_shell.run commands
+            @remote_shell.run commands if commands.length > 0
           end
 
           def remote_dir_exists?(dir)
