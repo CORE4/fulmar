@@ -30,7 +30,7 @@ module Fulmar
             environment = configuration.environment
             target = configuration.target
 
-            yield
+            yield if block_given?
 
             configuration.environment = environment
             configuration.target = target
