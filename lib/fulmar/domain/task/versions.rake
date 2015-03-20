@@ -1,11 +1,19 @@
 include Fulmar::Domain::Service::CommonHelperService
 
 namespace :versions do
+
   task :load_config do
     # load the configuration from the config gem
   end
 
-  @versioned_servers = full_configuration[:environments].select { |_name, config| config[:type].to_s == 'rsync_with_versions' }
+  @versioned_servers = {}
+  full_configuration[:environments].each_pair do |env, targets|
+    next if env == :all
+
+    targets.each_pair do |target, config|
+      @versioned_servers["#{env}:#{target}"] = config if config[:type].to_s == 'rsync_with_versions'
+    end
+  end
 
   desc 'List existing versions on the server'
   task :list do
@@ -25,14 +33,22 @@ namespace :versions do
   end
 
   unless @versioned_servers.empty?
+
     namespace :list do
+
       @versioned_servers.each_key do |env|
+
         desc "List available versions for environment \"#{env}\""
         task env do
-          environment = env
-          file_sync.list_releases(false).each { |item| puts item }
+          configuration.environment = env.split(':').first
+          configuration.target = env.split(':').last
+          file_sync.list_releases(false).each{|item| puts item}
         end
+
       end
+
     end
+
   end
+
 end
