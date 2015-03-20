@@ -24,7 +24,7 @@ module Fulmar
         end
 
         def remote_shell
-          @remote_shell ||= Fulmar::Infrastructure::Service::ShellService.new configuration[:remote_path], configuration[:host]
+          @remote_shell ||= Fulmar::Infrastructure::Service::ShellService.new(configuration[:remote_path], configuration[:hostname])
         end
 
         def file_sync
