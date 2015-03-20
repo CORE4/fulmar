@@ -8,27 +8,27 @@ module Fulmar
         attr_accessor :environment
 
         def full_configuration
-          (@config_service ||= Fulmar::Domain::Service::ConfigurationService.instance).configuration
+          configuration.configuration
         end
 
         def configuration
-          (@config_service ||= Fulmar::Domain::Service::ConfigurationService.instance)
+          (@_config_service ||= Fulmar::Domain::Service::ConfigurationService.instance)
         end
 
         def composer(command, arguments = [])
-          (@composer ||= Fulmar::Infrastructure::Service::ComposerService.new).execute(command, arguments)
+          (@_composer ||= Fulmar::Infrastructure::Service::ComposerService.new).execute(command, arguments)
         end
 
         def local_shell
-          @local_shell ||= Fulmar::Infrastructure::Service::ShellService.new configuration[:local_path]
+          @_local_shell ||= Fulmar::Infrastructure::Service::ShellService.new configuration[:local_path]
         end
 
         def remote_shell
-          @remote_shell ||= Fulmar::Infrastructure::Service::ShellService.new(configuration[:remote_path], configuration[:hostname])
+          @_remote_shell ||= Fulmar::Infrastructure::Service::ShellService.new(configuration[:remote_path], configuration[:hostname])
         end
 
         def file_sync
-          @file_sync ||= Fulmar::FileSync.create_transfer configuration
+          @_file_sync ||= Fulmar::FileSync.create_transfer configuration
         end
 
         def database
