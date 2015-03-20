@@ -171,7 +171,7 @@ module Fulmar
           def add_shared
             commands = [] # Collect all remote commands first, then execute them in one step to avoid reconnecting very often
             @config[:shared].each do |dir|
-              if remote_dir_exists?("#{@config[:shared_dir]}/#{dir}") && !remote_dir_exists?("#{release_dir}/#{dir}")
+              if remote_dir_exists?("#{release_dir}/#{dir}") && !remote_dir_exists?("#{@config[:shared_dir]}/#{dir}")
                 commands << "mkdir -p \"#{@config[:shared_dir]}/#{File.dirname(dir)}\""
                 commands << "cp -r \"#{release_dir}/#{dir}\" \"#{@config[:shared_dir]}/#{File.dirname(dir)}\""
               end
