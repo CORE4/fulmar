@@ -32,8 +32,8 @@ module Fulmar
 
             yield if block_given?
 
-            configuration.environment = environment
-            configuration.target = target
+            configuration.environment = environment unless environment.nil?
+            configuration.target = target unless target.nil?
           end
         end
 
