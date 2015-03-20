@@ -178,7 +178,7 @@ module Fulmar
 
               commands << "rm -fr \"#{release_dir}/#{dir}\""
               commands << "mkdir -p \"#{release_dir}/#{File.dirname(dir)}\""
-              commands << "ln \"#{@config[:shared_dir]}/#{dir}\" \"#{release_dir}/#{dir}\""
+              commands << "ln -s \"#{@config[:remote_path]}/#{@config[:shared_dir]}/#{dir}\" \"#{release_dir}/#{dir}\""
             end
 
             @remote_shell.run commands if commands.length > 0
