@@ -12,7 +12,7 @@ module Fulmar
 
         include Singleton
 
-        attr_accessor :environment, :target
+        attr_reader :environment, :target
 
         def initialize
           @environment = nil
@@ -50,6 +50,14 @@ module Fulmar
           environment(name) if configuration[:environments][name]
         end
 
+        def environment=(env)
+          @environment = env ? env.to_sym : nil
+        end
+
+        def target=(target)
+          @target = target ? target.to_sym : nil
+        end
+
         # Merge another configuration into the currently active one
         # Useful for supplying a default configuration, as values are not overwritten.
         # Hashes are merged.
@@ -82,7 +90,7 @@ module Fulmar
             host = @config[:environments][env][target][:host].to_sym
             if @config[:hosts] && @config[:hosts][host]
               @config[:hosts][host].each do
-              @config[:environments][env][target] = @config[:hosts][host].deep_merge(@config[:environments][env][target])
+                @config[:environments][env][target] = @config[:hosts][host].deep_merge(@config[:environments][env][target])
               end
             else
               fail "Host #{host} is not configured."
