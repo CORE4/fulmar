@@ -38,6 +38,10 @@ module Fulmar
         def render_templates
           (Fulmar::Domain::Service::ConfigRenderingService.new configuration).render
         end
+
+        def git
+          @_git ||= Fulmar::Infrastructure::Service::GitService.new configuration
+        end
       end
     end
   end

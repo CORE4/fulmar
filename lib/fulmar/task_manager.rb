@@ -14,6 +14,7 @@ require 'fulmar/domain/service/file_sync_service'
 
 require 'fulmar/infrastructure/service/composer_service'
 require 'fulmar/infrastructure/service/shell_service'
+require 'fulmar/infrastructure/service/git_service'
 
 require 'fulmar/infrastructure/service/database/database_service'
 
