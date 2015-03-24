@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.email         = %w(j.siegl@core4.de g.visscher@core4.de)
   spec.summary       = 'A deployment task manager.'
   spec.description   = 'Fulmar is a task manager for deployments.'
-  spec.homepage      = 'http://git.core4.de/core4internal/fulmar'
+  spec.homepage      = 'https://github.com/CORE4/fulmar'
   spec.license       = 'MIT'
 
   spec.files         = `git ls-files -z`.split("\x0")
