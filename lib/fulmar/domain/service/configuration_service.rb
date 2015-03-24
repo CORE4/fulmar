@@ -109,9 +109,18 @@ module Fulmar
           # Iterate over all environments and targets to prepare them
           @config[:environments].each_key do |env|
             next if env == :all
-            @config[:environments][env].each_key { |target| fill_target(env, target) }
+            @config[:environments][env].each_key do |target|
+              fill_target(env, target)
+              check_path(env, target)
+            end
           end
           @config
+        end
+
+        def check_path(env, target)
+          unless @config[:environments][env][target][:local_path].blank?
+            @config[:environments][env][target][:local_path] = File.expand_path(@config[:environments][env][target][:local_path])
+          end
         end
       end
     end
