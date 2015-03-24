@@ -33,7 +33,7 @@ module Fulmar
           def connect
             options = compile_options
 
-            if @config[:maria][:hostname] != 'localhost' && @config[:maria][:hostname] != '127.0.0.1'
+            unless local?
               tunnel.open
               options[:port] = tunnel.local_port
             end
@@ -60,6 +60,10 @@ module Fulmar
 
           def connected?
             @connected
+          end
+
+          def local?
+            @config[:maria][:hostname] == 'localhost' || @config[:maria][:hostname] == '127.0.0.1'
           end
 
           def tunnel
