@@ -1,6 +1,6 @@
-require 'fulmar/infrastructure/cache/dummy_cache_service'
-require 'fulmar/infrastructure/cache/neos_cache_service'
-require 'fulmar/infrastructure/cache/symfony_cache_service'
+require 'fulmar/infrastructure/service/cache/dummy_cache_service'
+require 'fulmar/infrastructure/service/cache/neos_cache_service'
+require 'fulmar/infrastructure/service/cache/symfony_cache_service'
 
 module Fulmar
   module Domain
