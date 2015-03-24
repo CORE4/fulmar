@@ -19,6 +19,7 @@ require 'fulmar/infrastructure/service/git_service'
 require 'fulmar/infrastructure/service/database/database_service'
 
 require 'ruby_wings'
+require 'fileutils'
 
 bootstrap = Fulmar::Service::BootstrapService.new
 bootstrap.fly
