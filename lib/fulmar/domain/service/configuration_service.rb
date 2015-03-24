@@ -59,7 +59,7 @@ module Fulmar
         end
 
         def ready?
-          !@environment.blank? && !@target.blank?
+          !@environment.nil? && !@target.nil?
         end
 
         # Merge another configuration into the currently active one
