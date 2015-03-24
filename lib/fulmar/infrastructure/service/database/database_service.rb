@@ -24,9 +24,9 @@ module Fulmar
           def initialize(config)
             @config = config
             @config.merge DEFAULT_CONFIG
-            @shell = Fulmar::Infrastructure::Service::ShellService.new(config[:local_path], config[:hostname])
             @tunnel = nil
             @client = nil
+            initialize_shell
             config_test
           end
 
@@ -130,6 +130,12 @@ module Fulmar
           # would result in more I/O
           def backup_filename
             "#{@config[:maria][:database]}_#{Time.now.strftime('%Y-%m-%dT%H%M%S')}.sql"
+          end
+
+          def initialize_shell
+            path = local? ? @config[:local_path] : @config[:remote_path]
+            @shell = Fulmar::Infrastructure::Service::ShellService.new(path, @config[:hostname])
+            @shell.debug = true if @config[:debug]
           end
 
           # Compiles a mysql config hash from valid options of the fulmar config
