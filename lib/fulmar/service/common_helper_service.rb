@@ -20,11 +20,19 @@ module Fulmar
         end
 
         def local_shell
-          @_local_shell ||= Fulmar::Infrastructure::Service::ShellService.new configuration[:local_path]
+          fail 'You need to set an environment and a target first' unless configuration.ready?
+          unless @_local_shell
+            @_local_shell = {}
+          end
+          @_local_shell["#{configuration.environment}:#{configuration.target}"] ||= Fulmar::Infrastructure::Service::ShellService.new configuration[:local_path]
         end
 
         def remote_shell
-          @_remote_shell ||= Fulmar::Infrastructure::Service::ShellService.new(configuration[:remote_path], configuration[:hostname])
+          fail 'You need to set an environment and a target first' unless configuration.ready?
+          unless @_remote_shell
+            @_remote_shell = {}
+          end
+          @_remote_shell["#{configuration.environment}:#{configuration.target}"] ||= Fulmar::Infrastructure::Service::ShellService.new(configuration[:remote_path], configuration[:hostname])
         end
 
         def file_sync
