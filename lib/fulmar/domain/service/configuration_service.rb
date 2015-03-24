@@ -21,12 +21,12 @@ module Fulmar
 
         # Allow access of configuration via array/hash access methods (read access)
         def [](id)
-          (@environment.nil? || @target.nil?) ? nil : configuration[:environments][@environment][@target][id]
+          ready? ? configuration[:environments][@environment][@target][id] : nil
         end
 
         # Allow access of configuration via array/hash access methods (write access)
         def []=(id, value)
-          if @environment && @target
+          if ready?
             configuration[:environments][@environment][@target][id] = value
           else
             fail 'Environment or target not set. Please set both variables via configuration.environment = \'xxx\' / '\
@@ -35,7 +35,7 @@ module Fulmar
         end
 
         def to_hash
-          (@environment.nil? || @target.nil?) ? configuration : configuration[:environments][@environment][@target]
+          ready? ? configuration[:environments][@environment][@target] : configuration
         end
 
         def base_path
@@ -56,6 +56,10 @@ module Fulmar
 
         def target=(target)
           @target = target ? target.to_sym : nil
+        end
+
+        def ready?
+          !@environment.blank? && !@target.blank?
         end
 
         # Merge another configuration into the currently active one
