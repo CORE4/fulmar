@@ -12,22 +12,6 @@ namespace :versions do
   end
 
   unless @versioned_servers.empty?
-    desc 'List existing versions on the server'
-    task :list do
-      puts 'Environments which support versioning:'
-      @versioned_servers.each_key do |env|
-        puts "- #{env}"
-      end
-
-      puts "\nSo run one of these now:"
-      @versioned_servers.each_key do |env|
-        puts "$ fulmar versions:list:#{env}"
-      end
-    end
-  end
-
-
-  unless @versioned_servers.empty?
     namespace :list do
       @versioned_servers.each_key do |env|
         desc "List available versions for environment \"#{env}\""
@@ -38,5 +22,18 @@ namespace :versions do
         end
       end
     end
+
+    namespace :clean do
+      @versioned_servers.each_key do |env|
+        desc "Delete obsolete versions for target \"#{env}\""
+        task env do
+          configuration.environment = env.split(':').first
+          configuration.target = env.split(':').last
+          file_sync.cleanup
+        end
+      end
+    end
+
+
   end
 end
