@@ -2,10 +2,6 @@ include Fulmar::Domain::Service::CommonHelperService
 
 namespace :versions do
 
-  task :load_config do
-    # load the configuration from the config gem
-  end
-
   @versioned_servers = {}
   full_configuration[:environments].each_pair do |env, targets|
     next if env == :all
