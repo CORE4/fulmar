@@ -22,6 +22,7 @@ module Fulmar
         def init
           super
           options.rakelib << fulmar_task_dir
+          options.rakelib << 'Fulmar'
         end
 
         def define_task(task_class, *args, &block)
