@@ -24,7 +24,7 @@ module Fulmar
           unless @_local_shell
             @_local_shell = {}
           end
-          @_local_shell["#{configuration.environment}:#{configuration.target}"] ||= Fulmar::Infrastructure::Service::ShellService.new configuration[:local_path]
+          @_local_shell["#{configuration.environment}:#{configuration.target}"] ||= new_shell(configuration[:local_path])
         end
 
         def remote_shell
@@ -32,7 +32,7 @@ module Fulmar
           unless @_remote_shell
             @_remote_shell = {}
           end
-          @_remote_shell["#{configuration.environment}:#{configuration.target}"] ||= Fulmar::Infrastructure::Service::ShellService.new(configuration[:remote_path], configuration[:hostname])
+          @_remote_shell["#{configuration.environment}:#{configuration.target}"] ||= new_shell(configuration[:remote_path], configuration[:hostname])
         end
 
         def file_sync
@@ -49,6 +49,13 @@ module Fulmar
 
         def git
           @_git ||= Fulmar::Infrastructure::Service::GitService.new configuration
+        end
+
+        def new_shell(path, hostname = 'localhost')
+          shell = Fulmar::Infrastructure::Service::ShellService.new(path, hostname)
+          shell.strict = true
+          shell.debug = configuration[:debug]
+          shell
         end
       end
     end
