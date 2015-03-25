@@ -57,6 +57,14 @@ module Fulmar
           shell.debug = configuration[:debug]
           shell
         end
+
+        def upload(filename)
+          Fulmar::Infrastructure::Service::CopyService.upload(local_shell, filename, configuration[:hostname], configuration[:remote_path])
+        end
+
+        def download(filename)
+          Fulmar::Infrastructure::Service::CopyService.download(local_shell, configuration[:hostname], filename, configuration[:local_path])
+        end
       end
     end
   end
