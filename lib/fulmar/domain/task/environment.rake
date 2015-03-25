@@ -1,7 +1,10 @@
 # This helper file provides tasks to set the environment. This is just for convenience
 # so that these tasks might be a dependency for other tasks
 
+include Fulmar::Domain::Service::CommonHelperService
+
 namespace :environment do
+
   full_configuration[:environments].each_key do |env|
     next if env == :all
 
