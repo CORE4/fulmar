@@ -26,23 +26,17 @@ namespace :versions do
     end
   end
 
+
   unless @versioned_servers.empty?
-
     namespace :list do
-
       @versioned_servers.each_key do |env|
-
         desc "List available versions for environment \"#{env}\""
         task env do
           configuration.environment = env.split(':').first
           configuration.target = env.split(':').last
           file_sync.list_releases(false).each{|item| puts item}
         end
-
       end
-
     end
-
   end
-
 end
