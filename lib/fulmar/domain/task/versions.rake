@@ -11,11 +11,9 @@ namespace :versions do
     end
   end
 
-  desc 'List existing versions on the server'
-  task :list do
-    if @versioned_servers.empty?
-      puts 'None of the configured environments supports versioning.'
-    else
+  unless @versioned_servers.empty?
+    desc 'List existing versions on the server'
+    task :list do
       puts 'Environments which support versioning:'
       @versioned_servers.each_key do |env|
         puts "- #{env}"
