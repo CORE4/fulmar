@@ -8,6 +8,7 @@ module Fulmar
       class ConfigurationService
         FULMAR_FILE = 'Fulmarfile'
         FULMAR_CONFIGURATION = 'FulmarConfiguration'
+        FULMAR_CONFIGURATION_DIR = 'Fulmar'
         DEPLOYMENT_CONFIG_FILE = 'deployment.yml'
 
         include Singleton
@@ -72,6 +73,10 @@ module Fulmar
           end
         end
 
+        def config_files
+          Dir.glob(File.join(base_path, FULMAR_CONFIGURATION_DIR, '*.config.yml')).sort
+        end
+
         protected
 
         def lookup_base_path
@@ -104,7 +109,10 @@ module Fulmar
 
         # Loads the configuration from the YAML file and populates all targets
         def load_configuration
-          @config = YAML.load_file(base_path + '/' + DEPLOYMENT_CONFIG_FILE).symbolize
+          @config = {}
+          config_files.each do |config_file|
+            @config = @config.deep_merge(YAML.load_file(config_file).symbolize)
+          end
 
           # Iterate over all environments and targets to prepare them
           @config[:environments].each_key do |env|
@@ -116,6 +124,8 @@ module Fulmar
           end
           @config
         end
+
+
 
         def check_path(env, target)
           unless @config[:environments][env][target][:local_path].blank?
