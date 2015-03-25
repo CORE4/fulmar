@@ -63,11 +63,11 @@ module Fulmar
           end
 
           def local?
-            @config[:maria][:hostname] == 'localhost' || @config[:maria][:hostname] == '127.0.0.1'
+            @config[:hostname] == 'localhost'
           end
 
           def tunnel
-            @tunnel ||= Fulmar::Infrastructure::Service::TunnelService.new(@config[:maria][:hostname], @config[:maria][:port])
+            @tunnel ||= Fulmar::Infrastructure::Service::TunnelService.new(@config[:hostname], @config[:maria][:port], @config[:maria][:hostname])
           end
 
           # shortcut for DatabaseService.client.query
@@ -93,22 +93,22 @@ module Fulmar
 
             diffable = @config[:maria][:diffable_dump] ? '--skip-comments --skip-extended-insert ' : ''
 
-            @shell.run "mysqldump -u #{@config[:maria][:user]} --password='#{@config[:maria][:password]}' " \
+            @shell.run "mysqldump -h #{@config[:maria][:host]} -u #{@config[:maria][:user]} --password='#{@config[:maria][:password]}' " \
                        "#{@config[:maria][:database]} --single-transaction #{diffable}-r \"#{path}\""
 
             path
           end
 
           def load_dump(dump_file, database = @config[:maria][:database])
-            @shell.run "mysql -u #{@config[:maria][:user]} --password='#{@config[:maria][:password]}' " \
+            @shell.run "mysql -h #{@config[:maria][:host]} -u #{@config[:maria][:user]} --password='#{@config[:maria][:password]}' " \
                        "-D #{database} < #{dump_file}"
           end
 
           def download_dump(filename = backup_filename)
             local_path = filename[0, 1] == '/' ? filename : @config[:local_path] + '/' + filename
             remote_path = dump
-            copy = system("scp -q #{@config[:maria][:hostname]}:#{remote_path} #{local_path}")
-            system("ssh #{@config[:maria][:hostname]} 'rm -f #{remote_path}'") # delete temporary file
+            copy = system("scp -q #{@config[:hostname]}:#{remote_path} #{local_path}")
+            system("ssh #{@config[:hostname]} 'rm -f #{remote_path}'") # delete temporary file
             if copy
               local_path
             else

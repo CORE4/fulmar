@@ -6,16 +6,17 @@ module Fulmar
       class TunnelService
         attr_reader :host, :remote_port, :local_port
 
-        def initialize(host, port)
+        def initialize(host, port, remote_host = 'localhost')
           @host = host
           @remote_port = port
+          @remote_host = remote_host
           @local_port = 0
           @tunnel_pid = 0
         end
 
         def open
           @local_port = free_port
-          @tunnel_pid = Process.spawn "ssh #{@host} -L #{@local_port}:localhost:#{@remote_port} -N"
+          @tunnel_pid = Process.spawn "ssh #{@host} -L #{@local_port}:#{@remote_host}:#{@remote_port} -N"
           sleep 1
         end
 
