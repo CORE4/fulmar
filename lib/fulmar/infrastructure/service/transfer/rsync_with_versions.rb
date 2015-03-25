@@ -98,7 +98,7 @@ module Fulmar
             return true unless limit > 0
             releases = list_releases.sort
             return true if releases.length <= limit
-            obsolete_dirs = releases[0, releases.length - limit].collect { |dir| "'#{@config[:releases_dir]}/#{dir}'" }
+            obsolete_dirs = releases[0, releases.length - limit].collect { |dir| "\"#{@config[:releases_dir]}/#{dir}\"" }
             @remote_shell.run "rm -fr #{obsolete_dirs.join(' ')}"
           end
 
