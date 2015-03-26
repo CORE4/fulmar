@@ -9,7 +9,7 @@ require 'fulmar/domain/service/application_service'
 require 'fulmar/domain/service/configuration_service'
 require 'fulmar/domain/service/config_rendering_service'
 
-require 'fulmar/service/common_helper_service'
+require 'fulmar/service/helper/common_helper'
 require 'fulmar/domain/service/file_sync_service'
 
 require 'fulmar/infrastructure/service/composer_service'
