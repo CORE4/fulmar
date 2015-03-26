@@ -5,7 +5,7 @@ if configuration.has_feature? :database
   include Fulmar::Domain::Service::Helper::DatabaseHelper
 end
 
-if configuration.has_feature? :neos
-  require 'fulmar/service/helper/neos_helper'
-  include Fulmar::Domain::Service::Helper::NeosHelper
+if configuration.has_feature? :flow
+  require 'fulmar/service/helper/flow_helper'
+  include Fulmar::Domain::Service::Helper::FlowHelper
 end

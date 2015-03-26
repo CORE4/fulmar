@@ -1,12 +1,12 @@
-require 'fulmar/infrastructure/service/neos_service'
+require 'fulmar/infrastructure/service/flow_service'
 
 module Fulmar
   module Domain
     module Service
       module Helper
-        module NeosHelper
-          def neos
-            storage['neos'] ||= Fulmar::Infrastructure::Service::NeosService.new remote_shell, configuration
+        module FlowHelper
+          def flow
+            storage['flow'] ||= Fulmar::Infrastructure::Service::FlowService.new remote_shell, configuration
           end
         end
       end
