@@ -136,6 +136,7 @@ module Fulmar
             path = local? ? @config[:local_path] : @config[:remote_path]
             @shell = Fulmar::Infrastructure::Service::ShellService.new(path, @config[:hostname])
             @shell.debug = true if @config[:debug]
+            @shell.strict = true
           end
 
           # Compiles a mysql config hash from valid options of the fulmar config
