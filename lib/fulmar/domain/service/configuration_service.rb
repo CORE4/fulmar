@@ -63,6 +63,32 @@ module Fulmar
           !@environment.nil? && !@target.nil?
         end
 
+        def has_feature?(feature)
+          case feature
+          when :database
+            configuration[:features][:database] ||= any? { |data| data[:type] == 'maria' }
+          else
+            false
+          end
+        end
+
+        def each
+          configuration[:environments].each_key do |env|
+            configuration[:environments][env].each_pair do |target, data|
+              yield(env, target, data)
+            end
+          end
+        end
+
+        def any?
+          if block_given?
+            each{ |_env, _target, data| return true if yield(data) }
+            false
+          else
+            configuration[:environments].any?
+          end
+        end
+
         # Merge another configuration into the currently active one
         # Useful for supplying a default configuration, as values are not overwritten.
         # Hashes are merged.
@@ -109,7 +135,7 @@ module Fulmar
 
         # Loads the configuration from the YAML file and populates all targets
         def load_configuration
-          @config = { environments: {} }
+          @config = { environments: {}, features: {} }
           config_files.each do |config_file|
             @config = @config.deep_merge(YAML.load_file(config_file).symbolize)
           end
@@ -122,10 +148,9 @@ module Fulmar
               check_path(env, target)
             end
           end
+          @config[:environments].delete(:all)
           @config
         end
-
-
 
         def check_path(env, target)
           unless @config[:environments][env][target][:local_path].blank?
