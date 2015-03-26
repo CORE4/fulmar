@@ -12,12 +12,11 @@ module Fulmar
 
           DEFAULT_CONFIG = {
             maria: {
-              hostname: '127.0.0.1',
+              host: '127.0.0.1',
               port: 3306,
               user: 'root',
               password: '',
               encoding: 'utf8',
-              backup_path: '/tmp'
             }
           }
 
@@ -82,21 +81,13 @@ module Fulmar
             disconnect unless state_before
           end
 
-          def dump(filename = nil)
-
-            if filename
-              # Ensure path is absolute
-              path = filename[0, 1] == '/' ? filename : @config[:maria][:backup_path] + '/' + filename
-            else
-              path = @config[:maria][:backup_path] + '/' + backup_filename
-            end
-
+          def dump(filename = backup_filename)
             diffable = @config[:maria][:diffable_dump] ? '--skip-comments --skip-extended-insert ' : ''
 
             @shell.run "mysqldump -h #{@config[:maria][:host]} -u #{@config[:maria][:user]} --password='#{@config[:maria][:password]}' " \
-                       "#{@config[:maria][:database]} --single-transaction #{diffable}-r \"#{path}\""
+                       "#{@config[:maria][:database]} --single-transaction #{diffable}-r \"#{filename}\""
 
-            path
+            @config[:remote_path] + '/' + filename
           end
 
           def load_dump(dump_file, database = @config[:maria][:database])
@@ -108,7 +99,7 @@ module Fulmar
             local_path = filename[0, 1] == '/' ? filename : @config[:local_path] + '/' + filename
             remote_path = dump
             copy = system("scp -q #{@config[:hostname]}:#{remote_path} #{local_path}")
-            system("ssh #{@config[:hostname]} 'rm -f #{remote_path}'") # delete temporary file
+            @shell.run "rm -f \"#{remote_path}\"" # delete temporary file
             if copy
               local_path
             else
@@ -121,7 +112,6 @@ module Fulmar
           # Test configuration
           def config_test
             fail 'Configuration option "database" missing.' unless @config[:maria][:database]
-            @shell.run "test -d '#{@config[:maria][:backup_path]}'"
           end
 
           # Builds the filename for a new database backup file
