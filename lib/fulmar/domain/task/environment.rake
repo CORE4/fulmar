@@ -4,8 +4,6 @@
 namespace :environment do
 
   full_configuration[:environments].each_key do |env|
-    next if env == :all
-
     # Sets the environment to #{env}
     task env do
       configuration.environment = env
