@@ -64,9 +64,10 @@ module Fulmar
         end
 
         def has_feature?(feature)
+          return configuration[:features][feature] unless configuration[:features][feature].nil?
           case feature
           when :database
-            configuration[:features][:database] ||= any? { |data| data[:type] == 'maria' }
+            configuration[:features][:database] = any? { |data| data[:type] == 'maria' }
           else
             false
           end
