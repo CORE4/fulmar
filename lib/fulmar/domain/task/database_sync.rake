@@ -12,7 +12,7 @@ end
 
 def create_update_task(from_db, to_db)
   namespace to_db.first do
-    desc 'Update staging database with live data'
+    desc "Update #{to_db.first} database with #{from_db.first} data" unless to_db.first.match(/^(live|prod)/) # hide sync to live
     task "from_#{from_db.first}" do
       configuration.environment = from_db.first
       configuration.target = from_db.last
