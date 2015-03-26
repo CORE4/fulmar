@@ -1,13 +1,8 @@
 require 'pp'
 
 db_configs = []
-full_configuration[:environments].each_key do |env|
-  next if env == :all
-  full_configuration[:environments][env].each_pair do |target, data|
-    if data[:type] == 'maria'
-      db_configs << [env, target]
-    end
-  end
+configuration.each do |env, target, data|
+  db_configs << [env, target] if data[:type] == 'maria'
 end
 
 def create_update_task(from_db, to_db)
