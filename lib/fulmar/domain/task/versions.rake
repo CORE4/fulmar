@@ -1,8 +1,13 @@
-include Fulmar::Domain::Service::CommonHelperService
+include Fulmar::Domain::Service::Helper::CommonHelper
 
 namespace :versions do
 
   @versioned_servers = {}
+  configuration.each do |env, target, data|
+
+  end
+
+
   full_configuration[:environments].each_pair do |env, targets|
     next if env == :all
 

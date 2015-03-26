@@ -32,10 +32,6 @@ module Fulmar
             storage['file_sync'] ||= Fulmar::FileSync.create_transfer configuration
           end
 
-        def database
-          storage['database'] ||= Fulmar::Infrastructure::Service::Database::DatabaseService.new configuration
-        end
-
           def render_templates
             (Fulmar::Domain::Service::ConfigRenderingService.new configuration).render
           end
