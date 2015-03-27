@@ -1,3 +1,7 @@
 #!/usr/bin/env ruby
 
+if ARGV[0] == 'init'
+  system('touch Fulmarfile')
+end
+
 require 'fulmar/task_manager'
