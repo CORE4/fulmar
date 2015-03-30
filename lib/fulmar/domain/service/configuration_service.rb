@@ -121,7 +121,7 @@ module Fulmar
         # Fills a target with all globally set variables so all necessary information
         # is found within each target
         def fill_target(env, target)
-          @config[:environments][env][target] = @config[:environments][:all].deep_merge(@config[:environments][env][target])
+          @config[:environments][env][target] = @config[:environments][:all].deep_merge(@config[:environments][env][target]) if @config[:environments][:all]
 
           unless @config[:environments][env][target][:host].blank?
             host = @config[:environments][env][target][:host].to_sym
