@@ -33,14 +33,8 @@ module Fulmar
             @local_shell.run rsync_command
           end
 
+          # Build the rsync command from the given options
           def rsync_command
-            options = ['-rl']
-            options << "--exclude='#{@config[:rsync][:exclude]}'" if @config[:rsync][:exclude]
-            options << "--exclude-from='#{@config[:rsync][:exclude_file]}'" if @config[:rsync][:exclude_file]
-            options << "--chown='#{@config[:rsync][:chown]}'" if @config[:rsync][:chown]
-            options << "--chmod='#{@config[:rsync][:chmod]}'" if @config[:rsync][:chmod]
-            options << '--delete' if @config[:rsync][:delete]
-
             if @config[:rsync][:direction] == 'up'
               from = @config[:local_path]
               to = ssh_user_and_host + ':' + @config[:remote_path]
@@ -49,7 +43,19 @@ module Fulmar
               to = @config[:local_path]
             end
 
-            "rsync #{options.join(' ')} '#{from}/' '#{to}'"
+            "rsync #{rsync_command_options.join(' ')} '#{from}/' '#{to}'"
+          end
+
+          protected
+
+          # Assembles all rsync command line parameters from the configuration options
+          def rsync_command_options
+            options = ['-rl']
+            options << "--exclude='#{@config[:rsync][:exclude]}'" if @config[:rsync][:exclude]
+            options << "--exclude-from='#{@config[:rsync][:exclude_file]}'" if @config[:rsync][:exclude_file]
+            options << "--chown='#{@config[:rsync][:chown]}'" if @config[:rsync][:chown]
+            options << "--chmod='#{@config[:rsync][:chmod]}'" if @config[:rsync][:chmod]
+            options << '--delete' if @config[:rsync][:delete]
           end
         end
       end

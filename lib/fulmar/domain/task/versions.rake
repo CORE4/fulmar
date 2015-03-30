@@ -1,12 +1,7 @@
 include Fulmar::Domain::Service::Helper::CommonHelper
 
 namespace :versions do
-
   @versioned_servers = {}
-  configuration.each do |env, target, data|
-
-  end
-
 
   full_configuration[:environments].each_pair do |env, targets|
     next if env == :all
@@ -23,7 +18,7 @@ namespace :versions do
         task env do
           configuration.environment = env.split(':').first
           configuration.target = env.split(':').last
-          file_sync.list_releases(false).each{|item| puts item}
+          file_sync.list_releases(false).each { |item| puts item }
         end
       end
     end
@@ -38,7 +33,5 @@ namespace :versions do
         end
       end
     end
-
-
   end
 end

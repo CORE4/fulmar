@@ -3,6 +3,7 @@ require 'socket'
 module Fulmar
   module Infrastructure
     module Service
+      # Opens an ssh tunnel to a remote host so other services can access mysql for example
       class TunnelService
         attr_reader :host, :remote_port, :local_port
 
@@ -31,18 +32,16 @@ module Fulmar
         end
 
         def free_port
-          port = 60000
-          begin
-            1000.times do
+          (60_000..61_000).each do |port|
+            begin
               socket = TCPSocket.new('localhost', port)
               socket.close
-              port += 1
+            rescue Errno::ECONNREFUSED
+              return port
             end
-          rescue Errno::ECONNREFUSED
-            return port
           end
+
           fail 'Cannot find an open local port'
-          0
         end
       end
     end

@@ -30,7 +30,7 @@ module Fulmar
         end
 
         def wrap_environment
-          Proc.new do
+          proc do
             configuration = Fulmar::Domain::Service::ConfigurationService.instance
             environment = configuration.environment
             target = configuration.target

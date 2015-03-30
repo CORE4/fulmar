@@ -39,8 +39,6 @@ end
 
 if db_configs.any?
   namespace :database do
-    if db_configs.count > 1
-      create_update_tasks(db_configs)
-    end
+    create_update_tasks(db_configs) if db_configs.count > 1
   end
 end

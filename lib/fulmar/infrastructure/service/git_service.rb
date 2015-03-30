@@ -33,15 +33,15 @@ module Fulmar
         end
 
         def branches
-          @git.branches.collect { |b| b.name }
+          @git.branches.collect(:name)
         end
 
         def feature_branches
-          @git.branches.collect { |b| b.name }.select { |name| name.match(/^feature_/) }.sort
+          branches.select { |name| name.match(/^feature_/) }.sort
         end
 
         def preview_branches
-          @git.branches.collect { |b| b.name }.select { |name| name.match(/^preview_/) }.sort
+          branches.select { |name| name.match(/^preview_/) }.sort
         end
 
         def checkout(branch_name = derive_branch_name)
@@ -58,7 +58,6 @@ module Fulmar
         def derive_branch_name
           @config[:git][:branch] == 'preview' ? preview_branches.last : @config[:git][:branch]
         end
-
       end
     end
   end

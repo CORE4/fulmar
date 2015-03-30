@@ -8,7 +8,8 @@ module Fulmar
         # Provides basic methods common to all database services
         class DatabaseService
           attr_accessor :client
-          attr_reader :shell
+          attr_reader :shell, :connected
+          alias_method :connected?, :connected
 
           DEFAULT_CONFIG = {
             maria: {
@@ -16,7 +17,7 @@ module Fulmar
               port: 3306,
               user: 'root',
               password: '',
-              encoding: 'utf8',
+              encoding: 'utf8'
             }
           }
 
@@ -39,13 +40,7 @@ module Fulmar
 
             # Wait max 3 seconds for the tunnel to establish
             4.times do |i|
-              begin
-                @client = Mysql2::Client.new options
-                break
-              rescue Mysql2::Error => e
-                sleep 1 if i < 3
-                fail e.message if i == 3
-              end
+              break if try_connect(options, i)
             end
 
             @connected = true
@@ -55,10 +50,6 @@ module Fulmar
             @connected = false
             @client.close
             @tunnel.close if @tunnel # using the variable directly avoids creating a tunnel instance when closing the database connection
-          end
-
-          def connected?
-            @connected
           end
 
           def local?
@@ -109,6 +100,13 @@ module Fulmar
 
           protected
 
+          def try_connect(options, i)
+            @client = Mysql2::Client.new options
+          rescue Mysql2::Error => e
+            sleep 1 if i < 3
+            raise e.message if i == 3
+          end
+
           # Test configuration
           def config_test
             fail 'Configuration option "database" missing.' unless @config[:maria][:database]
@@ -132,19 +130,17 @@ module Fulmar
           # Compiles a mysql config hash from valid options of the fulmar config
           def compile_options
             possible_options = [:host, :username, :password, :port, :encoding, :socket, :read_timeout, :write_timeout,
-                             :connect_timeout, :reconnect, :local_infile, :secure_auth, :default_file, :default_group,
-                             :init_command
-                            ]
-            options = {}
-            options[:host] = '127.0.0.1'
-            options[:username] = @config[:maria][:user]
+                                :connect_timeout, :reconnect, :local_infile, :secure_auth, :default_file, :default_group,
+                                :init_command
+                               ]
+            options = { host: '127.0.0.1', username: @config[:maria][:user] }
+
             possible_options.each do |option|
               options[option] = @config[:maria][option] unless @config[:maria][option].nil?
             end
 
             options
           end
-
         end
       end
     end

@@ -33,7 +33,7 @@ module Fulmar
           else
             fail 'Environment or target not set. Please set both variables via configuration.environment = \'xxx\' / '\
                  'configuration.target = \'yyy\''
-            end
+          end
         end
 
         def to_hash
@@ -64,7 +64,7 @@ module Fulmar
           !@environment.nil? && !@target.nil?
         end
 
-        def has_feature?(feature)
+        def feature?(feature)
           return configuration[:features][feature] unless configuration[:features][feature].nil?
           case feature
           when :database
@@ -84,7 +84,7 @@ module Fulmar
 
         def any?
           if block_given?
-            each{ |_env, _target, data| return true if yield(data) }
+            each { |_env, _target, data| return true if yield(data) }
             false
           else
             configuration[:environments].any?
@@ -96,9 +96,8 @@ module Fulmar
         # Hashes are merged.
         # @param [Hash] other
         def merge(other)
-          if @environment && @target
-            configuration[:environments][@environment][@target] = other.deep_merge(configuration[:environments][@environment][@target])
-          end
+          return unless @environment && @target
+          configuration[:environments][@environment][@target] = other.deep_merge(configuration[:environments][@environment][@target])
         end
 
         def config_files
@@ -123,15 +122,15 @@ module Fulmar
         def fill_target(env, target)
           @config[:environments][env][target] = @config[:environments][:all].deep_merge(@config[:environments][env][target]) if @config[:environments][:all]
 
-          unless @config[:environments][env][target][:host].blank?
-            host = @config[:environments][env][target][:host].to_sym
-            if @config[:hosts] && @config[:hosts][host]
-              @config[:hosts][host].each do
-                @config[:environments][env][target] = @config[:hosts][host].deep_merge(@config[:environments][env][target])
-              end
-            else
-              fail "Host #{host} is not configured."
+          return if @config[:environments][env][target][:host].blank?
+
+          host = @config[:environments][env][target][:host].to_sym
+          if @config[:hosts] && @config[:hosts][host]
+            @config[:hosts][host].each do
+              @config[:environments][env][target] = @config[:hosts][host].deep_merge(@config[:environments][env][target])
             end
+          else
+            fail "Host #{host} is not configured."
           end
         end
 
@@ -139,7 +138,7 @@ module Fulmar
         def load_configuration
           @config = { environments: {}, features: {}, hosts: {} }
           config_files.each do |config_file|
-            @config = @config.deep_merge((YAML.load_file(config_file) ||{}).symbolize)
+            @config = @config.deep_merge((YAML.load_file(config_file) || {}).symbolize)
           end
 
           # Iterate over all environments and targets to prepare them
@@ -155,9 +154,8 @@ module Fulmar
         end
 
         def check_path(env, target)
-          unless @config[:environments][env][target][:local_path].blank?
-            @config[:environments][env][target][:local_path] = File.expand_path(@config[:environments][env][target][:local_path])
-          end
+          return if @config[:environments][env][target][:local_path].blank?
+          @config[:environments][env][target][:local_path] = File.expand_path(@config[:environments][env][target][:local_path])
         end
       end
     end
