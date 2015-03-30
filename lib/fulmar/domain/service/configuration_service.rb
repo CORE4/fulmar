@@ -137,9 +137,9 @@ module Fulmar
 
         # Loads the configuration from the YAML file and populates all targets
         def load_configuration
-          @config = { environments: {}, features: {} }
+          @config = { environments: {}, features: {}, hosts: {} }
           config_files.each do |config_file|
-            @config = @config.deep_merge(YAML.load_file(config_file).symbolize)
+            @config = @config.deep_merge((YAML.load_file(config_file) ||{}).symbolize)
           end
 
           # Iterate over all environments and targets to prepare them
