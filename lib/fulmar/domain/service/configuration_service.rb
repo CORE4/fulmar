@@ -61,7 +61,10 @@ module Fulmar
         end
 
         def ready?
-          !@environment.nil? && !@target.nil?
+          return false if @environment.nil? || @target.nil?
+          fail 'Environment is invalid' if configuration[:environments][@environment].nil?
+          fail 'Target is invalid' if configuration[:environments][@environment][@target].nil?
+          true
         end
 
         def feature?(feature)
