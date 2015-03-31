@@ -3,12 +3,13 @@ module Fulmar
     module Service
       # Provides access to composer
       class ComposerService
-        def initialize(custom_path = '/usr/bin/env composer')
+        def initialize(shell, custom_path = '/usr/bin/env composer')
+          @local_shell = shell
           @path = custom_path
         end
 
         def execute(command, arguments = [])
-          system "#{@path} #{command} #{arguments.join(' ')} > /dev/null"
+          @local_shell.run "#{@path} #{command} #{arguments.join(' ')} > /dev/null"
         end
       end
     end

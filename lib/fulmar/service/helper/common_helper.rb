@@ -17,7 +17,7 @@ module Fulmar
           end
 
           def composer(command, arguments = [])
-            (storage['composer'] ||= Fulmar::Infrastructure::Service::ComposerService.new).execute(command, arguments)
+            (storage['composer'] ||= Fulmar::Infrastructure::Service::ComposerService.new(local_shell)).execute(command, arguments)
           end
 
           def local_shell
