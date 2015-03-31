@@ -1,4 +1,5 @@
 require 'fulmar/domain/service/configuration_service'
+require 'colorize'
 
 module Fulmar
   module Domain
@@ -60,6 +61,18 @@ module Fulmar
             @storage ||= {}
             @storage[configuration.environment] ||= {}
             @storage[configuration.environment][configuration.target] ||= {}
+          end
+
+          def info(text)
+            puts (ENV['TERM'] == 'xterm-256color' ? text.blue : "* Info: #{text}")
+          end
+
+          def warn(text)
+            puts (ENV['TERM'] == 'xterm-256color' ? text.magenta : "* Warning: #{text}")
+          end
+
+          def error(text)
+            puts (ENV['TERM'] == 'xterm-256color' ? text.light_red : "* Error: #{text}")
           end
         end
       end
