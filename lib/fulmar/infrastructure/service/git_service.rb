@@ -44,6 +44,14 @@ module Fulmar
           branches.select { |name| name.match(/^preview_/) }.sort
         end
 
+        def current_hash
+          @git.head.target_id
+        end
+
+        def current_branch
+          @git.head.name.split('/').last
+        end
+
         def checkout(branch_name = derive_branch_name)
           if branches.include?(branch_name)
             @git.checkout(branches.first)
