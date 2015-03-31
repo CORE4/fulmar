@@ -56,6 +56,7 @@ module Fulmar
             options << "--chown='#{@config[:rsync][:chown]}'" if @config[:rsync][:chown]
             options << "--chmod='#{@config[:rsync][:chmod]}'" if @config[:rsync][:chmod]
             options << '--delete' if @config[:rsync][:delete]
+            options
           end
         end
       end
