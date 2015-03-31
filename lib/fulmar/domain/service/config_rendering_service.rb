@@ -11,7 +11,8 @@ module Fulmar
 
         def render
           return unless @config[:config_templates]
-          @config[:config_templates].each do |template|
+          @config[:config_templates].each do |template_file|
+            template = "#{@config[:local_path]}/#{template_file}"
             fail "Template filenames must end in .erb - '#{template}' does not" unless template[-4, 4] == '.erb'
             fail "Cannot render missing config file '#{template}'" unless File.exist? template
 
