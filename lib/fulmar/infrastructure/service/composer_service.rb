@@ -8,7 +8,7 @@ module Fulmar
           @path = custom_path
         end
 
-        def execute(command, arguments = [])
+        def execute(command, arguments = ['--no-dev'])
           @local_shell.run "#{@path} #{command} #{arguments.join(' ')} > /dev/null"
         end
       end
