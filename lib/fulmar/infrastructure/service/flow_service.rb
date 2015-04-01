@@ -8,6 +8,7 @@ module Fulmar
         def initialize(shell, config)
           @remote_shell = shell
           @config = config
+          test_config
         end
 
         def cache_clear
@@ -35,6 +36,10 @@ module Fulmar
 
         def export_filename
           "export_#{Time.now.strftime('%Y-%m-%dT%H%M%S')}.xml"
+        end
+
+        def test_config
+          fail 'Neos environment is not set.' unless @config[:neos] && @config[:neos][:environment]
         end
       end
     end
