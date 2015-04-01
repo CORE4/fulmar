@@ -33,7 +33,7 @@ module Fulmar
         end
 
         def branches
-          @git.branches.collect(:name)
+          @git.branches.collect(&:name)
         end
 
         def feature_branches
