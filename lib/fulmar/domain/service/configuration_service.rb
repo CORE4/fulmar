@@ -12,6 +12,13 @@ module Fulmar
         FULMAR_CONFIGURATION_DIR = 'Fulmar'
         DEPLOYMENT_CONFIG_FILE = 'deployment.yml'
 
+        BLANK_CONFIG = {
+          environments: {},
+          features: {},
+          hosts: {},
+          dependencies: { all: {} }
+        }
+
         include Singleton
 
         attr_reader :environment, :target
@@ -139,7 +146,7 @@ module Fulmar
 
         # Loads the configuration from the YAML file and populates all targets
         def load_configuration
-          @config = { environments: {}, features: {}, hosts: {} }
+          @config = BLANK_CONFIG
           config_files.each do |config_file|
             @config = @config.deep_merge((YAML.load_file(config_file) || {}).symbolize)
           end
