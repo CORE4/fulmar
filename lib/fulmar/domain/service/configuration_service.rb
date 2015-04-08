@@ -67,6 +67,10 @@ module Fulmar
           @target = target ? target.to_sym : nil
         end
 
+        def dependencies(env = nil)
+          env.nil? ? @config[:dependencies][:all] : @config[:dependencies][:all].deep_merge(@config[:dependencies][env])
+        end
+
         def ready?
           return false if @environment.nil? || @target.nil?
           fail 'Environment is invalid' if configuration[:environments][@environment].nil?
