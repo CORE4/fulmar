@@ -1,5 +1,3 @@
-require 'pp'
-
 db_configs = []
 configuration.each do |env, target, data|
   db_configs << [env, target] if data[:type] == 'maria'
