@@ -1,6 +1,7 @@
 
 require 'fulmar/infrastructure/service/transfer/rsync'
 require 'fulmar/infrastructure/service/transfer/rsync_with_versions'
+require 'fulmar/infrastructure/service/transfer/tar'
 
 module Fulmar
   # Creates the required transfer model from the configuration
@@ -11,6 +12,8 @@ module Fulmar
         transfer_model = Fulmar::Infrastructure::Service::Transfer::RsyncWithVersions.new(config)
       when 'rsync'
         transfer_model = Fulmar::Infrastructure::Service::Transfer::Rsync.new(config)
+      when 'tar'
+        transfer_model = Fulmar::Infrastructure::Service::Transfer::Tar.new(config)
       else
         help = config[:type] == '' ? 'Add a "type: " field to your deployment yaml file. ' : ''
         transfer_model = nil
