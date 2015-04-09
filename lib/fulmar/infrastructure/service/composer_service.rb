@@ -7,6 +7,7 @@ module Fulmar
 
         def initialize(shell, custom_path = '/usr/bin/env composer')
           @local_shell = shell
+          @local_shell.quiet = true
           @path = custom_path
         end
 
