@@ -115,7 +115,9 @@ module Fulmar
         end
 
         def config_files
-          Dir.glob(File.join(base_path, FULMAR_CONFIGURATION_DIR, '*.config.yml')).sort
+          files = Dir.glob(File.join(base_path, FULMAR_CONFIGURATION_DIR, '*.config.yml')).sort
+          files << "#{ENV['HOME']}/.fulmar.yml" if File.exist? "#{ENV['HOME']}/.fulmar.yml"
+          files
         end
 
         protected
