@@ -45,7 +45,7 @@ module Fulmar
           # Ensures all needed services are set up
           def prepare
             super
-            @remote_shell = Fulmar::Infrastructure::Service::ShellService.new @config[:remote_path], ssh_user_and_host
+            @remote_shell = Fulmar::Infrastructure::Service::ShellService.new @config[:remote_path], @config.ssh_user_and_host
             @remote_shell.debug = @config[:debug]
           end
 
@@ -143,7 +143,7 @@ module Fulmar
             options << "--chmod='#{@config[:rsync][:chmod]}'" if @config[:rsync][:chmod]
             options << '--delete' if @config[:rsync][:delete]
 
-            "rsync #{options.join(' ')} '#{@config[:local_path]}/' '#{ssh_user_and_host}:#{@config[:remote_path]}/#{@config[:temp_dir]}'"
+            "rsync #{options.join(' ')} '#{@config[:local_path]}/' '#{@config.ssh_user_and_host}:#{@config[:remote_path]}/#{@config[:temp_dir]}'"
           end
 
           # Copies the data from the sync temp to the actual release directory

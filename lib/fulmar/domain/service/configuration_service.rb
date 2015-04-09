@@ -67,6 +67,10 @@ module Fulmar
           @target = target ? target.to_sym : nil
         end
 
+        def ssh_user_and_host
+          self[:user].blank? ? self[:hostname] : self[:user] + '@' + self[:hostname]
+        end
+
         def dependencies(env = nil)
           env.nil? ? @config[:dependencies][:all] : @config[:dependencies][:all].deep_merge(@config[:dependencies][env])
         end

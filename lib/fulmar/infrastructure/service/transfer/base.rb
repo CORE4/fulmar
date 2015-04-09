@@ -45,12 +45,6 @@ module Fulmar
             # Placeholder for consistent api, currently only implemented in rsync_with_versions
             true
           end
-
-          protected
-
-          def ssh_user_and_host
-            @config[:user].blank? ? @config[:hostname] : @config[:user] + '@' + @config[:hostname]
-          end
         end
       end
     end

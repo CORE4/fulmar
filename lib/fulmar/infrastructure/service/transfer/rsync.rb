@@ -37,9 +37,9 @@ module Fulmar
           def rsync_command
             if @config[:rsync][:direction] == 'up'
               from = @config[:local_path]
-              to = ssh_user_and_host + ':' + @config[:remote_path]
+              to = @config.ssh_user_and_host + ':' + @config[:remote_path]
             else
-              from = ssh_user_and_host + ':' + @config[:remote_path]
+              from = @config.ssh_user_and_host + ':' + @config[:remote_path]
               to = @config[:local_path]
             end
 
