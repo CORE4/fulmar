@@ -17,7 +17,7 @@ module Fulmar
             (@_config_service ||= Fulmar::Domain::Service::ConfigurationService.instance)
           end
 
-          def composer(command, arguments = [])
+          def composer(command, arguments = ['--no-dev'])
             (storage['composer'] ||= Fulmar::Infrastructure::Service::ComposerService.new(local_shell)).execute(command, arguments)
           end
 
