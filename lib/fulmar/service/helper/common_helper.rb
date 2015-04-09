@@ -42,11 +42,11 @@ module Fulmar
           end
 
           def upload(filename)
-            Fulmar::Infrastructure::Service::CopyService.upload(local_shell, filename, configuration[:hostname], configuration[:remote_path])
+            Fulmar::Infrastructure::Service::CopyService.upload(local_shell, filename, configuration.ssh_user_and_host, configuration[:remote_path])
           end
 
           def download(filename)
-            Fulmar::Infrastructure::Service::CopyService.download(local_shell, configuration[:hostname], filename, configuration[:local_path])
+            Fulmar::Infrastructure::Service::CopyService.download(local_shell, configuration.ssh_user_and_host, filename, configuration[:local_path])
           end
 
           def new_shell(path, hostname = 'localhost')
