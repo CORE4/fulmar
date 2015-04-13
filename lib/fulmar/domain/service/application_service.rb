@@ -30,12 +30,12 @@ module Fulmar
         end
 
         def wrap_environment
-          proc do
+          proc do |t, args|
             configuration = Fulmar::Domain::Service::ConfigurationService.instance
             environment = configuration.environment
             target = configuration.target
 
-            yield if block_given?
+            yield(t, args) if block_given?
 
             configuration.environment = environment unless environment.nil?
             configuration.target = target unless target.nil?
