@@ -13,7 +13,7 @@ if configuration.any? { |data| data[:type] == 'vhost' }
           STDERR.puts "Cannot deploy branch '#{branch}'"
           return
         end
-        configuration[:current_branch] = branch
+        configuration[:branch_name] = branch
         configuration[:vhost_name] = match[1]
         render_templates
         upload configuration[:vhost_template]
