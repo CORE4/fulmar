@@ -14,7 +14,7 @@ namespace :versions do
   unless @versioned_servers.empty?
 
     @versioned_servers.each_key do |env|
-      target_count = @versioned_servers.keys.reduce(0) { |sum, target| sum + 1 if target.split(':').first == env.split(':').first }
+      target_count = @versioned_servers.keys.reduce(0) { |sum, target| target.split(':').first == env.split(':').first ? sum + 1 : sum }
       namespace :list do
 
         # Count of there are multiple targets within the environment
