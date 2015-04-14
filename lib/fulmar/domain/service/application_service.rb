@@ -46,6 +46,18 @@ module Fulmar
         def fulmar_task_dir
           File.expand_path(File.join(File.dirname(__FILE__), '..', 'task'))
         end
+
+        def standard_rake_options
+          options = super
+          options.reject { |option| option[0] == '--version' }
+          options << ['--version', '-V',
+              'Display the program version.',
+              lambda { |_value|
+              puts "fulmar #{Fulmar::VERSION} (using rake, version #{RAKEVERSION})"
+              exit
+            }
+          ]
+        end
       end
     end
   end
