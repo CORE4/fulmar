@@ -64,7 +64,7 @@ module Fulmar
           end
 
           def info(text)
-            puts (ENV['TERM'] == 'xterm-256color' ? text.blue : "* Info: #{text}")
+            puts (ENV['TERM'] == 'xterm-256color' ? text.blue : "* Info: #{text}") if verbose
           end
 
           def warn(text)
