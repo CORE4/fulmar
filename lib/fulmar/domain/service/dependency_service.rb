@@ -13,7 +13,7 @@ module Fulmar
           shell = Fulmar::Infrastructure::Service::ShellService.new(@config[:local_path])
           @config.dependencies(env).each_pair do |_key, data|
             next unless data[:type].blank? || data[:type] == 'git'
-            shell.run "git clone #{data[:source]} #{data[:path]}"
+            shell.run "git clone #{data[:source]} #{data[:path]} -q"
           end
         end
 
