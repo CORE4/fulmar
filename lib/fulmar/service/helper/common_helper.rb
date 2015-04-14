@@ -26,7 +26,7 @@ module Fulmar
           end
 
           def remote_shell
-            storage['remote_shell'] ||= new_shell(configuration[:remote_path], (configuration[:user] ? configuration[:user]+'@' : '')+configuration[:hostname])
+            storage['remote_shell'] ||= new_shell(configuration[:remote_path], configuration.ssh_user_and_host)
           end
 
           def file_sync
