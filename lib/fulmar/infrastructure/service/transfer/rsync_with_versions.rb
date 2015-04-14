@@ -31,8 +31,10 @@ module Fulmar
             shared: []
           }
 
+          # @param [Fulmar::Domain::Service::ConfigurationService] config
           def initialize(config)
-            @config = DEFAULT_CONFIG.deep_merge(config)
+            @config = config
+            @config.merge(DEFAULT_CONFIG)
             super(@config)
 
             if @config[:rsync][:exclude_file].blank? && File.exist?(@config[:local_path] + '/.rsyncignore')

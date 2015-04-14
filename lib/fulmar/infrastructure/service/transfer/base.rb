@@ -18,8 +18,10 @@ module Fulmar
 
           attr_accessor :config
 
+          # @param [Fulmar::Domain::Service::ConfigurationService] config
           def initialize(config)
-            @config = DEFAULT_CONFIG.merge(config)
+            @config = config
+            @config.merge(DEFAULT_CONFIG)
 
             # Remove trailing slashes
             @config[:local_path] = @config[:local_path].chomp('/') if @config[:local_path]

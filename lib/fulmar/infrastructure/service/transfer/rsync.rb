@@ -18,8 +18,10 @@ module Fulmar
             }
           }
 
+          # @param [Fulmar::Domain::Service::ConfigurationService] config
           def initialize(config)
-            @config = DEFAULT_CONFIG.deep_merge(config)
+            @config = config
+            @config.merge(DEFAULT_CONFIG)
 
             if @config[:rsync][:exclude_file].blank? && File.exist?(@config[:local_path] + '/.rsyncignore')
               @config[:rsync][:exclude_file] = @config[:local_path] + '/.rsyncignore'
