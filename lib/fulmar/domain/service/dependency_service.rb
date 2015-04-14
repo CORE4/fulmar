@@ -22,9 +22,22 @@ module Fulmar
             next unless data[:type].blank? || data[:type] == 'git'
             git = Rugged::Repository.new(data[:path])
 
-            checkout_branch(git, data[:ref]) if git.branches.select { |b| b.name.split('/').last == data[:ref] }.any?
-            git.checkout('refs/tags/'+data[:ref]) if git.tags.map(&:name).include?(data[:ref])
-            git.checkout(data[:ref]) if git.exists? data[:ref]
+            # Switch to the configured branch/tag/commit
+            if git.branches.select { |b| b.name.split('/').last == data[:ref] }.any?
+              checkout_branch(git, data[:ref])
+            elsif git.tags.map(&:name).include?(data[:ref])
+              git.checkout('refs/tags/'+data[:ref])
+            elsif data[:ref].match(/^[a-zA-Z0-9]{40}$/) && git.exists?(data[:ref])
+              git.checkout(data[:ref])
+            else
+              fail "Cannot find ref #{data[:ref]} in repo #{data[:path]}"
+            end
+
+            # Pull
+            shell = Fulmar::Infrastructure::Service::ShellService.new @config[:local_path]+'/'+data[:path]
+            unless shell.run 'git pull --rebase -q'
+              fail "Cannot update repository #{data[:path]}. Please update manually."
+            end
           end
         end
 
