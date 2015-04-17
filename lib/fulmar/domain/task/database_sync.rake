@@ -35,7 +35,7 @@ def create_update_tasks(db_configs)
   end
 end
 
-if db_configs.any?
+if configuration.feature?(:database) && db_configs.any?
   namespace :database do
     create_update_tasks(db_configs) if db_configs.count > 1
   end
