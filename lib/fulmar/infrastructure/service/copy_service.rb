@@ -9,7 +9,7 @@ module Fulmar
         # @param [String] remote_host SSH hostname
         # @param [String] remote_dir remote directory
         def self.upload(shell, local_file, remote_host, remote_dir)
-          if shell.run "scp #{local_file} #{remote_host}:#{remote_dir.chomp('/')}/"
+          if shell.run "scp -r #{local_file} #{remote_host}:#{remote_dir.chomp('/')}/"
             "#{remote_dir.chomp('/')}/#{File.basename(local_file)}"
           end
         end
@@ -20,7 +20,7 @@ module Fulmar
         # @param [String] remote_file remote directory
         # @param [String] local_dir local filename, should be absolute
         def self.download(shell, remote_host, remote_file, local_dir = '.')
-          if shell.run "scp #{remote_host}:#{remote_file} #{local_dir.chomp('/')}/"
+          if shell.run "scp -r #{remote_host}:#{remote_file} #{local_dir.chomp('/')}/"
             "#{local_dir.chomp('/')}/#{File.basename(remote_file)}"
           end
         end
