@@ -49,6 +49,7 @@ namespace :vhost do
     task (vhost_count > 1 ? "list:#{env}" : 'list') do
       configuration.environment = env
       configuration.target      = target
+      configuration.merge(VHOST_DEFAULT_CONFIG)
 
       remote_shell.run 'ls -1'
       remote_shell.last_output.each do |line|
@@ -64,9 +65,11 @@ namespace :vhost do
     task (vhost_count > 1 ? "delete:#{env}" : 'delete'), [:name] do |_t, argv|
       configuration.environment = env
       configuration.target      = target
+      configuration.merge(VHOST_DEFAULT_CONFIG)
 
       remote_shell.run [
                          "rm auto_vhost_#{argv[:name]}.conf",
+                         "rm #{configuration[:sites_enabled_dir]}/auto_vhost_#{argv[:name]}.conf",
                          "service #{configuration[:webserver] || 'nginx'} reload"
                        ]
     end
