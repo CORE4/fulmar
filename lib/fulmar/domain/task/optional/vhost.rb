@@ -1,5 +1,5 @@
-require 'fulmar/service/helper/vhost_helper'
-include Fulmar::Service::Helper::VhostHelper
+require 'fulmar/domain/service/helper/vhost_helper'
+include Fulmar::Domain::Service::Helper::VhostHelper
 
 VHOST_DEFAULT_CONFIG = {
   webserver: 'nginx',
