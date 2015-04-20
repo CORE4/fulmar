@@ -29,7 +29,7 @@ module Fulmar
                                      end
           end
 
-          @git = Rugged::Repository.new(@config[:local_path]) # :log => Logger.new(STDOUT)
+          @git = Rugged::Repository.new(@config[:git_path].blank? ? @config[:local_path] : @config[:git_path]) # :log => Logger.new(STDOUT)
         end
 
         def branches
