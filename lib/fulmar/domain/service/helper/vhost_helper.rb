@@ -6,7 +6,7 @@ module Fulmar
         module VhostHelper
           def vhost_name
             branch = git.current_branch
-            match = branch.match(/f\d+_([a-zA-Z0-9]+)/)
+            match = branch.match(/f\d+_([a-zA-Z0-9\_\-]+)/)
             if match
               match[1]
             else
