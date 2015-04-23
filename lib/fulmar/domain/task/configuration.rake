@@ -5,5 +5,14 @@ task :configtest do
   test_service = Fulmar::Domain::Service::ConfigTestService.new(configuration)
   results = test_service.run
 
-  pp results
+  results.each do |report|
+    case report[:severity]
+    when :warning
+      warning report[:message]
+    when :error
+      error report[:message]
+    else
+      info report[:message]
+    end
+  end
 end
