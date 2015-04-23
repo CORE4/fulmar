@@ -12,10 +12,19 @@ module Fulmar
           @config.reset
         end
 
+        def run
+          @report = []
+          tests = self.methods.select { |name| name.to_s[0, 5] == 'test_' }
+          tests.each do |test|
+            self.send(test)
+          end
+          @report
+        end
+
         def test_hostnames_exist
           @config.each do |env, target, data|
             if data[:hostname].blank? && !data[:host].blank?
-              report << {
+              @report << {
                 message: "#{env}:#{target} has a host (#{data[:host]}) but is missing a hostname",
                 severity: :warning
               }
@@ -30,7 +39,7 @@ module Fulmar
             next if data[:hostname].blank?
 
             unless hostnames.include? data[:hostname]
-              report << {
+              @report << {
                 message: "#{env}:#{target} has a hostname (#{data[:hostname]}) which is not found in your ssh config",
                 severity: :info
               }
