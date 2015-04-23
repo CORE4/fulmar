@@ -158,8 +158,6 @@ module Fulmar
             @config[:hosts][host].each do
               @config[:environments][env][target] = @config[:hosts][host].deep_merge(@config[:environments][env][target])
             end
-          else
-            fail "Host #{host} is not configured."
           end
         end
 
