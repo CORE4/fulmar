@@ -41,6 +41,8 @@ namespace :vhost do
                          "service #{configuration[:webserver]} reload"
                        ]
 
+      FileUtils.rm config_file_name
+
       # recover remote path
       configuration[:remote_path] = remote_path
     end
@@ -72,6 +74,7 @@ namespace :vhost do
                          "rm #{configuration[:sites_enabled_dir]}/auto_vhost_#{argv[:name]}.conf",
                          "service #{configuration[:webserver] || 'nginx'} reload"
                        ]
+
     end
   end
 end
