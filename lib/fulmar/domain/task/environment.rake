@@ -2,7 +2,6 @@
 # so that these tasks might be a dependency for other tasks
 
 namespace :environment do
-
   full_configuration[:environments].each_key do |env|
     # Sets the environment to #{env}
     task env do

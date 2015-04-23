@@ -5,7 +5,6 @@ module Fulmar
     module Service
       # Tests the configuration
       class ConfigTestService
-
         def initialize(config)
           @config = config
           @config.load_user_config = false
@@ -15,9 +14,9 @@ module Fulmar
         # Runs all methods beginning with test_ and returns the report
         def run
           @report = []
-          tests = self.methods.select { |name| name.to_s[0, 5] == 'test_' }
+          tests = methods.select { |name| name.to_s[0, 5] == 'test_' }
           tests.each do |test|
-            self.send(test)
+            send(test)
           end
           @report
         end
@@ -51,7 +50,7 @@ module Fulmar
         def test_required_hostnames
           types = %i(rsync rsync_with_version maria)
           @config.each do |env, target, data|
-            if types.include? data[:type] and data[:hostname].blank?
+            if types.include?(data[:type]) && data[:hostname].blank?
               @report << {
                 message: "#{env}:#{target} requires a hostname (#{data[:hostname]})",
                 severity: :error
@@ -64,9 +63,7 @@ module Fulmar
           vhost_template = false
 
           @config.each do |_env, _target, data|
-            unless data[:vhost_template].blank?
-              vhost_template = true
-            end
+            vhost_template = true unless data[:vhost_template].blank?
           end
 
           add_report(
@@ -78,9 +75,9 @@ module Fulmar
         # Run simple test which only require one configuration
         def test_simple_tests
           @config.each do |env, target, data|
-            tests = self.methods.select { |name| name.to_s[0, 12] == 'simple_test_' }
+            tests = methods.select { |name| name.to_s[0, 12] == 'simple_test_' }
             tests.each do |test|
-              self.send(test, env, target, data)
+              send(test, env, target, data)
             end
           end
         end

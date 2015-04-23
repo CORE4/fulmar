@@ -16,9 +16,8 @@ namespace :test do
         info "Notice: #{report[:message]}"
       end
     end
-    if results.empty?
-      info 'I am fine.'
-    end
+
+    info 'I am fine.' if results.empty?
   end
 
   task :hosts do
@@ -33,11 +32,9 @@ namespace :test do
       message = "Cannot open remote shell to host '#{configuration[:hostname]}' (#{env}:#{target})"
 
       begin
-        unless remote_shell.run 'true'
-          error message
-        end
+        remote_shell.run 'true' || error(message)
       rescue
-        error message
+        error(message)
       end
     end
   end

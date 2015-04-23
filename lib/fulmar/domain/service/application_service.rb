@@ -50,12 +50,14 @@ module Fulmar
         def standard_rake_options
           options = super
           options.reject { |option| option[0] == '--version' }
-          options << ['--version', '-V',
-              'Display the program version.',
-              lambda { |_value|
+          options << [
+            '--version',
+            '-V',
+            'Display the program version.',
+            lambda do |_value|
               puts "fulmar #{Fulmar::VERSION} (using rake, version #{RAKEVERSION})"
               exit
-            }
+            end
           ]
         end
       end

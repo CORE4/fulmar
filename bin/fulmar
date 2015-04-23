@@ -1,7 +1,5 @@
 #!/usr/bin/env ruby
 
-if ARGV[0] == 'init'
-  system('touch Fulmarfile')
-end
+system('touch Fulmarfile') if ARGV[0] == 'init'
 
 require 'fulmar/task_manager'

@@ -118,7 +118,7 @@ module Fulmar
           def revert(release = last_release)
             prepare unless @prepared
 
-            return false if release == nil
+            return false if release.nil?
 
             # Convenience: Allow more readable version string from output
             if release.match(/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}/)

@@ -154,10 +154,9 @@ module Fulmar
           return if @config[:environments][env][target][:host].blank?
 
           host = @config[:environments][env][target][:host].to_sym
-          if @config[:hosts] && @config[:hosts][host]
-            @config[:hosts][host].each do
-              @config[:environments][env][target] = @config[:hosts][host].deep_merge(@config[:environments][env][target])
-            end
+          return unless @config[:hosts] && @config[:hosts][host]
+          @config[:hosts][host].each do
+            @config[:environments][env][target] = @config[:hosts][host].deep_merge(@config[:environments][env][target])
           end
         end
 

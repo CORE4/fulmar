@@ -3,8 +3,7 @@ include Fulmar::Domain::Service::Helper::VhostHelper
 
 VHOST_DEFAULT_CONFIG = {
   webserver: 'nginx',
-  sites_enabled_dir: '../sites-enabled',
-
+  sites_enabled_dir: '../sites-enabled'
 }
 
 vhost_count = 0
@@ -14,8 +13,10 @@ namespace :vhost do
   configuration.each do |env, target, data|
     next if data[:vhost_template].blank?
 
+    task_environment = vhost_count > 1 ? ":#{env}" : ''
+
     desc "Create a vhost for #{env}"
-    task (vhost_count > 1 ? "create:#{env}" : 'create') do
+    task "create#{task_environment}" do
       configuration.environment = env
       configuration.target      = target
       configuration.merge(VHOST_DEFAULT_CONFIG)
@@ -36,10 +37,10 @@ namespace :vhost do
       upload config_file_name
       config_remote_path = configuration[:sites_available_dir] + '/' + File.basename(config_file_name)
       remote_shell.run [
-                         "rm -f #{configuration[:sites_enabled_dir]}/#{File.basename(config_file_name)}", # remove any existing link
-                         "ln -s #{config_remote_path} #{configuration[:sites_enabled_dir]}/#{File.basename(config_file_name)}",
-                         "service #{configuration[:webserver]} reload"
-                       ]
+        "rm -f #{configuration[:sites_enabled_dir]}/#{File.basename(config_file_name)}", # remove any existing link
+        "ln -s #{config_remote_path} #{configuration[:sites_enabled_dir]}/#{File.basename(config_file_name)}",
+        "service #{configuration[:webserver]} reload"
+      ]
 
       FileUtils.rm config_file_name
 
@@ -48,7 +49,7 @@ namespace :vhost do
     end
 
     desc "List existing vhosts for #{env}"
-    task (vhost_count > 1 ? "list:#{env}" : 'list') do
+    task "list#{task_environment}" do
       configuration.environment = env
       configuration.target      = target
       configuration.merge(VHOST_DEFAULT_CONFIG)
@@ -64,17 +65,16 @@ namespace :vhost do
     end
 
     desc "Delete a vhost for #{env}"
-    task (vhost_count > 1 ? "delete:#{env}" : 'delete'), [:name] do |_t, argv|
+    task "delete#{task_environment}", [:name] do |_t, argv|
       configuration.environment = env
       configuration.target      = target
       configuration.merge(VHOST_DEFAULT_CONFIG)
 
       remote_shell.run [
-                         "rm auto_vhost_#{argv[:name]}.conf",
-                         "rm #{configuration[:sites_enabled_dir]}/auto_vhost_#{argv[:name]}.conf",
-                         "service #{configuration[:webserver] || 'nginx'} reload"
-                       ]
-
+        "rm auto_vhost_#{argv[:name]}.conf",
+        "rm #{configuration[:sites_enabled_dir]}/auto_vhost_#{argv[:name]}.conf",
+        "service #{configuration[:webserver] || 'nginx'} reload"
+      ]
     end
   end
 end
