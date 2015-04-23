@@ -115,8 +115,10 @@ module Fulmar
           #
           # @params release [String] the release folder or time string (which is found in the output list)
           # @return [true, false] success
-          def revert(release)
+          def revert(release = last_release)
             prepare unless @prepared
+
+            return false if release == nil
 
             # Convenience: Allow more readable version string from output
             if release.match(/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}/)
@@ -127,6 +129,13 @@ module Fulmar
           end
 
           protected
+
+          def last_release
+            list = list_releases
+            current = current_release
+            current_index = list.index(current)
+            (current_index.nil? || current_index == 0) ? nil : list[current_index - 1]
+          end
 
           # Creates all necessary paths on the remote machine
           # @return [true, false] success
