@@ -22,10 +22,12 @@ module Fulmar
         include Singleton
 
         attr_reader :environment, :target
+        attr_accessor :load_user_config
 
         def initialize
           @environment = nil
           @target = nil
+          @load_user_config = true
         end
 
         # Allow access of configuration via array/hash access methods (read access)
@@ -120,8 +122,15 @@ module Fulmar
 
         def config_files
           files = Dir.glob(File.join(base_path, FULMAR_CONFIGURATION_DIR, '*.config.yml')).sort
-          files << "#{ENV['HOME']}/.fulmar.yml" if File.exist? "#{ENV['HOME']}/.fulmar.yml"
+          files << "#{ENV['HOME']}/.fulmar.yml" if File.exist?("#{ENV['HOME']}/.fulmar.yml") && @load_user_config
           files
+        end
+
+        # Reset the loaded configuration, forcing a reload
+        # this is currently used for reloading the config without the user config file
+        # to test the project configuration
+        def reset
+          @config = nil
         end
 
         protected
