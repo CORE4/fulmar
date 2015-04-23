@@ -9,12 +9,15 @@ namespace :test do
     results.each do |report|
       case report[:severity]
       when :warning
-        warning report[:message]
+        warning "Warning: #{report[:message]}"
       when :error
-        error report[:message]
+        error "Error: #{report[:message]}"
       else
-        info report[:message]
+        info "Notice: #{report[:message]}"
       end
+    end
+    if results.empty?
+      info 'I am fine.'
     end
   end
 
