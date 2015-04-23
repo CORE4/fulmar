@@ -87,10 +87,7 @@ module Fulmar
 
         def simple_test_local_path_exists(env, target, data)
           unless File.exist? data[:local_path]
-            @report << {
-              message: "#{env}:#{target} has no valid local_path (#{data[:local_path]})",
-              severity: :warning
-            }
+            add_report("#{env}:#{target} has no valid local_path (#{data[:local_path]})", :warning)
           end
         end
 
