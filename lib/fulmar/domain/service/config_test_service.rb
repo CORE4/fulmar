@@ -63,7 +63,7 @@ module Fulmar
         def test_vhost_template_is_set
           vhost_template = false
 
-          @config.each do |env, target, data|
+          @config.each do |_env, _target, data|
             unless data[:vhost_template].blank?
               vhost_template = true
             end
