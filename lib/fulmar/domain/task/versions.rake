@@ -19,7 +19,7 @@ namespace :versions do
 
         # Count of there are multiple targets within the environment
         # if not, we can omit the target name in the task and shorten it a bit
-        # This should work in most cases.
+        # This should apply for almost all cases.
 
         desc "List available versions for environment/target \"#{env}\""
         task (target_count > 1 ? env : env.split(':').first) do
@@ -36,6 +36,15 @@ namespace :versions do
           configuration.environment = env.split(':').first
           configuration.target = env.split(':').last
           file_sync.cleanup
+        end
+      end
+
+      namespace :revert do
+        desc "Revert to the previous version for \"#{env}\""
+        task (target_count > 1 ? env : env.split(':').first) do
+          configuration.environment = env.split(':').first
+          configuration.target = env.split(':').last
+          error 'Cannot revert to previous version.' unless file_sync.revert
         end
       end
     end
