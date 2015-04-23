@@ -115,6 +115,13 @@ module Fulmar
           end
         end
 
+        def simple_test_remote_path_exists_for_rsync(env, target, data)
+          types = [:rsync, :rsync_with_version]
+          if types.include?(data[:type]) && data[:remote_path].blank?
+            add_report "#{env}:#{target} is missing a remote path", :error
+          end
+        end
+
         protected
 
         def add_report(message, severity)
