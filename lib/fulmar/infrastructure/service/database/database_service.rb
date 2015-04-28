@@ -73,12 +73,14 @@ module Fulmar
           end
 
           def dump(filename = backup_filename)
+            filename = "#{@config[:remote_path]}/#{filename}" unless filename[0, 1] == '/'
+
             diffable = @config[:maria][:diffable_dump] ? '--skip-comments --skip-extended-insert ' : ''
 
             @shell.run "mysqldump -h #{@config[:maria][:host]} -u #{@config[:maria][:user]} --password='#{@config[:maria][:password]}' " \
                        "#{@config[:maria][:database]} --single-transaction #{diffable}-r \"#{filename}\""
 
-            @config[:remote_path] + '/' + filename
+            filename
           end
 
           def load_dump(dump_file, database = @config[:maria][:database])
