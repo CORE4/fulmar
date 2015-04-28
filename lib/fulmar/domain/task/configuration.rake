@@ -17,10 +17,11 @@ namespace :test do
       end
     end
 
-    info 'I am fine.' if results.empty?
+    info "Feelin' fine." if results.empty?
   end
 
   task :hosts do
+    error_count = 0
     configuration.each do |env, target, _data|
       configuration.environment = env
       configuration.target = target
@@ -37,5 +38,6 @@ namespace :test do
         error(message)
       end
     end
+    info "Feelin' fine." if error_count == 0
   end
 end
