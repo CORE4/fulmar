@@ -29,6 +29,13 @@ module Fulmar
           super(task_class, *args, &wrap_environment(&block))
         end
 
+        def raw_load_rakefile
+          glob("#{fulmar_task_dir}/initialization/*.rake") do |name|
+            Rake.load_rakefile name
+          end
+          super
+        end
+
         def wrap_environment
           proc do |t, args|
             configuration = Fulmar::Domain::Service::ConfigurationService.instance
