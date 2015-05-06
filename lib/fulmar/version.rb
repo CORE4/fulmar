@@ -1,4 +1,4 @@
 # Provides a global version number
 module Fulmar
-  VERSION = '1.5.2'
+  VERSION = '1.6.0'
 end
