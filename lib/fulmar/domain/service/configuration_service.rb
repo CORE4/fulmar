@@ -13,6 +13,7 @@ module Fulmar
         DEPLOYMENT_CONFIG_FILE = 'deployment.yml'
 
         BLANK_CONFIG = {
+          project: {},
           environments: {},
           features: {},
           hosts: {},

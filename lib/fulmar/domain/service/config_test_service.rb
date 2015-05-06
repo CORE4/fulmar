@@ -32,6 +32,12 @@ module Fulmar
           end
         end
 
+        def test_project_name_exists
+          if @config.configuration[:project][:name].blank?
+            add_report 'Project is missing a name', :warning
+          end
+        end
+
         def test_hostnames_in_ssh_config
           hostnames = ssh_hostnames
 
