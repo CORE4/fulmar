@@ -34,7 +34,7 @@ module Fulmar
             end
 
             # Pull
-            shell = Fulmar::Infrastructure::Service::ShellService.new "#{@config[:local_path]}/#{data[:path]}"
+            shell = Fulmar::Infrastructure::Service::ShellService.new data[:path]
             unless shell.run 'git pull --rebase -q'
               fail "Cannot update repository #{data[:path]}. Please update manually."
             end

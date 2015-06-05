@@ -1,4 +1,5 @@
 require 'yaml'
+require 'pp'
 
 module Fulmar
   module Domain
@@ -172,7 +173,14 @@ module Fulmar
             @config = @config.deep_merge((YAML.load_file(config_file) || {}).symbolize)
           end
 
+          prepare_environments
+          prepare_dependencies
           # Iterate over all environments and targets to prepare them
+          @config[:environments].delete(:all)
+          @config
+        end
+
+        def prepare_environments
           @config[:environments].each_key do |env|
             next if env == :all
             @config[:environments][env].each_key do |target|
@@ -180,8 +188,16 @@ module Fulmar
               check_path(env, target)
             end
           end
-          @config[:environments].delete(:all)
-          @config
+        end
+
+        def prepare_dependencies
+          @config[:dependencies].each_pair do |_env, repos|
+            repos.each_pair do |_name, repo|
+              next if repo[:path].blank?
+              full_path = File.expand_path("#{base_path}/#{repo[:path]}")
+              repo[:path] = full_path unless repo[:path][0,1] == '/'
+            end
+          end
         end
 
         def check_path(env, target)
