@@ -75,7 +75,11 @@ module Fulmar
         end
 
         def dependencies(env = nil)
-          env.nil? ? @config[:dependencies][:all] : @config[:dependencies][:all].deep_merge(@config[:dependencies][env])
+          if env.nil? || !@config[:dependencies].has_key?(env)
+            @config[:dependencies][:all]
+          else
+            @config[:dependencies][:all].deep_merge(@config[:dependencies][env])
+          end
         end
 
         def ready?
