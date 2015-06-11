@@ -22,8 +22,12 @@ module Fulmar
         def host_exists?(hostname)
           config_file = File.open(CONFIG_FILE, 'r')
           while (line = config_file.gets)
-            return true if /#{hostname.gsub('.', '\\.')} /.match(line)
+            if /\s*Host #{hostname.gsub('.', '\\.')}\s*$/.match(line)
+              config_file.close
+              return true
+            end
           end
+          config_file.close
           false
         end
 
