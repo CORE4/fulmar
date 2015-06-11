@@ -13,8 +13,15 @@ module Fulmar
 
         def add_hosts
           @config.configuration[:hosts].values.each do |data|
-            next unless config_valid?(data)
-            add_host(data[:hostname], data) unless host_exists?(data[:hostname])
+            unless config_valid?(data)
+              puts "Skipping #{data[:hostname]}, config not sufficient." if @config[:debug]
+              next
+            end
+            if host_exists?(data[:hostname])
+              puts "Host #{data[:hostname]} exists, skipping..." if @config[:debug]
+            else
+              add_host(data[:hostname], data)
+            end
           end
         end
 
@@ -33,6 +40,7 @@ module Fulmar
 
         # Adds a host to the ssh config file
         def add_host(hostname, host_config = {})
+          puts "Adding host #{host_config[:hostname]}..." if @config[:debug]
           config_file = File.open(CONFIG_FILE, 'a')
 
           config_file.puts "\n" # Add some space between this and the second last entry
