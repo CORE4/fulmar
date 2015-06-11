@@ -60,6 +60,10 @@ module Fulmar
             shell
           end
 
+          def ssh_config
+            storage['ssh_config'] ||= Fulmar::Infrastructure::Service::SSHConfigService.new configuration
+          end
+
           def storage
             fail 'You need to set an environment and a target first' unless configuration.ready?
             @storage ||= {}
