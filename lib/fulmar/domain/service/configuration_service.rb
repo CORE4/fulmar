@@ -1,5 +1,6 @@
 require 'yaml'
 require 'pp'
+require 'fulmar/domain/model/project'
 
 module Fulmar
   module Domain
@@ -57,6 +58,10 @@ module Fulmar
 
         def configuration
           @config ||= load_configuration
+        end
+
+        def project
+          @project ||= Fulmar::Domain::Model::Project.new(configuration[:project])
         end
 
         def method_missing(name)
