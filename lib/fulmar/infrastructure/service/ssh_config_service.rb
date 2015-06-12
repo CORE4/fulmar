@@ -6,6 +6,7 @@ module Fulmar
       # Adds entries to the ssh config and checks for existing ones
       class SSHConfigService
         CONFIG_FILE = "#{ENV['HOME']}/.ssh/config"
+        KNOWN_HOST_FILE = "#{ENV['HOME']}/.ssh/known_hosts"
 
         def initialize(config)
           @config = config
@@ -23,6 +24,17 @@ module Fulmar
               add_host(data[:hostname], data)
             end
           end
+        end
+
+        def remove_known_host(hostname)
+          input_file = File.open(KNOWN_HOST_FILE, 'r')
+          output_file = File.open(KNOWN_HOST_FILE + '.temp', 'w')
+          while (line = input_file.gets)
+            output_file.puts(line) unless /^\[?#{hostname.gsub('.', '\\.')}(?:\]:\d+)? /.match(line)
+          end
+          input_file.close
+          output_file.close
+          FileUtils.mv(KNOWN_HOST_FILE + '.temp', KNOWN_HOST_FILE)
         end
 
         # Parses the users ssh config for an existing hostname
