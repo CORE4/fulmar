@@ -55,7 +55,7 @@ module Fulmar
             options = ['-rl']
             options << "--exclude='#{@config[:rsync][:exclude]}'" if @config[:rsync][:exclude]
             options << "--exclude-from='#{@config[:rsync][:exclude_file]}'" if @config[:rsync][:exclude_file]
-            options << "--chown='#{@config[:rsync][:chown]}'" if @config[:rsync][:chown]
+            options << "--owner --group --chown='#{@config[:rsync][:chown]}'" if @config[:rsync][:chown]
             options << "--chmod='#{@config[:rsync][:chmod]}'" if @config[:rsync][:chmod]
             options << '--delete' if @config[:rsync][:delete]
             options
