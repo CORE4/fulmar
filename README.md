@@ -19,9 +19,9 @@ Fulmar currently requires the [mysql2](https://github.com/brianmario/mysql2) gem
 requires the mysql header files. So on a linux system, you want to install
 libmariadbclient-dev/libmysqlclient-dev or similar.
 
-You also need cmake to build the dependencies.
+You also need cmake and pkg-config to build the dependencies.
 
-- OSX: brew install mariadb cmake
+- OSX: brew install mariadb cmake pkg-config
 - Ubuntu: apt-get install libmariadbclient-dev build-essential cmake
 
 ## Installation
