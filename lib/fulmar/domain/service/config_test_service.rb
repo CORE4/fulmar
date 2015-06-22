@@ -33,7 +33,7 @@ module Fulmar
         end
 
         def test_project_name_exists
-          if @config.configuration[:project][:name].blank?
+          if @config.project.name.blank?
             add_report 'Project is missing a name', :warning
           end
         end
