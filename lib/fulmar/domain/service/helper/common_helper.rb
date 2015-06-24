@@ -22,7 +22,9 @@ module Fulmar
           end
 
           def composer(command, arguments = Fulmar::Infrastructure::Service::ComposerService::DEFAULT_PARAMS)
-            (storage['composer'] ||= Fulmar::Infrastructure::Service::ComposerService.new(local_shell)).execute(command, arguments)
+            storage['composer'] ||= Fulmar::Infrastructure::Service::ComposerService.new(local_shell)
+            storage['composer'].shell.quiet = !configuration[:debug]
+            storage['composer'].execute(command, arguments)
           end
 
           def local_shell
