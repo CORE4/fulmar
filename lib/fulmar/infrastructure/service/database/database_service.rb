@@ -57,7 +57,7 @@ module Fulmar
           end
 
           def tunnel
-            @tunnel ||= Fulmar::Infrastructure::Service::TunnelService.new(@config[:hostname], @config[:maria][:port], @config[:maria][:hostname])
+            @tunnel ||= Fulmar::Infrastructure::Service::TunnelService.new(@config.ssh_user_and_host, @config[:maria][:port], @config[:maria][:hostname])
           end
 
           # shortcut for DatabaseService.client.query
@@ -91,7 +91,7 @@ module Fulmar
           def download_dump(filename = backup_filename)
             local_path = filename[0, 1] == '/' ? filename : @config[:local_path] + '/' + filename
             remote_path = dump
-            copy = system("scp -q #{@config[:hostname]}:#{remote_path} #{local_path}")
+            copy = system("scp -q #{@config.ssh_user_and_host}:#{remote_path} #{local_path}")
             @shell.run "rm -f \"#{remote_path}\"" # delete temporary file
             if copy
               local_path
@@ -143,7 +143,7 @@ module Fulmar
 
           def initialize_shell
             path = local? ? @config[:local_path] : @config[:remote_path]
-            @shell = Fulmar::Infrastructure::Service::ShellService.new(path, @config.ssh_user_and_host)
+            @shell = Fulmar::Infrastructure::Service::ShellService.new(path , @config.ssh_user_and_host)
             @shell.debug = true if @config[:debug]
             @shell.strict = true
           end
