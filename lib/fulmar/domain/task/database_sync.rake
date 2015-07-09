@@ -7,7 +7,6 @@ end
 # :name is either environment:target or just the environment, if the is only one target
 def create_update_task(from, to)
   namespace to[:name] do
-    desc "Update #{to[:name]} database with #{from[:name]} data" unless to[:environment].match(/^(live|prod)/) # hide sync to live
     task "from_#{from[:name]}" do
       configuration.environment = from[:environment]
       configuration.target = from[:target]
