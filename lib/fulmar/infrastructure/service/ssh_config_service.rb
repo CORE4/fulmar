@@ -30,7 +30,7 @@ module Fulmar
           input_file = File.open(KNOWN_HOST_FILE, 'r')
           output_file = File.open(KNOWN_HOST_FILE + '.temp', 'w')
           while (line = input_file.gets)
-            output_file.puts(line) unless /^\[?#{hostname.gsub('.', '\\.')}(?:\]:\d+)? /.match(line)
+            output_file.puts(line) unless /^\[?#{hostname.gsub('.', '\\.')}(?:\]:\d+)?[ ,]/.match(line)
           end
           input_file.close
           output_file.close
