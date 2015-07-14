@@ -206,8 +206,10 @@ module Fulmar
         end
 
         def check_path(env, target)
-          return if @config[:environments][env][target][:local_path].blank?
-          @config[:environments][env][target][:local_path] = File.expand_path(@config[:environments][env][target][:local_path])
+          path = @config[:environments][env][target][:local_path]
+          return if path.blank?
+          return if path[0,1] == '/'
+          @config[:environments][env][target][:local_path] = File.expand_path("#{base_path}/#{path}")
         end
       end
     end
