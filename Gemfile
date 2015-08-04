@@ -8,3 +8,7 @@ group :test do
   gem 'rspec'
   gem 'fakefs', require: 'fakefs/safe'
 end
+
+group :test, :development do
+  gem 'rubocop', require: false
+end
