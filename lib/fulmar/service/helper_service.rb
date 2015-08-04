@@ -6,6 +6,7 @@ module Fulmar
         ##
         # Reverse file lookup in path
         # @param path [String]
+        # @param filename [String]
         def reverse_file_lookup(path, filename)
           paths = get_parent_directory_paths(path)
 
