@@ -1,5 +1,7 @@
 # Fulmar
 
+[![Build Status](https://travis-ci.org/CORE4/fulmar.svg?branch=master)](https://travis-ci.org/CORE4/fulmar)
+
 Fulmar is a task manager for deployments. It is build on top of rake to use its powerful
 task system and adds host and environment configuration. It provides methods to easily
 access the current deployment configuration and simplifies especially file transfers and
