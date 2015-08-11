@@ -47,11 +47,11 @@ module Fulmar
 
         protected
 
-        def checkout_branch(git, branch)
+        def checkout_branch(git, branch, remote = 'origin')
           if git.branches.collect(&:name).include? branch
             git.checkout(branch)
           else
-            new_branch = git.branches.create(branch.split('/').last, branch)
+            new_branch = git.branches.create(branch, "#{remote}/#{branch}")
             git.checkout(new_branch)
           end
         end
