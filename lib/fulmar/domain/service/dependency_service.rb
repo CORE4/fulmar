@@ -58,7 +58,13 @@ module Fulmar
           if git.branches.collect(&:name).include? branch
             git.checkout(branch)
           else
-            new_branch = git.branches.create(branch, "#{remote}/#{branch}")
+            remote_branch = git.branches.find do |b|
+              b.name == "#{remote}/#{branch}"
+            end
+
+            new_branch = git.branches.create(branch, remote_branch.name)
+            new_branch.upstream=(remote_branch)
+
             git.checkout(new_branch)
           end
         end
