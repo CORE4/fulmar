@@ -9,14 +9,17 @@ module Fulmar
         module CommonHelper
           attr_accessor :environment
 
+          # @return [Hash]
           def full_configuration
             configuration.configuration
           end
 
+          # @return [Fulmar::Domain::Service::ConfigurationService]
           def configuration
             (@_config_service ||= Fulmar::Domain::Service::ConfigurationService.instance)
           end
 
+          # @return [Fulmar::Domain::Model::Project]
           def project
             full_configuration[:project]
           end
@@ -27,10 +30,12 @@ module Fulmar
             storage['composer'].execute(command, arguments)
           end
 
+          # @return [Fulmar::Shell]
           def local_shell
             storage['local_shell'] ||= new_shell(configuration[:local_path])
           end
 
+          # @return [Fulmar::Shell]
           def remote_shell
             storage['remote_shell'] ||= new_shell(configuration[:remote_path], configuration.ssh_user_and_host)
           end
