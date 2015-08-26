@@ -14,9 +14,14 @@ module Fulmar
           @config.dependencies(env).each_pair do |_key, data|
             next unless data[:type].blank? || data[:type] == 'git'
             shell.quiet = true
-            shell.run "git clone #{data[:source]} #{data[:path]} -q"
-            shell.last_error.each do |line|
-              puts line unless line.include? 'already exists and is not an empty directory'
+
+            if Dir.exist? "#{data[:path]}/.git"
+              shell.run "git clone #{data[:source]} #{data[:path]} -q"
+              shell.last_error.each do |line|
+                puts line unless line.include? 'already exists and is not an empty directory'
+              end
+            else
+              shell.run 'git fetch -q', in: data[:path]
             end
 
             git = Rugged::Repository.new(data[:path])
