@@ -48,6 +48,12 @@ module Fulmar
             "rsync #{rsync_command_options.join(' ')} '#{from}/' '#{to}'"
           end
 
+          # Gets the absolute release path
+          # @return [String] the release directory
+          def release_path
+            @config[:remote_path]
+          end
+
           protected
 
           # Assembles all rsync command line parameters from the configuration options
