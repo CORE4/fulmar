@@ -34,7 +34,7 @@ module Fulmar
             next unless data[:type].blank? || data[:type] == 'git'
             git = Rugged::Repository.new(data[:path])
 
-            checkout(git, data)
+            handle_uncommitted_changes(git, data)
 
             # Pull
             shell = Fulmar::Infrastructure::Service::ShellService.new data[:path]
@@ -46,7 +46,32 @@ module Fulmar
 
         protected
 
+        ##
+        # Runs a defined update policy to avoid git conflicts
+        # @param git [Rugged::Repository]
+        # @param dependency [Hash]
+        def handle_uncommitted_changes(git, dependency)
+          policy = dependency[:update_policy] || ''
+
+          case policy
+          when 'reset'
+            reset(git)
+          else
+            puts "Unexpected update policy #{policy}"
+          end
+        end
+
+        ##
+        # Reset changes
+        # @param git [Rugged::Repository]
+        def reset(git)
+          head = git.head
+          git.reset(head.target_id, :hard) unless head.nil?
+        end
+
         def checkout(git, dependency)
+          handle_uncommitted_changes(git, dependency)
+
           # Switch to the configured branch/tag/commit
           if git.branches.select { |b| b.name.split('/').last == dependency[:ref] }.any?
             checkout_branch(git, dependency[:ref])
