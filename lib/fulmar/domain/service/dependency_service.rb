@@ -46,16 +46,16 @@ module Fulmar
 
         protected
 
-        def checkout(git, data)
+        def checkout(git, dependency)
           # Switch to the configured branch/tag/commit
-          if git.branches.select { |b| b.name.split('/').last == data[:ref] }.any?
-            checkout_branch(git, data[:ref])
-          elsif git.tags.map(&:name).include?(data[:ref])
-            git.checkout("refs/tags/#{data[:ref]}")
-          elsif data[:ref].match(/^[a-zA-Z0-9]{40}$/) && git.exists?(data[:ref])
-            git.checkout(data[:ref])
+          if git.branches.select { |b| b.name.split('/').last == dependency[:ref] }.any?
+            checkout_branch(git, dependency[:ref])
+          elsif git.tags.map(&:name).include?(dependency[:ref])
+            git.checkout("refs/tags/#{dependency[:ref]}")
+          elsif dependency[:ref].match(/^[a-zA-Z0-9]{40}$/) && git.exists?(dependency[:ref])
+            git.checkout(dependency[:ref])
           else
-            fail "Cannot find ref #{data[:ref]} in repo #{data[:path]}"
+            fail "Cannot find ref #{dependency[:ref]} in repo #{dependency[:path]}"
           end
         end
 
