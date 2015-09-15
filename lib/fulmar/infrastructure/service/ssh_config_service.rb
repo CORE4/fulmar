@@ -7,6 +7,7 @@ module Fulmar
       class SSHConfigService
         CONFIG_FILE = "#{ENV['HOME']}/.ssh/config"
         KNOWN_HOST_FILE = "#{ENV['HOME']}/.ssh/known_hosts"
+        # @todo: Get rid of this layer (Version 2?)
         CONFIG_MAP = {
           hostname: 'Hostname',
           port: 'Port',
@@ -14,7 +15,9 @@ module Fulmar
           proxycommand: 'ProxyCommand',
           checkhostip: 'CheckHostIP',
           stricthostkeychecking: 'StrictHostKeyChecking',
-          identityfile: 'IdentityFile'
+          identityfile: 'IdentityFile',
+          userknownhostfile: 'UserKnownHostsFile',
+          loglevel: 'LogLevel'
         }
 
         def initialize(config)
