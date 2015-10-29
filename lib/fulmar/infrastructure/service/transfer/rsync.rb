@@ -1,4 +1,4 @@
-
+require 'pathname'
 require 'fulmar/infrastructure/service/transfer/base'
 
 module Fulmar
@@ -38,13 +38,12 @@ module Fulmar
           # Build the rsync command from the given options
           def rsync_command
             if @config[:rsync][:direction] == 'up'
-              from = @config[:local_path]
+              from = absolute_path(@config[:local_path])
               to = @config.ssh_user_and_host + ':' + @config[:remote_path]
             else
               from = @config.ssh_user_and_host + ':' + @config[:remote_path]
-              to = @config[:local_path]
+              to = absolute_path(@config[:local_path])
             end
-
             "rsync #{rsync_command_options.join(' ')} '#{from}/' '#{to}'"
           end
 
@@ -55,6 +54,15 @@ module Fulmar
           end
 
           protected
+
+          # Get the absolute path of the given path
+          # @param [String] path
+          # @return [String] absolute path
+          def absolute_path(path)
+            path = Pathname.new(path)
+            return Pathname.new(@config.base_path) + path unless path.absolute?
+            path
+          end
 
           # Assembles all rsync command line parameters from the configuration options
           def rsync_command_options
