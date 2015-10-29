@@ -72,20 +72,26 @@ module Fulmar
             disconnect unless state_before
           end
 
+          def command(binary)
+            command = binary
+            command << " -h #{@config[:maria][:host]}" unless @config[:maria][:host].blank?
+            command << " -u #{@config[:maria][:user]}" unless @config[:maria][:user].blank?
+            command << " --password='#{@config[:maria][:password]}" unless @config[:maria][:password].blank?
+            command
+          end
+
           def dump(filename = backup_filename)
             filename = "#{@config[:remote_path]}/#{filename}" unless filename[0, 1] == '/'
 
             diffable = @config[:maria][:diffable_dump] ? '--skip-comments --skip-extended-insert ' : ''
 
-            @shell.run "mysqldump -h #{@config[:maria][:host]} -u #{@config[:maria][:user]} --password='#{@config[:maria][:password]}' " \
-                       "#{@config[:maria][:database]} --single-transaction #{diffable}-r \"#{filename}\""
+            @shell.run "#{command('mysqldump')} #{@config[:maria][:database]} --single-transaction #{diffable}-r \"#{filename}\""
 
             filename
           end
 
           def load_dump(dump_file, database = @config[:maria][:database])
-            @shell.run "mysql -h #{@config[:maria][:host]} -u #{@config[:maria][:user]} --password='#{@config[:maria][:password]}' " \
-                       "-D #{database} < #{dump_file}"
+            @shell.run "#{command('mysql')} -D #{database} < #{dump_file}"
           end
 
           def download_dump(filename = backup_filename)
