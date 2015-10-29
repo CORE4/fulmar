@@ -56,6 +56,8 @@ module Fulmar
           case policy
           when 'reset'
             reset(git)
+          when -> (p) { p.nil? || p.empty? }
+            puts 'No update policy configured'
           else
             puts "Unexpected update policy #{policy}"
           end
