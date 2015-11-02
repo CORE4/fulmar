@@ -91,7 +91,7 @@ module Fulmar
           def download_dump(filename = backup_filename)
             local_path = filename[0, 1] == '/' ? filename : @config[:local_path] + '/' + filename
             remote_path = dump
-            copy = system("scp -q #{@config.ssh_user_and_host}:#{remote_path} #{local_path}")
+            copy = system("scp -Cq #{@config.ssh_user_and_host}:#{remote_path} #{local_path}")
             @shell.run "rm -f \"#{remote_path}\"" # delete temporary file
             if copy
               local_path
