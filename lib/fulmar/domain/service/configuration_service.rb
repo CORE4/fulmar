@@ -182,6 +182,7 @@ module Fulmar
           prepare_dependencies
           # Iterate over all environments and targets to prepare them
           @config[:environments].delete(:all)
+          check_version
           @config
         end
 
@@ -210,6 +211,13 @@ module Fulmar
           return if path.blank?
           return if path[0,1] == '/'
           @config[:environments][env][target][:local_path] = File.expand_path("#{base_path}/#{path}")
+        end
+
+        def check_version
+          return if @config[:project][:fulmar_version].nil?
+          unless  Gem::Dependency.new('', @config[:project][:fulmar_version]).match?('', Fulmar::VERSION)
+            fail "Project requires a newer version of fulmar: #{@config[:project][:fulmar_version]}"
+          end
         end
       end
     end
