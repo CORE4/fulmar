@@ -66,6 +66,16 @@ module Fulmar
               exit
             end
           ]
+          options << [
+              '--debug',
+              nil,
+              'Run in debug mode.',
+              lambda do |_value|
+                configuration = Fulmar::Domain::Service::ConfigurationService.instance
+                configuration.debug = true
+              end
+          ]
+          options
         end
       end
     end
