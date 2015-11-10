@@ -11,17 +11,18 @@ module Fulmar
 
           # @return [Hash]
           def full_configuration
-            configuration.configuration
+            # configuration.data
+            fail 'This option is deprecated. Do we need it?'
           end
 
           # @return [Fulmar::Domain::Service::ConfigurationService]
           def configuration
-            (@_config_service ||= Fulmar::Domain::Service::ConfigurationService.instance)
+            (@_config_service ||= Fulmar::Domain::Service::ConfigurationService.instance.configuration)
           end
 
           # @return [Fulmar::Domain::Model::Project]
           def project
-            full_configuration[:project]
+            configuration.project
           end
 
           def composer(command, arguments = Fulmar::Infrastructure::Service::ComposerService::DEFAULT_PARAMS)
