@@ -3,12 +3,8 @@ include Fulmar::Domain::Service::Helper::CommonHelper
 namespace :versions do
   @versioned_servers = {}
 
-  full_configuration[:environments].each_pair do |env, targets|
-    next if env == :all
-
-    targets.each_pair do |target, config|
-      @versioned_servers["#{env}:#{target}"] = config if config[:type].to_s == 'rsync_with_versions'
-    end
+  configuration.each do |env, target, config|
+    @versioned_servers["#{env}:#{target}"] = config if config[:type].to_s == 'rsync_with_versions'
   end
 
   unless @versioned_servers.empty?

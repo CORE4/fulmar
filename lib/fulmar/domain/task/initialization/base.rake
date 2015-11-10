@@ -11,7 +11,7 @@ if configuration.feature? :flow
   include Fulmar::Domain::Service::Helper::FlowHelper
 end
 
-if full_configuration[:dependencies].any?
+if configuration.dependencies.any?
   require 'fulmar/domain/service/helper/dependencies_helper'
   include Fulmar::Domain::Service::Helper::DependenciesHelper
 end
