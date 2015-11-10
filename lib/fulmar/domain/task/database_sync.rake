@@ -1,6 +1,6 @@
 db_configs = []
 configuration.each do |env, target, data|
-  db_configs << [env, target] if data[:type] == 'maria'
+  db_configs << [env, target] unless data[:maria].nil?
 end
 
 # Expects two hashes as parameters each with { :environment, :target, :name } set
