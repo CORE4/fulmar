@@ -59,6 +59,34 @@ module Fulmar
           self[:user].blank? ? self[:hostname] : self[:user] + '@' + self[:hostname]
         end
 
+        # Handle dependencies
+        # @todo Refactor this to work with the dependencies plugin
+        def dependencies(env = nil)
+          if env.nil? || !@data[:dependencies].has_key?(env)
+            @data[:dependencies][:all]
+          else
+            @data[:dependencies][:all].deep_merge(@data[:dependencies][env])
+          end
+        end
+
+        # Check for a feature
+        # @todo Do we still need this? Maybe replace this with a "plugin?" method?
+        def feature?(feature)
+          return @data[:features].include? feature.to_s unless @data[:features].nil?
+          case feature
+          when :maria
+            key? :maria
+          else
+            false
+          end
+        end
+
+        # Checks if a configuration key exists in one of the targets
+        def key?(key)
+          each { |_env, _target, data| return true unless data[key].nil? }
+          false
+        end
+
         protected
 
         # Prepares the configuration

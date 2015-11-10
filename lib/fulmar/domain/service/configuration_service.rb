@@ -39,24 +39,6 @@ module Fulmar
           @config ||= load_configuration
         end
 
-        def dependencies(env = nil)
-          if env.nil? || !@config[:dependencies].has_key?(env)
-            @config[:dependencies][:all]
-          else
-            @config[:dependencies][:all].deep_merge(@config[:dependencies][env])
-          end
-        end
-
-        def feature?(feature)
-          return configuration[:features].include? feature.to_s unless configuration[:features].nil?
-          case feature
-          when :database
-            any? { |data| data[:type] == 'maria' }
-          else
-            false
-          end
-        end
-
         # Merge another configuration into the currently active one
         # Useful for supplying a default configuration, as values are not overwritten.
         # Hashes are merged.
