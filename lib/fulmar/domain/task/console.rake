@@ -1,5 +1,5 @@
 desc 'Open an interactive terminal within fulmar'
-task :console, [:environment] do |t, args|
+task :console, [:environment] do |_t, args|
   require 'irb'
   require 'irb/completion'
   ARGV.clear
