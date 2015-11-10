@@ -1,6 +1,7 @@
 require 'yaml'
 require 'pp'
 require 'fulmar/domain/model/project'
+require 'fulmar/domain/model/configuration'
 
 module Fulmar
   module Domain
