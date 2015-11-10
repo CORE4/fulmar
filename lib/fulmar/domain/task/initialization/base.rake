@@ -16,6 +16,6 @@ if full_configuration[:dependencies].any?
   include Fulmar::Domain::Service::Helper::DependenciesHelper
 end
 
-if configuration.feature?(:vhost) && configuration.any? { |data| !data[:vhost_template].blank? }
+if configuration.feature?(:vhost)
   require 'fulmar/domain/task/optional/vhost'
 end
