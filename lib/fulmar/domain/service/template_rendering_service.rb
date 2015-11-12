@@ -4,7 +4,7 @@ module Fulmar
   module Domain
     module Service
       # Renders templates of config files
-      class ConfigRenderingService
+      class TemplateRenderingService
         def initialize(config)
           @config = config
         end
