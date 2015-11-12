@@ -62,7 +62,7 @@ module Fulmar
         # Handle dependencies
         # @todo Refactor this to work with the dependencies plugin
         def dependencies(env = nil)
-          if env.nil? || !@data[:dependencies].has_key?(env)
+          if env.nil? || !@data[:dependencies].key?(env)
             @data[:dependencies][:all]
           else
             @data[:dependencies][:all].deep_merge(@data[:dependencies][env])
