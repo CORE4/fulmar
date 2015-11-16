@@ -129,6 +129,7 @@ module Fulmar
 
           # Return mysql command line options to ignore specific tables
           def ignore_tables
+            @config[:maria][:ignore_tables] = [*@config[:maria][:ignore_tables]]
             @config[:maria][:ignore_tables].map do |table|
               "--ignore-table=#{@config[:maria][:database]}.#{table}"
             end.join(' ')
