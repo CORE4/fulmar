@@ -17,7 +17,8 @@ module Fulmar
               port: 3306,
               user: 'root',
               password: '',
-              encoding: 'utf8'
+              encoding: 'utf8',
+              ignore_tables: []
             }
           }
 
@@ -78,7 +79,7 @@ module Fulmar
             diffable = @config[:maria][:diffable_dump] ? '--skip-comments --skip-extended-insert ' : ''
 
             @shell.run "mysqldump -h #{@config[:maria][:host]} -u #{@config[:maria][:user]} --password='#{@config[:maria][:password]}' " \
-                       "#{@config[:maria][:database]} --single-transaction #{diffable}-r \"#{filename}\""
+                       "#{@config[:maria][:database]} --single-transaction #{diffable} #{ignore_tables} -r \"#{filename}\""
 
             filename
           end
@@ -126,6 +127,13 @@ module Fulmar
           rescue Mysql2::Error => e
             sleep 1 if i < 3
             raise e.message if i == 3
+          end
+
+          # Return mysql command line options to ignore specific tables
+          def ignore_tables
+            @config[:maria][:ignore_tables].map do |table|
+              "--ignore-table=#{@config[:maria][:database]}.#{table}"
+            end.join(' ')
           end
 
           # Test configuration
