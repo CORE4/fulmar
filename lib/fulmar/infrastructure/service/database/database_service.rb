@@ -76,8 +76,6 @@ module Fulmar
           def dump(filename = backup_filename)
             filename = "#{@config[:remote_path]}/#{filename}" unless filename[0, 1] == '/'
 
-            diffable = @config[:maria][:diffable_dump] ? '--skip-comments --skip-extended-insert ' : ''
-
             @shell.run "mysqldump -h #{@config[:maria][:host]} -u #{@config[:maria][:user]} --password='#{@config[:maria][:password]}' " \
                        "#{@config[:maria][:database]} --single-transaction #{diffable} #{ignore_tables} -r \"#{filename}\""
 
@@ -134,6 +132,11 @@ module Fulmar
             @config[:maria][:ignore_tables].map do |table|
               "--ignore-table=#{@config[:maria][:database]}.#{table}"
             end.join(' ')
+          end
+
+          # Return the mysql configuration options to make a dump diffable
+          def diffable
+            @config[:maria][:diffable_dump] ? '--skip-comments --skip-extended-insert ' : ''
           end
 
           # Test configuration
