@@ -1,4 +1,5 @@
 require 'rake'
+require 'fulmar/domain/service/plugin_service'
 
 module Fulmar
   module Domain
@@ -31,6 +32,9 @@ module Fulmar
 
         def raw_load_rakefile
           glob("#{fulmar_task_dir}/initialization/*.rake") do |name|
+            Rake.load_rakefile name
+          end
+          Fulmar::Domain::Service::PluginService.instance.rake_files.each do
             Rake.load_rakefile name
           end
           super
