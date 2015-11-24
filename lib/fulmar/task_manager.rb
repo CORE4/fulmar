@@ -18,7 +18,6 @@ require 'fulmar/infrastructure/service/ssh_config_service'
 
 require 'fulmar/infrastructure/service/database/database_service'
 
-require 'ruby_wings'
 require 'fileutils'
 
 bootstrap = Fulmar::Service::BootstrapService.new

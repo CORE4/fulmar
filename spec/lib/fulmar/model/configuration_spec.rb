@@ -1,5 +1,6 @@
 require 'fulmar/service/helper_service'
 require 'fulmar/domain/model/configuration'
+require 'active_support'
 
 FULMAR_TEST_CONFIG = {
   project: {
@@ -52,7 +53,9 @@ FULMAR_TEST_CONFIG = {
 
 describe Fulmar::Domain::Model::Configuration do
   before :each do
-    @config = Fulmar::Domain::Model::Configuration.new(FULMAR_TEST_CONFIG, '/tmp')
+    # Make a deep copy of the hash so we have a fresh copy for every test
+    config_data = Marshal.load( Marshal.dump(FULMAR_TEST_CONFIG) )
+    @config = Fulmar::Domain::Model::Configuration.new(config_data, '/tmp')
   end
 
   describe '#instantiation' do
@@ -126,6 +129,24 @@ describe Fulmar::Domain::Model::Configuration do
     it 'should prefer the local configuration over the host configuration' do
       @config.environment = :staging
       @config.target = :data
+      expect(@config[:remote_path]).to eql('/')
+    end
+  end
+
+  describe '#merge' do
+    it 'merges the given configuration into the current target' do
+      default_config = { new_default_value: 'default' }
+      @config.environment = :staging
+      @config.target = :data
+      @config.merge(default_config)
+      expect(@config[:new_default_value]).to eql('default')
+    end
+
+    it 'prefers the explicit config over the default values' do
+      default_config = { remote_path: '/default' }
+      @config.environment = :staging
+      @config.target = :data
+      @config.merge(default_config)
       expect(@config[:remote_path]).to eql('/')
     end
   end

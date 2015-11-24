@@ -1,6 +1,6 @@
 require 'yaml'
 require 'fulmar/domain/model/project'
-require 'ruby_wings'
+require 'active_support'
 require 'pp'
 
 module Fulmar
@@ -87,6 +87,15 @@ module Fulmar
           false
         end
 
+        # Merge another configuration into the currently active one
+        # Useful for supplying a default configuration, as values are not overwritten.
+        # Hashes are merged.
+        # @param [Hash] other
+        def merge(other)
+          return unless @environment && @target
+          @data[:environments][@environment][@target] = other.deep_merge(@data[:environments][@environment][@target])
+        end
+
         protected
 
         # Prepares the configuration
@@ -137,7 +146,7 @@ module Fulmar
         def absolutize_paths
           each do |_env, _target, data|
             data.keys.each do |key|
-              data[:local_path] = absolutize(data[:local_path])
+              data[:local_path] = absolutize(data[:local_path]) if data[:local_path]
               if local_path?(key) && data[key].class == String
                 data[key] = absolutize(data[key], data[:local_path] || @base_path)
               end

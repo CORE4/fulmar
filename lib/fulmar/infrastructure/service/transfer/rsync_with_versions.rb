@@ -1,7 +1,7 @@
 
 require 'fulmar/infrastructure/service/transfer/base'
 require 'time'
-require 'ruby_wings'
+require 'active_support'
 
 module Fulmar
   module Infrastructure
