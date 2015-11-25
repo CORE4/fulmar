@@ -1,3 +1,4 @@
+
 module Fulmar
   module Domain
     module Service

@@ -80,7 +80,7 @@ module Fulmar
         def load_configuration
           config = BLANK_CONFIG
           config_files.each do |config_file|
-            config = config.deep_merge((YAML.load_file(config_file) || {}).symbolize_keys)
+            config = config.deep_merge((YAML.load_file(config_file) || {}).deep_symbolize_keys)
           end
           check_version(config[:project][:fulmar_version])
           Fulmar::Domain::Model::Configuration.new(config)

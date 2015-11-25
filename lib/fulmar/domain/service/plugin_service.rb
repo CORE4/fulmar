@@ -1,16 +1,19 @@
 require 'singleton'
 require 'active_support/core_ext/string/inflections'
 
-
 module Fulmar
   module Domain
     module Service
       class PluginService
         include Singleton
 
-        def load
+        def self.instance
+          @@instance ||= new
+        end
+
+        def initialize
           @plugins = {}
-          config = ConfigurationService.instance
+          config = ConfigurationService.instance.configuration
           config.plugins.each_pair do |name, plugin_config|
             require_plugin(name)
             @plugins[name] = classname(name, :configuration).new(plugin_config)
@@ -22,11 +25,13 @@ module Fulmar
         end
 
         def require_plugin(name)
-          require "fulmar-plugin-#{name}"
+          require "fulmar/plugin/#{name}/configuration"
         end
 
         def helpers
-          @plugins.keys.collect { |plugin| classname(plugin, :dsl_helper) }
+          @plugins.keys.select { |plugin| classname(plugin).constants.include? (:DslHelper) }.collect do |plugin|
+            classname(plugin, :DslHelper)
+          end
         end
 
         def rake_files

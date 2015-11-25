@@ -1,7 +1,6 @@
 require 'yaml'
 require 'fulmar/domain/model/project'
-require 'active_support'
-require 'pp'
+require 'active_support/core_ext/object/blank'
 
 module Fulmar
   module Domain
@@ -42,6 +41,10 @@ module Fulmar
         # Return the project
         def project
           @project ||= Fulmar::Domain::Model::Project.new(@data[:project])
+        end
+
+        def plugins
+          @data[:plugins] || {}
         end
 
         # Allows iterating over all targets from all configured environments

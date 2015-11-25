@@ -34,7 +34,7 @@ module Fulmar
           glob("#{fulmar_task_dir}/initialization/*.rake") do |name|
             Rake.load_rakefile name
           end
-          Fulmar::Domain::Service::PluginService.instance.rake_files.each do
+          Fulmar::Domain::Service::PluginService.instance.rake_files.each do |name|
             Rake.load_rakefile name
           end
           super
