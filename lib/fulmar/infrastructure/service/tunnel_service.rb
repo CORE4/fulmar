@@ -17,7 +17,7 @@ module Fulmar
 
         def open
           @local_port = free_port
-          @tunnel_pid = Process.spawn "ssh #{@host} -L #{@local_port}:#{@remote_host}:#{@remote_port} -N"
+          @tunnel_pid = Process.spawn "ssh #{@host} -q -L #{@local_port}:#{@remote_host}:#{@remote_port} -N"
           sleep 1
         end
 
