@@ -40,7 +40,7 @@ module Fulmar
             end
 
             # Wait max 3 seconds for the tunnel to establish
-            4.times do |i|
+            6.times do |i|
               break if try_connect(options, i)
             end
 
@@ -123,8 +123,8 @@ module Fulmar
           def try_connect(options, i)
             @client = Mysql2::Client.new options
           rescue Mysql2::Error => e
-            sleep 1 if i < 3
-            raise e.message if i == 3
+            sleep 1 if i < 5
+            raise e.message if i == 5
           end
 
           # Return mysql command line options to ignore specific tables
