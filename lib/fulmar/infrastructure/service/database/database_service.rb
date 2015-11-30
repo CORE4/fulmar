@@ -63,7 +63,7 @@ module Fulmar
 
           # shortcut for DatabaseService.client.query
           def query(*arguments)
-            @client.query(arguments)
+            @client.query(*arguments)
           end
 
           def create(name)
