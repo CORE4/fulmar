@@ -10,7 +10,7 @@ module Fulmar
         def initialize(host, port, remote_host = 'localhost')
           @host = host
           @remote_port = port
-          @remote_host = remote_host
+          @remote_host = remote_host.nil? ? 'localhost' : remote_host
           @local_port = 0
           @tunnel_pid = 0
         end
