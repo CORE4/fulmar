@@ -45,6 +45,7 @@ module Fulmar
             end
 
             @connected = true
+            query("USE #{@config[:maria][:database]}")
           end
 
           def disconnect
