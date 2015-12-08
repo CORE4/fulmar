@@ -10,14 +10,14 @@ module Fulmar
         def initialize(host, port, remote_host = 'localhost')
           @host = host
           @remote_port = port
-          @remote_host = remote_host
+          @remote_host = remote_host.nil? ? 'localhost' : remote_host
           @local_port = 0
           @tunnel_pid = 0
         end
 
         def open
           @local_port = free_port
-          @tunnel_pid = Process.spawn "ssh #{@host} -L #{@local_port}:#{@remote_host}:#{@remote_port} -N"
+          @tunnel_pid = Process.spawn "ssh #{@host} -q -L #{@local_port}:#{@remote_host}:#{@remote_port} -N"
           sleep 1
         end
 
