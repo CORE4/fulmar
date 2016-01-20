@@ -78,7 +78,7 @@ module Fulmar
             command = binary
             command << " -h #{@config[:maria][:host]}" unless @config[:maria][:host].blank?
             command << " -u #{@config[:maria][:user]}" unless @config[:maria][:user].blank?
-            command << " --password='#{@config[:maria][:password]}" unless @config[:maria][:password].blank?
+            command << " --password='#{@config[:maria][:password]}'" unless @config[:maria][:password].blank?
             command
           end
 
