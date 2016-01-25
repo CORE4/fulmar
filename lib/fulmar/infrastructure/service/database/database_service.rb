@@ -85,7 +85,7 @@ module Fulmar
           def dump(filename = backup_filename)
             filename = "#{@config[:remote_path]}/#{filename}" unless filename[0, 1] == '/'
 
-            @shell.run "#{command('mysqldump')} #{@config[:maria][:database]} --single-transaction #{diffable}-r \"#{filename}\""
+            @shell.run "#{command('mysqldump')} #{@config[:maria][:database]} --single-transaction #{diffable} #{ignore_tables} -r \"#{filename}\""
 
             filename
           end
