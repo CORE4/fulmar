@@ -160,7 +160,7 @@ module Fulmar
           # Copies the data from the sync temp to the actual release directory
           # @return [true, false] success
           def copy_temp_to_release
-            @remote_shell.run "cp -r #{@config[:temp_dir]} #{release_dir}"
+            @remote_shell.run "cp -pr #{@config[:temp_dir]} #{release_dir}"
           end
 
           # Set the symlink to the given release or the return value of release_dir() otherwise
@@ -186,7 +186,7 @@ module Fulmar
 
               unless remote_dir_exists?("#{@config[:shared_dir]}/#{dir}")
                 commands << "mkdir -p \"#{@config[:shared_dir]}/#{File.dirname(dir)}\""
-                commands << "cp -r \"#{release_dir}/#{dir}\" \"#{@config[:shared_dir]}/#{File.dirname(dir)}\""
+                commands << "cp -pr \"#{release_dir}/#{dir}\" \"#{@config[:shared_dir]}/#{File.dirname(dir)}\""
               end
 
               commands << "rm -fr \"#{release_dir}/#{dir}\""
