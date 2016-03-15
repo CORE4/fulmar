@@ -27,7 +27,7 @@ module Fulmar
               delete: true
             },
             symlinks: {},
-            limit_releases: 10,
+            limit_releases: 5,
             shared: []
           }
 
