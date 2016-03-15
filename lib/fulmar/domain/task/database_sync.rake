@@ -30,9 +30,8 @@ def name(env, target, counts)
 end
 
 def create_update_tasks(db_configs)
-  counts = {}
+  counts = Hash.new(0)
   db_configs.each do |config|
-    counts[config.first] = 0 unless counts[config.first]
     counts[config.first] += 1
   end
 
