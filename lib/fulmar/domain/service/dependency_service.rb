@@ -57,7 +57,7 @@ module Fulmar
           when 'reset'
             reset(git)
           when -> (p) { p.nil? || p.empty? }
-            puts 'No update policy configured'
+            puts 'No update policy configured' if @config[:debug]
           else
             puts "Unexpected update policy #{policy}"
           end
