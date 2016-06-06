@@ -17,7 +17,8 @@ module Fulmar
           stricthostkeychecking: 'StrictHostKeyChecking',
           identityfile: 'IdentityFile',
           userknownhostfile: 'UserKnownHostsFile',
-          loglevel: 'LogLevel'
+          loglevel: 'LogLevel',
+          forwardagent: 'ForwardAgent'
         }
 
         def initialize(config)
