@@ -64,10 +64,16 @@ module Fulmar
             path
           end
 
+          def rsync_excludes
+            return nil unless @config[:rsync][:exclude]
+            excludes = [*@config[:rsync][:exclude]]
+            excludes.map { |exclude| "--exclude='#{exclude}'" }.join(' ')
+          end
+
           # Assembles all rsync command line parameters from the configuration options
           def rsync_command_options
             options = ['-rl']
-            options << "--exclude='#{@config[:rsync][:exclude]}'" if @config[:rsync][:exclude]
+            options << rsync_excludes if rsync_excludes
             options << "--exclude-from='#{@config[:rsync][:exclude_file]}'" if @config[:rsync][:exclude_file]
             options << "--owner --group --chown='#{@config[:rsync][:chown]}'" if @config[:rsync][:chown]
             options << "--chmod='#{@config[:rsync][:chmod]}'" if @config[:rsync][:chmod]

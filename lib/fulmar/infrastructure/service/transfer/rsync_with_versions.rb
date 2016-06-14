@@ -148,7 +148,7 @@ module Fulmar
           # @return [String] the command
           def rsync_command
             options = ['-rl']
-            options << "--exclude='#{@config[:rsync][:exclude]}'" if @config[:rsync][:exclude]
+            options << rsync_excludes if rsync_excludes
             options << "--exclude-from='#{@config[:rsync][:exclude_file]}'" if @config[:rsync][:exclude_file]
             options << "--chown='#{@config[:rsync][:chown]}'" if @config[:rsync][:chown]
             options << "--chmod='#{@config[:rsync][:chmod]}'" if @config[:rsync][:chmod]
@@ -169,8 +169,8 @@ module Fulmar
           # @return [true, false] success
           def create_symlink(release = nil)
             @remote_shell.run [
-              "rm -f #{@config[:remote_path]}/current",
-              "ln -s #{release ? @config[:releases_dir] + '/' + release : release_dir} current"
+              "ln -s #{release ? @config[:releases_dir] + '/' + release : release_dir} current_new",
+              "mv -T #{@config[:remote_path]}/current_new #{@config[:remote_path]}/current"
             ]
           end
 
