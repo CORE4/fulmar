@@ -32,6 +32,11 @@ module Fulmar
           end
         end
 
+        def set(environment, target = nil)
+          @environment = environment
+          @target = target
+        end
+
         # Checks if environment and target are set
         def ready?
           return false if @environment.nil? || @target.nil?
