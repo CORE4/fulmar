@@ -5,7 +5,7 @@ module Fulmar
   module Infrastructure
     module Service
       module Transfer
-        # Abstract class for alle transfers, provides common methods
+        # Abstract class for all transfers, provides common methods
         class Base
           DEFAULT_CONFIG = {
             debug: false,
