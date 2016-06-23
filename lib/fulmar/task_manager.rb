@@ -16,8 +16,6 @@ require 'fulmar/infrastructure/service/git_service'
 require 'fulmar/infrastructure/service/copy_service'
 require 'fulmar/infrastructure/service/ssh_config_service'
 
-require 'fulmar/infrastructure/service/database/database_service'
-
 require 'fileutils'
 
 bootstrap = Fulmar::Service::BootstrapService.new
