@@ -1,6 +1,8 @@
 require 'yaml'
 require 'fulmar/domain/model/project'
 require 'active_support/core_ext/object/blank'
+require 'active_support/core_ext/hash/deep_merge'
+require 'active_support/hash_with_indifferent_access'
 
 module Fulmar
   module Domain
