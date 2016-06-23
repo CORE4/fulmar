@@ -21,7 +21,15 @@ module Fulmar
         end
 
         def classname(plugin, name = nil)
-          "Fulmar::Plugin::#{plugin.to_s.camelize}#{name.nil? ? '' : '::'+name.to_s.camelize}".constantize
+          "Fulmar::Plugin::#{class_map[plugin.to_s.downcase]}#{name.nil? ? '' : '::'+name.to_s.camelize}".constantize
+        end
+
+        def class_map
+          map = {}
+          Fulmar::Plugin.constants.each do |classname|
+            map[classname.to_s.downcase] = classname.to_s
+          end
+          map
         end
 
         def require_plugin(name)
