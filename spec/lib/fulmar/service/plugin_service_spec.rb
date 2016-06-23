@@ -5,7 +5,7 @@ require 'fulmar/domain/service/plugin_service'
 
 module Fulmar
   module Plugin
-    module Maria
+    module MariaDB
       class Database
       end
     end
@@ -19,11 +19,11 @@ describe Fulmar::Domain::Service::PluginService do
 
   describe '#classname' do
     it 'returns a module' do
-      expect(@plugin_service.classname :maria).to eql(Fulmar::Plugin::Maria)
+      expect(@plugin_service.classname :maria).to eql(Fulmar::Plugin::MariaDB)
     end
 
     it 'returns a class' do
-      expect(@plugin_service.classname(:maria, :database)).to eql(Fulmar::Plugin::Maria::Database)
+      expect(@plugin_service.classname(:maria, :database)).to eql(Fulmar::Plugin::MariaDB::Database)
     end
   end
 end
