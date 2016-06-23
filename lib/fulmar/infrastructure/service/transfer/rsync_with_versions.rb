@@ -27,7 +27,7 @@ module Fulmar
               delete: true
             },
             symlinks: {},
-            limit_releases: 10,
+            limit_releases: 5,
             shared: []
           }
 
@@ -148,7 +148,7 @@ module Fulmar
           # @return [String] the command
           def rsync_command
             options = ['-rl']
-            options << "--exclude='#{@config[:rsync][:exclude]}'" if @config[:rsync][:exclude]
+            options << rsync_excludes if rsync_excludes
             options << "--exclude-from='#{@config[:rsync][:exclude_file]}'" if @config[:rsync][:exclude_file]
             options << "--chown='#{@config[:rsync][:chown]}'" if @config[:rsync][:chown]
             options << "--chmod='#{@config[:rsync][:chmod]}'" if @config[:rsync][:chmod]
@@ -160,7 +160,7 @@ module Fulmar
           # Copies the data from the sync temp to the actual release directory
           # @return [true, false] success
           def copy_temp_to_release
-            @remote_shell.run "cp -r #{@config[:temp_dir]} #{release_dir}"
+            @remote_shell.run "cp -pr #{@config[:temp_dir]} #{release_dir}"
           end
 
           # Set the symlink to the given release or the return value of release_dir() otherwise
@@ -169,8 +169,8 @@ module Fulmar
           # @return [true, false] success
           def create_symlink(release = nil)
             @remote_shell.run [
-              "rm -f #{@config[:remote_path]}/current",
-              "ln -s #{release ? @config[:releases_dir] + '/' + release : release_dir} current"
+              "ln -s #{release ? @config[:releases_dir] + '/' + release : release_dir} current_new",
+              "mv -T #{@config[:remote_path]}/current_new #{@config[:remote_path]}/current"
             ]
           end
 
@@ -186,7 +186,7 @@ module Fulmar
 
               unless remote_dir_exists?("#{@config[:shared_dir]}/#{dir}")
                 commands << "mkdir -p \"#{@config[:shared_dir]}/#{File.dirname(dir)}\""
-                commands << "cp -r \"#{release_dir}/#{dir}\" \"#{@config[:shared_dir]}/#{File.dirname(dir)}\""
+                commands << "cp -pr \"#{release_dir}/#{dir}\" \"#{@config[:shared_dir]}/#{File.dirname(dir)}\""
               end
 
               commands << "rm -fr \"#{release_dir}/#{dir}\""

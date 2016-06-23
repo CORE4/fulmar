@@ -17,7 +17,8 @@ module Fulmar
               port: 3306,
               user: 'root',
               password: '',
-              encoding: 'utf8'
+              encoding: 'utf8',
+              ignore_tables: []
             }
           }
 
@@ -39,11 +40,12 @@ module Fulmar
             end
 
             # Wait max 3 seconds for the tunnel to establish
-            4.times do |i|
+            6.times do |i|
               break if try_connect(options, i)
             end
 
             @connected = true
+            query("USE #{@config[:maria][:database]}")
           end
 
           def disconnect
@@ -62,7 +64,7 @@ module Fulmar
 
           # shortcut for DatabaseService.client.query
           def query(*arguments)
-            @client.query(arguments)
+            @client.query(*arguments)
           end
 
           def create(name)
@@ -72,20 +74,24 @@ module Fulmar
             disconnect unless state_before
           end
 
+          def command(binary)
+            command = binary
+            command << " -h #{@config[:maria][:host]}" unless @config[:maria][:host].blank?
+            command << " -u #{@config[:maria][:user]}" unless @config[:maria][:user].blank?
+            command << " --password='#{@config[:maria][:password]}'" unless @config[:maria][:password].blank?
+            command
+          end
+
           def dump(filename = backup_filename)
             filename = "#{@config[:remote_path]}/#{filename}" unless filename[0, 1] == '/'
 
-            diffable = @config[:maria][:diffable_dump] ? '--skip-comments --skip-extended-insert ' : ''
-
-            @shell.run "mysqldump -h #{@config[:maria][:host]} -u #{@config[:maria][:user]} --password='#{@config[:maria][:password]}' " \
-                       "#{@config[:maria][:database]} --single-transaction #{diffable}-r \"#{filename}\""
+            @shell.run "#{command('mysqldump')} #{@config[:maria][:database]} --single-transaction #{diffable} #{ignore_tables} -r \"#{filename}\""
 
             filename
           end
 
           def load_dump(dump_file, database = @config[:maria][:database])
-            @shell.run "mysql -h #{@config[:maria][:host]} -u #{@config[:maria][:user]} --password='#{@config[:maria][:password]}' " \
-                       "-D #{database} < #{dump_file}"
+            @shell.run "#{command('mysql')} -D #{database} < #{dump_file}"
           end
 
           def download_dump(filename = backup_filename)
@@ -124,8 +130,21 @@ module Fulmar
           def try_connect(options, i)
             @client = Mysql2::Client.new options
           rescue Mysql2::Error => e
-            sleep 1 if i < 3
-            raise e.message if i == 3
+            sleep 1 if i < 5
+            raise e.message if i == 5
+          end
+
+          # Return mysql command line options to ignore specific tables
+          def ignore_tables
+            @config[:maria][:ignore_tables] = [*@config[:maria][:ignore_tables]]
+            @config[:maria][:ignore_tables].map do |table|
+              "--ignore-table=#{@config[:maria][:database]}.#{table}"
+            end.join(' ')
+          end
+
+          # Return the mysql configuration options to make a dump diffable
+          def diffable
+            @config[:maria][:diffable_dump] ? '--skip-comments --skip-extended-insert ' : ''
           end
 
           # Test configuration
