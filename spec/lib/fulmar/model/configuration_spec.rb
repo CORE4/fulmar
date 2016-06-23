@@ -176,4 +176,18 @@ describe Fulmar::Domain::Model::Configuration do
       expect(@config[:relative_path]).to eql('/tmp/Application/SubApplication')
     end
   end
+
+  describe '#set' do
+    it 'should set the environment only' do
+      @config.set(:live)
+      expect(@config.environment).to eql(:live)
+      expect(@config.target).to be_nil
+    end
+
+    it 'should set the environment and the target' do
+      @config.set(:live, :data)
+      expect(@config.environment).to eql(:live)
+      expect(@config.target).to eql(:data)
+    end
+  end
 end
