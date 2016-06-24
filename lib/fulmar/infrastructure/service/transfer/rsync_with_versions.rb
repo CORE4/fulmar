@@ -144,6 +144,12 @@ module Fulmar
             @remote_shell.run paths.collect { |path| "mkdir -p '#{@config[:remote_path]}/#{path}'" }
           end
 
+          def rsync_excludes
+            return nil unless @config[:rsync][:exclude]
+            excludes = [*@config[:rsync][:exclude]]
+            excludes.map { |exclude| "--exclude='#{exclude}'" }.join(' ')
+          end
+
           # Builds the rsync command
           # @return [String] the command
           def rsync_command
