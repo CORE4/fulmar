@@ -175,8 +175,8 @@ module Fulmar
           # @return [true, false] success
           def create_symlink(release = nil)
             @remote_shell.run [
-              "ln -s #{release ? @config[:releases_dir] + '/' + release : release_dir} current_new",
-              "mv -T #{@config[:remote_path]}/current_new #{@config[:remote_path]}/current"
+              "rm -f #{@config[:remote_path]}/current",
+              "ln -s #{release ? @config[:releases_dir] + '/' + release : release_dir} current"
             ]
           end
 
