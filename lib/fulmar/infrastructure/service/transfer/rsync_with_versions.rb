@@ -144,6 +144,12 @@ module Fulmar
             @remote_shell.run paths.collect { |path| "mkdir -p '#{@config[:remote_path]}/#{path}'" }
           end
 
+          def rsync_excludes
+            return nil unless @config[:rsync][:exclude]
+            excludes = [*@config[:rsync][:exclude]]
+            excludes.map { |exclude| "--exclude='#{exclude}'" }.join(' ')
+          end
+
           # Builds the rsync command
           # @return [String] the command
           def rsync_command
@@ -169,8 +175,8 @@ module Fulmar
           # @return [true, false] success
           def create_symlink(release = nil)
             @remote_shell.run [
-              "ln -s #{release ? @config[:releases_dir] + '/' + release : release_dir} current_new",
-              "mv -T #{@config[:remote_path]}/current_new #{@config[:remote_path]}/current"
+              "rm -f #{@config[:remote_path]}/current",
+              "ln -s #{release ? @config[:releases_dir] + '/' + release : release_dir} current"
             ]
           end
 
