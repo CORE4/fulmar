@@ -3,7 +3,7 @@ require 'fulmar/shell'
 
 module Fulmar
   module Infrastructure
-    module Service
+    module Model
       module Transfer
         # Abstract class for all transfers, provides common methods
         class Base

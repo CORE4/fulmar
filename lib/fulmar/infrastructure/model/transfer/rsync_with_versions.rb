@@ -5,7 +5,7 @@ require 'active_support'
 
 module Fulmar
   module Infrastructure
-    module Service
+    module Model
       module Transfer
         # Provides syncing with versioning on the server
         #

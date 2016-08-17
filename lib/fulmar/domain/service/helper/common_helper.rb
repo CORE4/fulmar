@@ -30,7 +30,7 @@ module Fulmar
           end
 
           def file_sync
-            storage['file_sync'] ||= Fulmar::FileSync.create_transfer configuration
+            storage['file_sync'] ||= Fulmar::FileSync.get_model configuration
           end
 
           def render_templates
