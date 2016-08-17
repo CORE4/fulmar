@@ -9,12 +9,6 @@ module Fulmar
         module CommonHelper
           attr_accessor :environment
 
-          # @return [Hash]
-          def full_configuration
-            # configuration.data
-            fail 'This option is deprecated. Do we need it?'
-          end
-
           # @return [Fulmar::Domain::Service::ConfigurationService]
           def configuration
             (@_config_service ||= Fulmar::Domain::Service::ConfigurationService.instance.configuration)
@@ -23,12 +17,6 @@ module Fulmar
           # @return [Fulmar::Domain::Model::Project]
           def project
             configuration.project
-          end
-
-          def composer(command, arguments = Fulmar::Infrastructure::Service::ComposerService::DEFAULT_PARAMS)
-            storage['composer'] ||= Fulmar::Infrastructure::Service::ComposerService.new(local_shell)
-            storage['composer'].shell.quiet = !configuration[:debug]
-            storage['composer'].execute(command, arguments)
           end
 
           # @return [Fulmar::Shell]
