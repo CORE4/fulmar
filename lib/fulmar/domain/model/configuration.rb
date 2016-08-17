@@ -11,9 +11,10 @@ module Fulmar
       class Configuration
         attr_accessor :environment, :target, :base_path
 
-        def initialize(data, base_path = '')
+        def initialize(data, base_path = '', debug = false)
           @data = data
           @base_path = base_path
+          @debug = debug
           prepare_data
         end
 
@@ -127,6 +128,7 @@ module Fulmar
             targets.each do |target|
               local_config = @data[:environments][env][target]
               @data[:environments][env][target] = global_config.deep_merge(environment_config).deep_merge(local_config)
+              @data[:environments][env][target][:debug] = @debug
             end
           end
         end

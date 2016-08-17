@@ -83,7 +83,7 @@ module Fulmar
             config = config.deep_merge((YAML.load_file(config_file) || {}).deep_symbolize_keys)
           end
           check_version(config[:project][:fulmar_version])
-          Fulmar::Domain::Model::Configuration.new(config)
+          Fulmar::Domain::Model::Configuration.new(config, base_path, @debug)
         end
 
         # @todo Move to configuration model if I know what this was or if it is relevant
