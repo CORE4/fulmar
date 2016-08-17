@@ -37,10 +37,6 @@ module Fulmar
             (Fulmar::Domain::Service::TemplateRenderingService.new configuration).render
           end
 
-          def git
-            storage['git'] ||= Fulmar::Infrastructure::Service::GitService.new configuration
-          end
-
           def upload(filename)
             Fulmar::Infrastructure::Service::CopyService.upload(local_shell, filename, configuration.ssh_user_and_host, configuration[:remote_path])
           end

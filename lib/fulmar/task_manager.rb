@@ -12,7 +12,6 @@ require 'fulmar/domain/service/configuration_service'
 require 'fulmar/domain/service/template_rendering_service'
 require 'fulmar/domain/service/file_sync_service'
 
-require 'fulmar/infrastructure/service/git_service'
 require 'fulmar/infrastructure/service/copy_service'
 require 'fulmar/infrastructure/service/ssh_config_service'
 
