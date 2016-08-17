@@ -1,5 +1,7 @@
 require 'fulmar/version'
 
+require 'fulmar/shell'
+
 require 'fulmar/service/bootstrap_service'
 require 'fulmar/service/helper_service'
 require 'fulmar/service/logger_service'
@@ -11,7 +13,6 @@ require 'fulmar/domain/service/template_rendering_service'
 require 'fulmar/domain/service/file_sync_service'
 
 require 'fulmar/infrastructure/service/composer_service'
-require 'fulmar/infrastructure/service/shell_service'
 require 'fulmar/infrastructure/service/git_service'
 require 'fulmar/infrastructure/service/copy_service'
 require 'fulmar/infrastructure/service/ssh_config_service'

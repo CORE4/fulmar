@@ -62,7 +62,7 @@ module Fulmar
           end
 
           def new_shell(path, hostname = 'localhost')
-            shell = Fulmar::Infrastructure::Service::ShellService.new(path, hostname)
+            shell = Fulmar::Shell(path, hostname)
             shell.strict = true
             shell.debug = configuration[:debug]
             shell
