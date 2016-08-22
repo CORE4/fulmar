@@ -56,7 +56,10 @@ module Fulmar
           def transfer
             prepare unless @prepared
 
-            create_paths && @local_shell.run(rsync_command) && copy_temp_to_release && add_shared
+            fail 'Deployment failed when trying to prepare remote directories for sync.' unless create_paths
+            fail 'Deployment failed. Cannot sync files.' unless @local_shell.run(rsync_command)
+            fail 'Deployment failed when trying to move file from temporary upload dir.' unless copy_temp_to_release
+            fail 'Deployment failed when creating symlinks for shared folders' unless add_shared
           end
 
           # Publishes the current release (i.e. sets the 'current' symlink)
