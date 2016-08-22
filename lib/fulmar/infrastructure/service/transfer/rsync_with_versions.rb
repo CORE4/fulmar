@@ -169,7 +169,7 @@ module Fulmar
           # Copies the data from the sync temp to the actual release directory
           # @return [true, false] success
           def copy_temp_to_release
-            @remote_shell.run "cp -pr #{@config[:temp_dir]} #{release_dir}"
+            @remote_shell.run "cp -pR #{@config[:temp_dir]} #{release_dir}"
           end
 
           # Set the symlink to the given release or the return value of release_dir() otherwise
