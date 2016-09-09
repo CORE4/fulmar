@@ -156,7 +156,7 @@ module Fulmar
           # Builds the rsync command
           # @return [String] the command
           def rsync_command
-            options = ['-rl']
+            options = %w(-rl --delete-excluded)
             options << rsync_excludes if rsync_excludes
             options << "--exclude-from='#{@config[:rsync][:exclude_file]}'" if @config[:rsync][:exclude_file]
             options << "--chown='#{@config[:rsync][:chown]}'" if @config[:rsync][:chown]
