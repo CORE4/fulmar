@@ -1,5 +1,5 @@
 require 'pathname'
-require 'fulmar/infrastructure/service/transfer/base'
+require 'fulmar/infrastructure/model/transfer/base'
 
 module Fulmar
   module Infrastructure

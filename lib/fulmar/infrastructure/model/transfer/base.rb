@@ -1,4 +1,3 @@
-
 require 'fulmar/shell'
 
 module Fulmar
