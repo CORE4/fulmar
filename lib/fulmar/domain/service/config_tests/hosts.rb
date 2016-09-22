@@ -1,33 +1,23 @@
-test 'hostname is set' do |config|
-  warning = nil
-  config.each do |env, target, data|
-    if data[:hostname].blank? && !data[:host].blank?
-      warning = [:warning, "#{env}:#{target} has a host (#{data[:host]}) but is missing a hostname"]
-    end
+target_test 'hostname is set' do |config|
+  if config[:hostname].blank? && !config[:host].blank?
+    next {
+      severity: :warning,
+      message: "config has a host (#{[:host]}) but is missing a hostname"
+    }
   end
-  next warning
 end
 
-test 'hostnames in ssh config' do |config|
-  hostnames = ssh_hostnames
-  info = nil
-  config.each do |env, target, data|
-    next if data[:hostname].blank?
+target_test 'hostnames in ssh config' do |config|
+  next if config[:hostname].blank?
 
-    unless hostnames.include? data[:hostname]
-      info = [:info, "#{env}:#{target} has a hostname (#{data[:hostname]}) which is not in your ssh config"]
-    end
+  unless ssh_hostnames.include? config[:hostname]
+    {severity: :info, message: "config has a hostname (#{data[:hostname]}) which is not in your ssh config"}
   end
-  next info
 end
 
-test 'required hostnames' do |config|
+target_test 'required hostnames' do |config|
   types = %i(rsync rsync_with_version maria)
-  error = nil
-  config.each do |env, target, data|
-    if types.include?(data[:type]) && data[:hostname].blank?
-      error = [:error, "#{env}:#{target} requires a hostname (#{data[:hostname]})"]
-    end
+  if types.include?(config[:type]) && config[:hostname].blank?
+    next {severity: :error, message: "config requires a hostname (#{data[:hostname]})"}
   end
-  next error
 end
