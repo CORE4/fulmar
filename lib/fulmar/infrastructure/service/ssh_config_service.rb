@@ -26,7 +26,7 @@ module Fulmar
         end
 
         def add_hosts
-          @config.configuration[:hosts].values.each do |data|
+          @config.hosts.values.each do |data|
             unless config_valid?(data)
               puts "Skipping #{data[:hostname]}, config not sufficient." if @config[:debug]
               next

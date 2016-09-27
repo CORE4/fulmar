@@ -80,6 +80,11 @@ module Fulmar
           end
         end
 
+        # Allow access to host list
+        def hosts
+          @data[:hosts]
+        end
+
         # Check for a feature
         # @todo Do we still need this? Maybe replace this with a "plugin?" method?
         def feature?(feature)
