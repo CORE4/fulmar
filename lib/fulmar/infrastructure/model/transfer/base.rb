@@ -37,7 +37,7 @@ module Fulmar
           end
 
           def prepare
-            @local_shell = Fulmar::Infrastructure::Service::ShellService.new @config[:local_path]
+            @local_shell = Fulmar::Shell.new @config[:local_path]
             @local_shell.debug = @config[:debug]
             @prepared = true
           end

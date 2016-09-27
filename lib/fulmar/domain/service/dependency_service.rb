@@ -35,7 +35,7 @@ module Fulmar
             handle_uncommitted_changes(data[:path], data)
 
             # Pull
-            shell = Fulmar::Infrastructure::Service::ShellService.new data[:path]
+            shell = Fulmar::Shell.new data[:path]
             unless shell.run 'git pull --rebase -q'
               fail "Cannot update repository #{data[:path]}. Please update manually."
             end

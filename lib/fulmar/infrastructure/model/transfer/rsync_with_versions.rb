@@ -47,7 +47,7 @@ module Fulmar
           # Ensures all needed services are set up
           def prepare
             super
-            @remote_shell = Fulmar::Infrastructure::Service::ShellService.new @config[:remote_path], @config.ssh_user_and_host
+            @remote_shell = Fulmar::Shell.new @config[:remote_path], @config.ssh_user_and_host
             @remote_shell.debug = @config[:debug]
           end
 

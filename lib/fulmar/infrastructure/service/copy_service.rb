@@ -4,7 +4,7 @@ module Fulmar
       # Provides access to composer
       class CopyService
         # Copies a file to a remote server
-        # @param [Fulmar::Infrastructure::Service::ShellService] shell
+        # @param [Fulmar::Shell] shell
         # @param [String] local_file local filename, should be absolute
         # @param [String] remote_host SSH hostname
         # @param [String] remote_dir remote directory
@@ -15,7 +15,7 @@ module Fulmar
         end
 
         # Downloads a file from a remote server
-        # @param [Fulmar::Infrastructure::Service::ShellService] shell
+        # @param [Fulmar::Shell] shell
         # @param [String] remote_host SSH hostname
         # @param [String] remote_file remote directory
         # @param [String] local_dir local filename, should be absolute
