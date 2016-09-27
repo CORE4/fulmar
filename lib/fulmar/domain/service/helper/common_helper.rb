@@ -1,4 +1,5 @@
 require 'fulmar/domain/service/configuration_service'
+require 'fulmar/shell'
 require 'colorize'
 
 module Fulmar
@@ -46,7 +47,7 @@ module Fulmar
           end
 
           def new_shell(path, hostname = 'localhost')
-            shell = Fulmar::Shell(path, hostname)
+            shell = Fulmar::Shell.new(path, hostname)
             shell.strict = true
             shell.debug = configuration[:debug]
             shell
