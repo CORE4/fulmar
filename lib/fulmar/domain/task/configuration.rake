@@ -30,10 +30,12 @@ namespace :test do
       remote_shell.quiet = true
       remote_shell.strict = false
 
+      info "Testing #{env}:#{target}..."
+
       message = "Cannot open remote shell to host '#{configuration[:hostname]}' (#{env}:#{target})"
 
       begin
-        remote_shell.run 'true' || error(message)
+        remote_shell.run('true') || error(message)
       rescue
         error(message)
       end
