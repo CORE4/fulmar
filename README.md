@@ -17,14 +17,8 @@ through an ssh tunnel.
 
 ## Prerequisites
 
-Fulmar currently requires the [mysql2](https://github.com/brianmario/mysql2) gem which
-requires the mysql header files. So on a linux system, you want to install
-libmariadbclient-dev/libmysqlclient-dev or similar.
-
-You also need cmake and pkg-config to build the dependencies.
-
-- OSX: brew install mariadb cmake pkg-config
-- Ubuntu: apt-get install libmariadbclient-dev build-essential cmake
+Fulmar 2.0 runs with Ruby >= 2.0. Plugins like [mariadb](https://github.com/CORE4/fulmar-plugin-mariadb) might have
+additional requirements.
 
 ## Installation
 
