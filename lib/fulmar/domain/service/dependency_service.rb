@@ -26,6 +26,10 @@ module Fulmar
 
             checkout(data[:path], data)
           end
+
+          # Update. This is not necessary after the initial checkout but
+          # ensures the repo is up-to-date if it was already cloned
+          update(env)
         end
 
         def update(env = @config.environment)
