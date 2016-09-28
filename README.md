@@ -368,3 +368,17 @@ Then add the variable to your template:
 ```
 SetEnv APPLICATION_ENVIRONMENT "<%= @config['application_environment'] %>"
 ```
+
+## Plugins
+
+Fulmar can be extended with plugins.
+
+```yaml
+plugins:
+  mariadb:
+    # Put mariadb plugin configuration here
+  git:
+    # Put git plugin configuration here 
+```
+
+If you want to add your own plugin, have a look at the [example plugin](https://github.com/CORE4/fulmar-plugin-example).
