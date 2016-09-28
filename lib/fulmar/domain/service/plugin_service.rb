@@ -1,5 +1,6 @@
 require 'singleton'
 require 'active_support/core_ext/string/inflections'
+require 'fulmar/domain/service/configuration_service'
 
 module Fulmar
   module Domain
