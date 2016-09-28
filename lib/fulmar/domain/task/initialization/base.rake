@@ -1,7 +1,7 @@
 require 'fulmar/domain/service/helper/common_helper'
 include Fulmar::Domain::Service::Helper::CommonHelper
 
-if configuration.feature?(:vhost)
+if config.feature?(:vhost)
   require 'fulmar/domain/task/optional/vhost'
 end
 

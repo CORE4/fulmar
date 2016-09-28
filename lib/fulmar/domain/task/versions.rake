@@ -3,7 +3,7 @@ include Fulmar::Domain::Service::Helper::CommonHelper
 namespace :versions do
   @versioned_servers = {}
 
-  configuration.each do |env, target, config|
+  config.each do |env, target, config|
     @versioned_servers["#{env}:#{target}"] = config if config[:type].to_s == 'rsync_with_versions'
   end
 
@@ -21,8 +21,8 @@ namespace :versions do
 
         desc "List available versions for environment/target \"#{env}\""
         task task_environment do
-          configuration.environment = env.split(':').first
-          configuration.target = env.split(':').last
+          config.environment = env.split(':').first
+          config.target = env.split(':').last
           file_sync.list_releases(false).each { |item| puts item }
         end
       end
@@ -30,8 +30,8 @@ namespace :versions do
       namespace :clean do
         desc "Delete obsolete versions for target \"#{env}\""
         task task_environment do
-          configuration.environment = env.split(':').first
-          configuration.target = env.split(':').last
+          config.environment = env.split(':').first
+          config.target = env.split(':').last
           file_sync.cleanup
         end
       end
@@ -39,8 +39,8 @@ namespace :versions do
       namespace :revert do
         desc "Revert to the previous version for \"#{env}\""
         task task_environment do
-          configuration.environment = env.split(':').first
-          configuration.target = env.split(':').last
+          config.environment = env.split(':').first
+          config.target = env.split(':').last
           error 'Cannot revert to previous version.' unless file_sync.revert
         end
       end

@@ -5,8 +5,8 @@ task :console, [:environment] do |_t, args|
   ARGV.clear
   if args[:environment] && args[:environment].include?(':')
     environment, target = args[:environment].split(':')
-    configuration.environment = environment.to_sym
-    configuration.target = target.to_sym
+    config.environment = environment.to_sym
+    config.target = target.to_sym
   end
   IRB.start
 end

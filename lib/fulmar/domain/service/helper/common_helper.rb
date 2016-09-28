@@ -11,61 +11,61 @@ module Fulmar
           attr_accessor :environment
 
           # @return [Fulmar::Domain::Service::ConfigurationService]
-          def configuration
+          def config
             (@_config_service ||= Fulmar::Domain::Service::ConfigurationService.instance.configuration)
           end
 
           # @return [Fulmar::Domain::Model::Project]
           def project
-            configuration.project
+            config.project
           end
 
           # @return [Fulmar::Shell]
           def local_shell
-            storage['local_shell'] ||= new_shell(configuration[:local_path])
+            storage['local_shell'] ||= new_shell(config[:local_path])
           end
 
           # @return [Fulmar::Shell]
           def remote_shell
-            storage['remote_shell'] ||= new_shell(configuration[:remote_path], configuration.ssh_user_and_host)
+            storage['remote_shell'] ||= new_shell(config[:remote_path], config.ssh_user_and_host)
           end
 
           def file_sync
-            storage['file_sync'] ||= Fulmar::FileSync.get_model configuration
+            storage['file_sync'] ||= Fulmar::FileSync.get_model config
           end
 
           def dependencies
-            storage['dependecies'] ||= Fulmar::Domain::Service::DependencyService.new configuration
+            storage['dependecies'] ||= Fulmar::Domain::Service::DependencyService.new config
           end
 
           def render_templates
-            (Fulmar::Domain::Service::TemplateRenderingService.new configuration).render
+            (Fulmar::Domain::Service::TemplateRenderingService.new config).render
           end
 
           def upload(filename)
-            Fulmar::Infrastructure::Service::CopyService.upload(local_shell, filename, configuration.ssh_user_and_host, configuration[:remote_path])
+            Fulmar::Infrastructure::Service::CopyService.upload(local_shell, filename, config.ssh_user_and_host, config[:remote_path])
           end
 
           def download(filename)
-            Fulmar::Infrastructure::Service::CopyService.download(local_shell, configuration.ssh_user_and_host, filename, configuration[:local_path])
+            Fulmar::Infrastructure::Service::CopyService.download(local_shell, config.ssh_user_and_host, filename, config[:local_path])
           end
 
           def new_shell(path, hostname = 'localhost')
             shell = Fulmar::Shell.new(path, hostname)
             shell.strict = true
-            shell.debug = configuration[:debug]
+            shell.debug = config[:debug]
             shell
           end
 
           def ssh_config
-            storage['ssh_config'] ||= Fulmar::Infrastructure::Service::SSHConfigService.new configuration
+            storage['ssh_config'] ||= Fulmar::Infrastructure::Service::SSHConfigService.new config
           end
 
           def storage
-            fail 'You need to set an environment and a target first' unless configuration.ready?
+            fail 'You need to set an environment and a target first' unless config.ready?
             @storage ||= {}
-            @storage[configuration.environment] ||= {}
-            @storage[configuration.environment][configuration.target] ||= {}
+            @storage[config.environment] ||= {}
+            @storage[config.environment][config.target] ||= {}
           end
 
           def info(text)
