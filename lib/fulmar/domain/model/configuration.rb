@@ -33,9 +33,17 @@ module Fulmar
           end
         end
 
+        # Set the environment and target in one call
         def set(environment, target = nil)
-          @environment = environment
-          @target = target
+          # For convenience, allow something like "environment:target" as string
+          if environment.class == String
+            fields = environment.split(':')
+            @environment = fields.first.to_sym
+            @target = fields.size > 1 ? fields[1].to_sym : nil
+          else
+            @environment = environment
+            @target = target unless target.nil?
+          end
         end
 
         # Checks if environment and target are set
