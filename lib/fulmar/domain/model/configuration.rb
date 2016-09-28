@@ -139,7 +139,7 @@ module Fulmar
             environment_config = @data[:environments][env].delete(:all) || {}
             targets = @data[:environments][env].keys
             targets.each do |target|
-              local_config = @data[:environments][env][target]
+              local_config = @data[:environments][env][target] || {}
               @data[:environments][env][target] = global_config.deep_merge(environment_config).deep_merge(local_config)
               @data[:environments][env][target][:debug] = @debug
             end
