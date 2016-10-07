@@ -190,17 +190,17 @@ module Fulmar
           # @return [true, false] success
           def add_shared
             commands = [] # Collect all remote commands first, then execute them in one step to avoid reconnecting very often
-            @config[:shared].each do |dir|
-              commands << "mkdir -p \"#{release_dir}/#{File.dirname(dir)}\""
+            @config[:shared].each do |path|
+              commands << "mkdir -p \"#{release_dir}/#{File.dirname(path)}\""
 
-              unless remote_dir_exists?("#{@config[:shared_dir]}/#{dir}")
-                commands << "mkdir -p \"#{@config[:shared_dir]}/#{File.dirname(dir)}\""
-                commands << "cp -pr \"#{release_dir}/#{dir}\" \"#{@config[:shared_dir]}/#{File.dirname(dir)}\""
+              unless remote_dir_exists?("#{@config[:shared_dir]}/#{path}")
+                commands << "mkdir -p \"#{@config[:shared_dir]}/#{File.dirname(path)}\""
+                commands << "cp -pr \"#{release_dir}/#{path}\" \"#{@config[:shared_dir]}/#{File.dirname(path)}\""
               end
 
-              commands << "rm -fr \"#{release_dir}/#{dir}\""
-              commands << "mkdir -p \"#{release_dir}/#{File.dirname(dir)}\""
-              commands << "ln -s \"#{@config[:remote_path]}/#{@config[:shared_dir]}/#{dir}\" \"#{release_dir}/#{dir}\""
+              commands << "rm -fr \"#{release_dir}/#{path}\""
+              commands << "mkdir -p \"#{release_dir}/#{File.dirname(path)}\""
+              commands << "ln -s \"#{@config[:remote_path]}/#{@config[:shared_dir]}/#{path}\" \"#{release_dir}/#{path}\""
             end
 
             @remote_shell.run commands if commands.length > 0
