@@ -194,8 +194,7 @@ module Fulmar
               commands << "mkdir -p \"#{release_dir}/#{File.dirname(path)}\""
 
               unless remote_dir_exists?("#{@config[:shared_dir]}/#{path}")
-                commands << "mkdir -p \"#{@config[:shared_dir]}/#{File.dirname(path)}\""
-                commands << "cp -pr \"#{release_dir}/#{path}\" \"#{@config[:shared_dir]}/#{File.dirname(path)}\""
+                commands << "mkdir -p \"#{@config[:shared_dir]}/#{path}}\""
               end
 
               commands << "rm -fr \"#{release_dir}/#{path}\""
