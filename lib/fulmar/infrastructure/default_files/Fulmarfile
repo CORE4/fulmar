@@ -1,0 +1,22 @@
+# This is a basic Fulmarfile. You can add task just like in Rake. Additionally, you can
+# use helper to modify the ssh config, open a shell locally or remote, or upload files to a preconfigured host
+# All paths and hostname are configured in Fulmar/project.config.yml. You can split you configuration over multiple
+# *.config.yml files which are all merged. You can create additional .rake files within the Fulmar directory.
+# For more help, look at https://github.com/CORE4/fulmar
+
+desc 'setup this project'
+task setup: 'environment:local:base' do
+  info 'Withing this task you can add the initialization of your project.'
+  # Maybe do this:
+  # dependencies.setup
+  # ssh_config.add_hosts
+end
+
+namespace :deploy do
+  desc 'Deploy to staging system'
+  task staging: 'environment:staging:application' do
+    info 'Here you can upload your files and maybe flush the cache'
+    # file_sync.transfer
+    # remote_shell.run 'php cli/console cache:flush'
+  end
+end
