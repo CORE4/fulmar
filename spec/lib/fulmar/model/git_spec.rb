@@ -69,26 +69,52 @@ describe Fulmar::Domain::Model::Git do
     end
   end
 
-  describe '#local_branches' do
+  describe '#reset' do
     it 'calls git' do
+      @git.reset
+      expect(@shell.last_commands.last[0, 16]).to eq('git reset --hard')
+    end
+  end
+
+  describe '#remote_branches' do
+    it 'calls git' do
+      @git.remote_branches
+      expect(@shell.last_commands.last).to eq('git branch -r')
+    end
+
+    it 'returns the remote branches' do
       @shell.last_output = [
         '  origin/2.0',
         '  origin/HEAD -> origin/master',
         '  origin/f4780_update_policies',
         '  origin/master'
       ]
-      branches = @git.remote_branches
-      expect(@shell.last_commands.last).to eq('git branch -r')
-      expect(branches).to eq(%w(2.0 HEAD f4780_update_policies master))
+      expect(@git.remote_branches).to eq(%w(2.0 HEAD f4780_update_policies master))
     end
   end
 
   describe '#local_branches' do
     it 'calls git' do
-      @shell.last_output = ['* 2.0', '  master']
-      branches = @git.local_branches
+      @git.local_branches
       expect(@shell.last_commands.last).to eq('git branch')
-      expect(branches).to eq(%w(2.0 master))
+    end
+
+    it 'returns the local branches' do
+      @shell.last_output = ['* 2.0', '  master']
+      expect(@git.local_branches).to eq(%w(2.0 master))
+    end
+  end
+
+  describe '#tags' do
+    it 'calls git' do
+      @git.tags
+      expect(@shell.last_commands.last).to eq('git tag')
+    end
+
+    it 'returns the tag list' do
+      output = %w(0.1.0 0.2.0 0.3.0 0.3.1 0.5.0)
+      @shell.last_output = output
+      expect(@git.tags).to eq(output)
     end
   end
 end

@@ -27,6 +27,10 @@ module Fulmar
           @shell.run "git checkout #{ref}"
         end
 
+        def reset
+          @shell.run 'git reset --hard'
+        end
+
         def local_branches
           @shell.run 'git branch'
           @shell.last_output.collect { |b| b.strip.gsub(/^\* /, '') }
@@ -35,6 +39,11 @@ module Fulmar
         def remote_branches
           @shell.run 'git branch -r'
           @shell.last_output.collect { |b| b.strip.split(' ').first.split('/').last }
+        end
+
+        def tags
+          @shell.run 'git tag'
+          @shell.last_output.collect { |b| b.strip }
         end
       end
     end
