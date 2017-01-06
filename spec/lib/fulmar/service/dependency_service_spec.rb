@@ -79,18 +79,11 @@ describe Fulmar::Domain::Service::DependencyService do
   end
 
   describe '#setup' do
-    it 'checks out the master branch' do
+    it 'checks out the master branch when the is no lock file' do
       @dependency_service = Fulmar::Domain::Service::DependencyService.new(new_config)
       FileUtils.remove_entry_secure @test_dir # this is a bit silly, I know :)
-      @dependency_service.update
+      @dependency_service.setup
       expect(file_content).to eq('commit 4')
-    end
-
-    it 'checks if the local_path matches a dependency' do
-      config = new_config
-      config[:local_path] = @test_dir
-      @dependency_service = Fulmar::Domain::Service::DependencyService.new(config)
-      expect { @dependency_service.update }.to raise_error(RuntimeError)
     end
 
     it 'checks out the preview branch' do
@@ -98,26 +91,26 @@ describe Fulmar::Domain::Service::DependencyService do
       data[:dependencies][:all][:testgit][:ref] = 'preview'
       FileUtils.remove_entry_secure @test_dir # this is a bit silly, I know :)
       @dependency_service = Fulmar::Domain::Service::DependencyService.new(new_config(data))
-      @dependency_service.update
+      @dependency_service.setup
       expect(file_content).to eq('commit 5')
-    end
-
-    it 'updates during checkout' do
-      @dependency_service = Fulmar::Domain::Service::DependencyService.new(new_config)
-      shell = Fulmar::Shell.new(@test_dir)
-      shell.run 'git reset --hard HEAD^1'
-      @dependency_service.update
-      expect(file_content).to eq('commit 4')
     end
 
     it 'creates a new lock file' do
       config = new_config
       @dependency_service = Fulmar::Domain::Service::DependencyService.new(config)
       expect(File.exist?(config.base_path + '/' + Fulmar::Domain::Service::DependencyService::LOCK_FILE)).to be false
-      @dependency_service.update
+      @dependency_service.setup
       expect(File.exist?(config.base_path + '/' + Fulmar::Domain::Service::DependencyService::LOCK_FILE)).to be true
     end
   end
 
-
+  describe '#update' do
+    it 'checks out a newer ref' do
+      @dependency_service = Fulmar::Domain::Service::DependencyService.new(new_config)
+      shell = Fulmar::Shell.new(@test_dir)
+      shell.run 'git reset --hard HEAD^1'
+      @dependency_service.update
+      expect(file_content).to eq('commit 4')
+    end
+  end
 end

@@ -36,6 +36,16 @@ module Fulmar
           @shell.run 'git branch -r'
           @shell.last_output.collect { |b| b.strip.split(' ').first.split('/').last }
         end
+
+        def uncommited_changes?
+          @shell.run 'git status -s'
+          !@shell.last_output.empty?
+        end
+
+        def unpushed_changes?
+          @shell.run 'git status -b -s'
+          !@shell.last_output.empty?
+        end
       end
     end
   end

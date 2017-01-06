@@ -5,12 +5,17 @@ module Fulmar
     module Service
       # Manages dependencies to subrepositories
       class DependencyService
+        LOCK_FILE = 'Fulmar/dependencies.lock'
+
         def initialize(config)
           @config = config
         end
 
-        def setup(env = @config.environment)
+        def checkout(env = @config.environment)
           shell = Fulmar::Shell.new(@config[:local_path])
+
+          read_lock_file
+
           @config.dependencies(env).each_pair do |_key, data|
             next unless data[:type].blank? || data[:type] == 'git'
             shell.quiet = true
@@ -24,14 +29,15 @@ module Fulmar
               end
             end
 
-            checkout(data[:path], data)
+            checkout_repo(data)
           end
 
           # Update. This is not necessary after the initial checkout but
           # ensures the repo is up-to-date if it was already cloned
-          update(env)
+          # update(env)
         end
 
+        # Updates all dependencies according to the dependency config and update the lock file
         def update(env = @config.environment)
           @config.dependencies(env).each_pair do |_key, data|
             next unless data[:type].blank? || data[:type] == 'git'
@@ -39,14 +45,21 @@ module Fulmar
             handle_uncommitted_changes(data[:path], data)
 
             # Pull
-            shell = Fulmar::Shell.new data[:path]
-            unless shell.run 'git pull --rebase -q'
+            git = Fulmar::Domain::Model::Git.new data[:path]
+            unless git.pull
               fail "Cannot update repository #{data[:path]}. Please update manually."
             end
+
           end
+
+
         end
 
         protected
+
+        def write_lock_file
+
+        end
 
         ##
         # Runs a defined update policy to avoid git conflicts
@@ -69,18 +82,19 @@ module Fulmar
           system("cd #{git_path}; git reset --hard")
         end
 
-        def checkout(git_path, dependency, remote = 'origin')
-          handle_uncommitted_changes(git, dependency)
+        def checkout_repo(dependency, remote = 'origin')
+          git_path = dependency[:path]
+          handle_uncommitted_changes(git_path, dependency)
 
           # Switch to the configured branch/tag/commit
-          if local_branches.include? dependency[:ref]
-            system "cd #{git_path} && git checkout #{dependency[:ref]}"
-          elsif remote_branches.include? dependency[:ref]
-            system("cd #{git_path} && git checkout -b #{dependency[:ref]} #{remote}/#{dependency[:ref]}")
+          if local_branches(git_path).include? dependency[:ref]
+            system "cd #{git_path} && git checkout -q #{dependency[:ref]}"
+          elsif remote_branches(git_path).include? dependency[:ref]
+            system("cd #{git_path} && git checkout -q -b #{dependency[:ref]} #{remote}/#{dependency[:ref]}")
           elsif `cd #{git_path} && git tag`.split("\n").include?(dependency[:ref])
-            system "cd #{git_path} && git checkout refs/tags/#{dependency[:ref]}"
+            system "cd #{git_path} && git checkout -q refs/tags/#{dependency[:ref]}"
           elsif dependency[:ref].match(/^[a-zA-Z0-9]{40}$/)
-            system "cd #{git_path} && git checkout #{dependency[:ref]}"
+            system "cd #{git_path} && git checkout -q #{dependency[:ref]}"
           else
             fail "Cannot find ref #{dependency[:ref]} in repo #{dependency[:path]}"
           end
