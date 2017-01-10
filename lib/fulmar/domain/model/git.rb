@@ -45,6 +45,16 @@ module Fulmar
           @shell.run 'git tag'
           @shell.last_output.collect { |b| b.strip }
         end
+
+        def uncommited_changes?
+          @shell.run 'git status -s'
+          !@shell.last_output.empty?
+        end
+
+        def unpushed_changes?
+          @shell.run 'git status -b -s'
+          !@shell.last_output.empty?
+        end
       end
     end
   end

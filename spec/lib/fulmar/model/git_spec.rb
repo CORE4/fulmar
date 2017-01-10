@@ -117,5 +117,30 @@ describe Fulmar::Domain::Model::Git do
       expect(@git.tags).to eq(output)
     end
   end
+
+  describe '#uncommited_changes?' do
+    it 'returns false when everything is up-to-date' do
+      expect(@git.uncommited_changes?).to be false
+      expect(@shell.last_commands.last).to include('git status')
+    end
+
+    it 'returns true when a file is changed' do
+      @shell.last_output = [' M Fulmarfile']
+      expect(@git.uncommited_changes?).to be true
+    end
+  end
+
+  describe '#uncommited_changes?' do
+    it 'returns false when everything is up-to-date' do
+      expect(@git.uncommited_changes?).to be false
+      expect(@shell.last_commands.last).to include('git status')
+      expect(@shell.last_commands.last).to include(' -b ')
+    end
+
+    it 'returns true when a file is changed' do
+      @shell.last_output = ['## master...origin/master [behind 1]']
+      expect(@git.uncommited_changes?).to be true
+    end
+  end
 end
 
