@@ -18,7 +18,7 @@ module Fulmar
             if Dir.exist? "#{data[:path]}/.git"
               shell.run 'git fetch -q', in: data[:path]
             else
-              shell.run "git clone #{data[:source]} #{data[:path]} -q"
+              shell.run "git clone \"#{data[:source]}\" \"#{data[:path]}\" -q"
               shell.last_error.each do |line|
                 puts line unless line.include? 'already exists and is not an empty directory'
               end
