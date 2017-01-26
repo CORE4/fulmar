@@ -77,7 +77,7 @@ module Fulmar
           config_file.puts "Host #{hostname}"
           CONFIG_MAP.keys.each do |key|
             unless ssh_config[key].blank?
-              config_file.puts "    #{CONFIG_MAP[key]} \"#{ssh_config[key].gsub('"', '\\"')}\""
+              config_file.puts "    #{CONFIG_MAP[key]} \"#{ssh_config[key].to_s.gsub('"', '\\"')}\""
             end
           end
 
