@@ -24,7 +24,8 @@ libmariadbclient-dev/libmysqlclient-dev or similar.
 You also need cmake and pkg-config to build the dependencies.
 
 - OSX: brew install mariadb cmake pkg-config
-- Ubuntu: apt-get install libmariadbclient-dev build-essential cmake
+- Ubuntu: apt-get install libmariadb-client-lgpl-dev build-essential cmake
+- Ubuntu (pre-xenial): apt-get install libmariadbclient-dev build-essential cmake
 
 ## Installation
 
@@ -55,7 +56,7 @@ several files.
     $ mkdir Fulmar
     $ touch Fulmar/project.config.yml
 
-You can now now test your configuration.
+You can now test your configuration.
 
     $ fulmar test:config
 
