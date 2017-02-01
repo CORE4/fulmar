@@ -24,7 +24,7 @@ module Fulmar
               exclude_file: nil,
               chown: nil,
               chmod: nil,
-              delete: true
+              delete:  true
             },
             symlinks: {},
             limit_releases: 5,
@@ -193,7 +193,7 @@ module Fulmar
             @config[:shared].each do |path|
               commands << "mkdir -p \"#{release_dir}/#{File.dirname(path)}\""
 
-              unless remote_dir_exists?("#{@config[:shared_dir]}/#{path}")
+              unless remote_path_exists?("#{@config[:shared_dir]}/#{path}")
                 commands << "mkdir -p \"#{@config[:shared_dir]}/#{path}\""
               end
 
@@ -205,8 +205,8 @@ module Fulmar
             @remote_shell.run commands if commands.length > 0
           end
 
-          def remote_dir_exists?(dir)
-            @remote_shell.run "test -d \"#{dir}\""
+          def remote_path_exists?(dir)
+            @remote_shell.run "test -e \"#{dir}\""
           end
         end
       end
