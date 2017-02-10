@@ -1,8 +1,7 @@
 language: ruby
 rvm:
-  - 2.0
-  - 2.1
-  - 2.2
+  - 2.2.2
+  - 2.3
   - ruby-head
 matrix:
   fast_finish: true
@@ -12,4 +11,7 @@ matrix:
 before_script:
   - bundle update
 
-script: 'bundle exec rspec spec'
+script:
+  - git config --global user.email "you@example.com"
+  - git config --global user.name "Whatever Name"
+  - bundle exec rspec spec
