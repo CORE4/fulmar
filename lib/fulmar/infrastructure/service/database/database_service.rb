@@ -1,6 +1,3 @@
-require 'mysql2'
-require 'fulmar/infrastructure/service/tunnel_service'
-
 module Fulmar
   module Infrastructure
     module Service
@@ -25,53 +22,12 @@ module Fulmar
           def initialize(config)
             @config = config
             @config.merge DEFAULT_CONFIG
-            @tunnel = nil
-            @client = nil
             initialize_shell
             config_test
           end
 
-          def connect
-            options = compile_options
-
-            unless local?
-              tunnel.open
-              options[:port] = tunnel.local_port
-            end
-
-            # Wait max 3 seconds for the tunnel to establish
-            6.times do |i|
-              break if try_connect(options, i)
-            end
-
-            @connected = true
-            query("USE #{@config[:maria][:database]}")
-          end
-
-          def disconnect
-            @connected = false
-            @client.close
-            @tunnel.close if @tunnel # using the variable directly avoids creating a tunnel instance when closing the database connection
-          end
-
           def local?
             @config[:hostname] == 'localhost'
-          end
-
-          def tunnel
-            @tunnel ||= Fulmar::Infrastructure::Service::TunnelService.new(@config.ssh_user_and_host, @config[:maria][:port], @config[:maria][:hostname])
-          end
-
-          # shortcut for DatabaseService.client.query
-          def query(*arguments)
-            @client.query(*arguments)
-          end
-
-          def create(name)
-            state_before = connected?
-            connect unless connected?
-            @client.query "CREATE DATABASE IF NOT EXISTS `#{name}`"
-            disconnect unless state_before
           end
 
           def command(binary)
@@ -106,33 +62,7 @@ module Fulmar
             end
           end
 
-          def clear
-            clear_statements = <<-EOD.gsub(/^\s+\|/, '')
-              |SET FOREIGN_KEY_CHECKS = 0;
-              |SET GROUP_CONCAT_MAX_LEN=32768;
-              |SET @tables = NULL;
-              |SELECT GROUP_CONCAT('`', table_name, '`') INTO @tables
-              |FROM information_schema.tables
-              |WHERE table_schema = (SELECT DATABASE());
-              |SELECT IFNULL(@tables,'dummy') INTO @tables;
-              |
-              |SET @tables = CONCAT('DROP TABLE IF EXISTS ', @tables);
-              |PREPARE stmt FROM @tables;
-              |EXECUTE stmt;
-              |DEALLOCATE PREPARE stmt;
-              |SET FOREIGN_KEY_CHECKS = 1;
-            EOD
-            @client.query clear_statements
-          end
-
           protected
-
-          def try_connect(options, i)
-            @client = Mysql2::Client.new options
-          rescue Mysql2::Error => e
-            sleep 1 if i < 5
-            raise e.message if i == 5
-          end
 
           # Return mysql command line options to ignore specific tables
           def ignore_tables
