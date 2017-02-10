@@ -217,7 +217,7 @@ module Fulmar
         def check_version
           return if @config[:project][:fulmar_version].nil?
           unless  Gem::Dependency.new('', @config[:project][:fulmar_version]).match?('', Fulmar::VERSION)
-            fail "Project requires a newer version of fulmar: #{@config[:project][:fulmar_version]}"
+            fail "Project requires another version of fulmar: #{@config[:project][:fulmar_version]}"
           end
         end
       end

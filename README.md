@@ -15,6 +15,14 @@ compatible (i.e. database).
 It has (yet limited) support for MySQL / MariaDB and git. Remote databases can be accessed
 through an ssh tunnel.
 
+## Warning
+
+Version 1.10.0 of Fulmar removes some features that we (CORE4) rarely used and which
+caused the deployments to slow down the gems needed to be compiled against the
+installed libraries. If you need support to query databases (more than just dumps)
+or use dependencies, you will need to explicitly specify version `~> 1.9.0`.
+Fulmar 2.0 will support these features via plugins.
+
 ## Prerequisites
 
 Fulmar currently requires the [mysql2](https://github.com/brianmario/mysql2) gem which
