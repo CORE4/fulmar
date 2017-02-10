@@ -66,7 +66,7 @@ module Fulmar
             '-V',
             'Display the program version.',
             lambda do |_value|
-              puts "fulmar #{Fulmar::VERSION} (using rake, version #{RAKEVERSION})"
+              puts "fulmar #{Fulmar::VERSION} (using rake, version #{Rake::VERSION})"
               exit
             end
           ]
