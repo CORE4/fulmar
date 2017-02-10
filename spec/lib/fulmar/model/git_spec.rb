@@ -24,6 +24,7 @@ describe Fulmar::Domain::Model::Git do
   before :all do
     include FakeFS::SpecHelpers
     FileUtils.mkdir_p "#{TEST_GIT_PATH}/.git"
+    FileUtils.touch "#{TEST_GIT_PATH}/.git/config"
   end
 
   before :each do
@@ -118,28 +119,83 @@ describe Fulmar::Domain::Model::Git do
     end
   end
 
-  describe '#uncommited_changes?' do
+  describe '#unpushed_changes?' do
     it 'returns false when everything is up-to-date' do
-      expect(@git.uncommited_changes?).to be false
-      expect(@shell.last_commands.last).to include('git status')
-    end
-
-    it 'returns true when a file is changed' do
-      @shell.last_output = [' M Fulmarfile']
-      expect(@git.uncommited_changes?).to be true
-    end
-  end
-
-  describe '#uncommited_changes?' do
-    it 'returns false when everything is up-to-date' do
-      expect(@git.uncommited_changes?).to be false
+      @shell.last_output = []
+      expect(@git.unpushed_changes?).to be false
       expect(@shell.last_commands.last).to include('git status')
       expect(@shell.last_commands.last).to include(' -b ')
     end
 
-    it 'returns true when a file is changed' do
+    it 'returns true when there are changes to push' do
       @shell.last_output = ['## master...origin/master [behind 1]']
-      expect(@git.uncommited_changes?).to be true
+      expect(@git.unpushed_changes?).to be true
+    end
+  end
+
+  describe '#repo?' do
+    it 'returns false on a non-existing dir' do
+      repo_exists = Fulmar::Domain::Model::Git.repo?('/this/path/does hopefully/not exist')
+      expect(repo_exists).to be false
+    end
+
+    it 'returns false on a non-git-dir' do
+      repo_exists = Fulmar::Domain::Model::Git.repo?('/')
+      expect(repo_exists).to be false
+    end
+
+    it 'returns true on a valid git dir' do
+      repo_exists = Fulmar::Domain::Model::Git.repo?(@git.path)
+      expect(repo_exists).to be true
+    end
+
+    it 'handles an invalid path' do
+      repo_exists = Fulmar::Domain::Model::Git.repo?(nil)
+      expect(repo_exists).to be false
+    end
+  end
+
+  describe '#remotes' do
+    it 'calls git' do
+      @git.remotes
+      expect(@shell.last_commands.last).to eq('git remote')
+    end
+  end
+
+  describe '#has_remote?' do
+    it 'checks all remotes' do
+      @shell.last_output = %w(origin kayssun core4)
+      found = @git.has_remote?('git@github.com:CORE4/fulmar.git')
+      expect(@shell.last_commands.last).to eq('git remote get-url --all \'core4\'')
+      expect(found).to be false
+    end
+
+    it 'finds an existing remote' do
+      @shell.last_output = %w(origin kayssun core4)
+      # this is a trick but I guess it will do (search for kayssun, so it will find something)
+      # I can't modify the mock shell output according to the different commands
+      found = @git.has_remote?('kayssun')
+      expect(@shell.last_commands.last).to eq('git remote get-url --all \'origin\'')
+      expect(found).to be true
+    end
+  end
+
+  describe '#clean' do
+    it 'returns false when the are changes' do
+      @shell.last_output = [' M lib/fulmar/domain/model/git.rb', ' M spec/lib/fulmar/model/git_spec.rb']
+      expect(@git.clean?).to be false
+    end
+
+    it 'returns true when the repo has no open changes' do
+      @shell.last_output = []
+      expect(@git.clean?).to be true
+    end
+  end
+
+  describe '#fetch' do
+    it 'calls git' do
+      @git.fetch
+      expect(@shell.last_commands.last).to eq('git fetch')
     end
   end
 end
