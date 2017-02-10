@@ -2,7 +2,7 @@ target_test 'local path exists' do |config|
   if config[:local_path] && !File.exist?(config[:local_path])
     next {
       severity: :warning,
-      message: "#{config.environment}:#{config.target} has no valid local_path (#{config[:local_path]})"
+      message: "local_path does not exist (#{config[:local_path]})"
     }
   end
 end
