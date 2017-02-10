@@ -25,7 +25,7 @@ Fulmar 2.0 will support these features via plugins.
 
 ## Prerequisites
 
-Fulmar currently requires the [mysql2](https://github.com/brianmario/mysql2) gem which
+Fulmar 1.9 currently requires the [mysql2](https://github.com/brianmario/mysql2) gem which
 requires the mysql header files. So on a linux system, you want to install
 libmariadbclient-dev/libmysqlclient-dev or similar.
 
