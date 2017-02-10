@@ -21,7 +21,6 @@ module Fulmar
           environments: {},
           features: {},
           hosts: {},
-          dependencies: { all: {} }
         }
 
         include Singleton
