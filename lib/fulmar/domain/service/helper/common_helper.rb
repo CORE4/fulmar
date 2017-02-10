@@ -34,10 +34,6 @@ module Fulmar
             storage['file_sync'] ||= Fulmar::FileSync.get_model config
           end
 
-          def dependencies
-            storage['dependecies'] ||= Fulmar::Domain::Service::DependencyService.new config
-          end
-
           def render_templates
             (Fulmar::Domain::Service::TemplateRenderingService.new config).render
           end
