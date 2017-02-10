@@ -1,6 +1,7 @@
 require 'yaml'
 require 'pp'
 require 'fulmar/domain/model/project'
+require 'singleton'
 
 module Fulmar
   module Domain
@@ -22,7 +23,7 @@ module Fulmar
           dependencies: { all: {} }
         }
 
-        include Singleton
+        include ::Singleton
 
         attr_reader :environment, :target
         attr_accessor :load_user_config
