@@ -38,11 +38,11 @@ module Fulmar
             (Fulmar::Domain::Service::TemplateRenderingService.new config).render
           end
 
-          def upload(filename, target = configuration[:remote_path])
+          def upload(filename, target = config[:remote_path])
             Fulmar::Infrastructure::Service::CopyService.upload(local_shell, filename, config.ssh_user_and_host, target)
           end
 
-          def download(filename, target = configuration[:local_path])
+          def download(filename, target = config[:local_path])
             Fulmar::Infrastructure::Service::CopyService.download(local_shell, config.ssh_user_and_host, filename, target)
           end
 
