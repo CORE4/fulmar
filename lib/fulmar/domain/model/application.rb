@@ -5,7 +5,7 @@ module Fulmar
   module Domain
     module Service
       # The main application which extends rake
-      class ApplicationService < Rake::Application
+      class Application < Rake::Application
         def initialize
           super
           @rakefiles = %w(fulmarfile Fulmarfile fulmarfile.rb Fulmarfile.rb)

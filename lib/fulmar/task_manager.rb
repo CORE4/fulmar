@@ -4,7 +4,7 @@ require 'fulmar/service/bootstrap_service'
 require 'fulmar/service/helper_service'
 
 require 'fulmar/domain/service/initialization_service'
-require 'fulmar/domain/service/application_service'
+require 'fulmar/domain/model/application'
 require 'fulmar/domain/service/configuration_service'
 require 'fulmar/domain/service/template_rendering_service'
 require 'fulmar/domain/service/file_sync_service'

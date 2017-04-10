@@ -3,7 +3,7 @@ module Fulmar
     # Initializes the rake service and starts it
     class BootstrapService
       def fly
-        Fulmar::Domain::Service::ApplicationService.new.run
+        Fulmar::Domain::Service::Application.new.run
       end
     end
   end
