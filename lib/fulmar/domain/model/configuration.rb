@@ -10,6 +10,7 @@ module Fulmar
       # Loads and prepares the configuration from the yaml file
       class Configuration
         attr_accessor :environment, :target, :base_path
+        attr_reader :debug
 
         def initialize(data, base_path = '', debug = false)
           @data = data

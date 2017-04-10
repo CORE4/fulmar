@@ -22,9 +22,11 @@ module Fulmar
           end
 
           config.plugins.each_pair do |name, plugin_config|
+            puts "Loading plugin '#{name}'..." if config.debug
             require_plugin(name)
             @plugins[name] = classname(name, :configuration).new(plugin_config)
           end
+
         end
 
         def classname(plugin, name = nil)
