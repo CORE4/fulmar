@@ -12,12 +12,11 @@ the cache and the publish via a symlink. This avoids an inconsistent state on th
 machine and allows a quick revert to the old version, as long as other dependencies are
 compatible (i.e. database).
 
-It has (yet limited) support for MySQL / MariaDB and git. Remote databases can be accessed
-through an ssh tunnel.
+It has (yet limited) support for MySQL / MariaDB and git.
 
 ## Prerequisites
 
-Fulmar 2.0 runs with Ruby >= 2.0. Plugins like [mariadb](https://github.com/CORE4/fulmar-plugin-mariadb) might have
+Fulmar 2.0 runs with Ruby >= 2.2.2. Plugins like [mariadb](https://github.com/CORE4/fulmar-plugin-mariadb) might have
 additional requirements.
 
 ## Installation
