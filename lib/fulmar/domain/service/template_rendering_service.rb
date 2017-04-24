@@ -10,8 +10,8 @@ module Fulmar
         end
 
         def render
-          return unless @config[:config_templates]
-          @config[:config_templates].each do |template_file|
+          return unless @config[:templates]
+          @config[:templates].each do |template_file|
             template = template_path(template_file)
 
             renderer = ERB.new(File.read(template))

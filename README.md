@@ -357,7 +357,7 @@ the configuration:
 environments:
   staging:
     files:
-      config_templates:
+      templates:
         - .htaccess.erb
       application_environment: Production/Live
 ```
