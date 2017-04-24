@@ -20,8 +20,8 @@ Gem::Specification.new do |spec|
 
   spec.add_development_dependency 'bundler', '~> 1.7'
 
-  spec.add_runtime_dependency 'rake', '~>10'
+  spec.add_runtime_dependency 'rake', '~>11'
   spec.add_runtime_dependency 'fulmar-shell', '~>1', '>=1.7.0'
-  spec.add_runtime_dependency 'ruby_wings', '~>0.1', '>=0.1.1'
   spec.add_runtime_dependency 'colorize', '~>0'
+  spec.add_runtime_dependency 'activesupport', '~> 5.0'
 end

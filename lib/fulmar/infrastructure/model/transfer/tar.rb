@@ -1,9 +1,9 @@
 
-require 'fulmar/infrastructure/service/transfer/base'
+require 'fulmar/infrastructure/model/transfer/base'
 
 module Fulmar
   module Infrastructure
-    module Service
+    module Model
       module Transfer
         # Implements the rsync transfer
         class Tar < Base

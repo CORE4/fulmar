@@ -1,11 +1,11 @@
 
-require 'fulmar/infrastructure/service/transfer/base'
+require 'fulmar/infrastructure/model/transfer/base'
 require 'time'
-require 'ruby_wings'
+require 'active_support'
 
 module Fulmar
   module Infrastructure
-    module Service
+    module Model
       module Transfer
         # Provides syncing with versioning on the server
         #
@@ -47,7 +47,7 @@ module Fulmar
           # Ensures all needed services are set up
           def prepare
             super
-            @remote_shell = Fulmar::Infrastructure::Service::ShellService.new @config[:remote_path], @config.ssh_user_and_host
+            @remote_shell = Fulmar::Shell.new @config[:remote_path], @config.ssh_user_and_host
             @remote_shell.debug = @config[:debug]
           end
 

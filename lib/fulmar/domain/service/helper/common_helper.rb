@@ -1,4 +1,5 @@
 require 'fulmar/domain/service/configuration_service'
+require 'fulmar/shell'
 require 'colorize'
 
 module Fulmar
@@ -9,73 +10,58 @@ module Fulmar
         module CommonHelper
           attr_accessor :environment
 
-          # @return [Hash]
-          def full_configuration
-            configuration.configuration
-          end
-
           # @return [Fulmar::Domain::Service::ConfigurationService]
-          def configuration
-            (@_config_service ||= Fulmar::Domain::Service::ConfigurationService.instance)
+          def config
+            (@_config_service ||= Fulmar::Domain::Service::ConfigurationService.instance.configuration)
           end
 
           # @return [Fulmar::Domain::Model::Project]
           def project
-            full_configuration[:project]
-          end
-
-          def composer(command, arguments = Fulmar::Infrastructure::Service::ComposerService::DEFAULT_PARAMS)
-            storage['composer'] ||= Fulmar::Infrastructure::Service::ComposerService.new(local_shell)
-            storage['composer'].shell.quiet = !configuration[:debug]
-            storage['composer'].execute(command, arguments)
+            config.project
           end
 
           # @return [Fulmar::Shell]
           def local_shell
-            storage['local_shell'] ||= new_shell(configuration[:local_path])
+            storage['local_shell'] ||= new_shell(config[:local_path])
           end
 
           # @return [Fulmar::Shell]
           def remote_shell
-            storage['remote_shell'] ||= new_shell(configuration[:remote_path], configuration.ssh_user_and_host)
+            storage['remote_shell'] ||= new_shell(config[:remote_path], config.ssh_user_and_host)
           end
 
           def file_sync
-            storage['file_sync'] ||= Fulmar::FileSync.create_transfer configuration
+            storage['file_sync'] ||= Fulmar::FileSync.get_model config
           end
 
           def render_templates
-            (Fulmar::Domain::Service::ConfigRenderingService.new configuration).render
+            (Fulmar::Domain::Service::TemplateRenderingService.new config).render
           end
 
-          def git
-            storage['git'] ||= Fulmar::Infrastructure::Service::GitService.new configuration
+          def upload(filename, target = config[:remote_path])
+            Fulmar::Infrastructure::Service::CopyService.upload(local_shell, filename, config.ssh_user_and_host, target)
           end
 
-          def upload(filename)
-            Fulmar::Infrastructure::Service::CopyService.upload(local_shell, filename, configuration.ssh_user_and_host, configuration[:remote_path])
-          end
-
-          def download(filename)
-            Fulmar::Infrastructure::Service::CopyService.download(local_shell, configuration.ssh_user_and_host, filename, configuration[:local_path])
+          def download(filename, target = config[:local_path])
+            Fulmar::Infrastructure::Service::CopyService.download(local_shell, config.ssh_user_and_host, filename, target)
           end
 
           def new_shell(path, hostname = 'localhost')
-            shell = Fulmar::Infrastructure::Service::ShellService.new(path, hostname)
+            shell = Fulmar::Shell.new(path, hostname)
             shell.strict = true
-            shell.debug = configuration[:debug]
+            shell.debug = config[:debug]
             shell
           end
 
           def ssh_config
-            storage['ssh_config'] ||= Fulmar::Infrastructure::Service::SSHConfigService.new configuration
+            storage['ssh_config'] ||= Fulmar::Infrastructure::Service::SSHConfigService.new config
           end
 
           def storage
-            fail 'You need to set an environment and a target first' unless configuration.ready?
+            fail 'You need to set an environment and a target first' unless config.ready?
             @storage ||= {}
-            @storage[configuration.environment] ||= {}
-            @storage[configuration.environment][configuration.target] ||= {}
+            @storage[config.environment] ||= {}
+            @storage[config.environment][config.target] ||= {}
           end
 
           def info(text)

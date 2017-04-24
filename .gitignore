@@ -14,7 +14,7 @@
 mkmf.log
 /.idea/
 *.gem
-/Vagrantfile
 /.vagrant
+/Vagrantfile
 /vendor
 /test/deployment

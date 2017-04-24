@@ -1,11 +1,10 @@
-
 require 'fulmar/shell'
 
 module Fulmar
   module Infrastructure
-    module Service
+    module Model
       module Transfer
-        # Abstract class for alle transfers, provides common methods
+        # Abstract class for all transfers, provides common methods
         class Base
           DEFAULT_CONFIG = {
             debug: false,
@@ -38,7 +37,8 @@ module Fulmar
           end
 
           def prepare
-            @local_shell = Fulmar::Infrastructure::Service::ShellService.new @config[:local_path]
+            @local_shell = Fulmar::Shell.new @config[:local_path]
+            @local_shell.strict = true
             @local_shell.debug = @config[:debug]
             @prepared = true
           end

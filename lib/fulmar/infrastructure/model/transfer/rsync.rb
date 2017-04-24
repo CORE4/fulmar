@@ -1,9 +1,9 @@
 require 'pathname'
-require 'fulmar/infrastructure/service/transfer/base'
+require 'fulmar/infrastructure/model/transfer/base'
 
 module Fulmar
   module Infrastructure
-    module Service
+    module Model
       module Transfer
         # Implements the rsync transfer
         class Rsync < Base
@@ -26,6 +26,8 @@ module Fulmar
             if @config[:rsync][:exclude_file].blank? && File.exist?(@config[:local_path] + '/.rsyncignore')
               @config[:rsync][:exclude_file] = @config[:local_path] + '/.rsyncignore'
             end
+
+            fail 'Hostname not set. Cannot initialize sync.' if @config[:hostname].empty?
 
             super(@config)
           end

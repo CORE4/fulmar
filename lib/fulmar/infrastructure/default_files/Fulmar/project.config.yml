@@ -1,0 +1,26 @@
+project:
+  name: example_project
+  fulmar_version: '~> 2.0'
+
+environments:
+  local:
+    base:
+      local_path: .
+
+  staging:
+    files:
+      host: staging_server
+
+dependencies:
+  # Dependencies under "all" are merged into all environments
+  all:
+    application:
+      type: git
+
+
+hosts:
+  staging_server:
+    hostname: staging
+    ssh_config:
+      Hostname: staging
+      User: deployment

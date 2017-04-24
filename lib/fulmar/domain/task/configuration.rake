@@ -3,7 +3,7 @@ require 'pp'
 namespace :test do
   task :config do
     require 'fulmar/domain/service/config_test_service'
-    test_service = Fulmar::Domain::Service::ConfigTestService.new(configuration)
+    test_service = Fulmar::Domain::Service::ConfigTestService.new(config)
     results = test_service.run
 
     results.each do |report|
@@ -22,18 +22,20 @@ namespace :test do
 
   task :hosts do
     error_count = 0
-    configuration.each do |env, target, _data|
-      configuration.environment = env
-      configuration.target = target
+    config.each do |env, target, _data|
+      config.environment = env
+      config.target = target
 
-      next if configuration[:hostname].blank?
+      next if config[:hostname].blank?
       remote_shell.quiet = true
       remote_shell.strict = false
 
-      message = "Cannot open remote shell to host '#{configuration[:hostname]}' (#{env}:#{target})"
+      info "Testing #{env}:#{target}..."
+
+      message = "Cannot open remote shell to host '#{config[:hostname]}' (#{env}:#{target})"
 
       begin
-        remote_shell.run 'true' || error(message)
+        remote_shell.run('true') || error(message)
       rescue
         error(message)
       end

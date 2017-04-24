@@ -1,10 +1,11 @@
 require 'rake'
+require 'fulmar/domain/service/plugin_service'
 
 module Fulmar
   module Domain
     module Service
       # The main application which extends rake
-      class ApplicationService < Rake::Application
+      class Application < Rake::Application
         def initialize
           super
           @rakefiles = %w(fulmarfile Fulmarfile fulmarfile.rb Fulmarfile.rb)
@@ -31,6 +32,9 @@ module Fulmar
 
         def raw_load_rakefile
           glob("#{fulmar_task_dir}/initialization/*.rake") do |name|
+            Rake.load_rakefile name
+          end
+          Fulmar::Domain::Service::PluginService.instance.rake_files.each do |name|
             Rake.load_rakefile name
           end
           super
@@ -62,10 +66,20 @@ module Fulmar
             '-V',
             'Display the program version.',
             lambda do |_value|
-              puts "fulmar #{Fulmar::VERSION} (using rake, version #{RAKEVERSION})"
+              puts "fulmar #{Fulmar::VERSION} (using rake, version #{Rake::VERSION})"
               exit
             end
           ]
+          options << [
+              '--debug',
+              nil,
+              'Run in debug mode.',
+              lambda do |_value|
+                configuration = Fulmar::Domain::Service::ConfigurationService.instance
+                configuration.debug = true
+              end
+          ]
+          options
         end
       end
     end
