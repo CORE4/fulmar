@@ -286,64 +286,6 @@ before calling file_sync.publish to create the symlink (current => releases/2015
 As you probably figured out, your webserver uses the "current" symlink to get the base directory of your web
 application. Here, you would point it to /tmp/current/public or something like that.
 
-### Database access
-
-Within a task you can access and update databases (mariadb/mysql at the time of writing). Remote databases do not need
-to be accessible directly since fulmar uses an ssh tunnel to connect to the host first. So the database host is often
-just "localhost" (the default value). You can specify a different host if you database server is on another host, which
-is the case on most simple web spaces.
-
-The field "maria:database" is required for type "maria". The other fields are optional, though you probably need the
-fields "user" and "password". Below you can see the default values for the optional fields.
-
-```yaml
-environments:
-  staging:
-    database:
-      host: project-staging
-      type: maria
-      maria:
-        database: db_name
-        user: root
-        password:
-        port: 3306
-        host: localhost
-        encoding: utf-8
-```
-
-```ruby
-require 'pp'
-
-task :database => 'environment:staging:database' do
-  database.create 'test_db'
-  database.clear # deletes all tables within the database
-  remote_file_name = database.dump # dumps the database to the returned file
-  database.load_dump(remote_file_name) # loads an sql dump
-  local_filename = database.download_dump # downloads an sql dump to your machine
-end
-```
-
-You can query the database like this:
-
-```ruby
-results = database.query 'SELECT name, email FROM users'
-results.each do |row|
-  puts "#{row['name']} <#{row['email']}>"
-end
-```
-
-You can use all features of the mysql2 gem via `database.client`.
-
-If you configured more than one database on different environments, fulmar will
-create task to sync these databases via mysql_dump. This allows you to update a
-staging or preview database with the data from the production system.
-
-```
-fulmar database:update:preview:from_live
-```
-
-The task to copy data *to* the live database is hidden (it has no description).
-
 ### Configuration templates
 
 Sometimes you need different versions of files on your different environments. An exmaple might be the .htaccess file.
