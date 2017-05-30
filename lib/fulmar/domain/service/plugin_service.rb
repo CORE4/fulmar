@@ -51,6 +51,10 @@ module Fulmar
           end
         end
 
+        def test_files
+          @plugins.values.select{|plugin| plugin.respond_to?(:test_files) }.collect(&:test_files).flatten
+        end
+
         def rake_files
           @plugins.values.collect(&:rake_files).flatten
         end

@@ -1,4 +1,5 @@
 require 'erb'
+require 'fulmar/domain/service/plugin_service'
 
 module Fulmar
   module Domain
@@ -34,8 +35,6 @@ module Fulmar
 
         # Runs all methods beginning with test_ and returns the report
         def run
-          test_dirs = ["#{File.dirname(__FILE__)}/config_tests/"]
-          test_files = test_dirs.collect{ |dir| Dir.glob("#{dir}/*.rb") }.flatten
           test_files.each do |file|
             eval File.read(file)
           end
@@ -54,6 +53,13 @@ module Fulmar
 
         def ssh_hostnames
           @ssh_hostnames ||= `grep -E '^Host [^ *]+$' ~/.ssh/config | sort | uniq | cut -d ' ' -f 2`.split("\n")
+        end
+
+        def test_files
+          dir = "#{File.dirname(__FILE__)}/config_tests/"
+          files = Dir.glob("#{dir}/*.rb")
+          plugin_service = Fulmar::Domain::Service::PluginService.instance
+          files + plugin_service.test_files
         end
       end
     end
