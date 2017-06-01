@@ -94,22 +94,9 @@ module Fulmar
           @data[:hosts]
         end
 
-        # Check for a feature
-        # @todo Do we still need this? Maybe replace this with a "plugin?" method?
-        def feature?(feature)
-          return @data[:features].include? feature.to_s unless @data[:features].nil?
-          case feature
-          when :maria
-            key? :maria
-          else
-            false
-          end
-        end
-
         # Checks if a configuration key exists in one of the targets
         def key?(key)
-          each { |_env, _target, data| return true unless data[key].nil? }
-          false
+          ready? ? @data[:environments][@environment][@target].key?(key) : false
         end
 
         # Merge another configuration into the currently active one
