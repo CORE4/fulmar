@@ -43,3 +43,17 @@ namespace :test do
     info "Feelin' fine." if error_count == 0
   end
 end
+
+if File.exist?("#{Fulmar::Infrastructure::Service::SSHConfigService::DEFAULT_CONFIG_FILE}.bak")
+  namespace :revert do
+    task :ssh_config do
+      config = Fulmar::Infrastructure::Service::SSHConfigService::DEFAULT_CONFIG_FILE
+      backup = "#{config}.bak"
+      temp = "#{config}.tmp"
+      FileUtils.cp config, temp
+      FileUtils.cp backup, config
+      FileUtils.mv temp, backup
+      Fulmar::Infrastructure::Service::SSHConfigService.new(config).show_diff
+    end
+  end
+end

@@ -35,6 +35,7 @@ module Fulmar
           puts '--------------- DIFF ---------------'
           puts diff
           puts '--------------- /DIFF --------------'
+          puts 'You can revert these changes by running "fulmar revert:ssh_config"'
         end
 
         def add_hosts
