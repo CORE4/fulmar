@@ -22,10 +22,16 @@ end
 def new_service(config_file = DEFAULT_CONFIG_FILE, known_hosts_file = DEFAULT_KNOWN_HOSTS_FILE)
   FileUtils.cp config_file, CONFIG_TEMP_FILE
   FileUtils.cp known_hosts_file, KNOWN_HOSTS_TEMP_FILE
-  Fulmar::Infrastructure::Service::SSHConfigService.new(MockConfig.new, CONFIG_TEMP_FILE, KNOWN_HOSTS_TEMP_FILE)
+  service = Fulmar::Infrastructure::Service::SSHConfigService.new(MockConfig.new, CONFIG_TEMP_FILE, KNOWN_HOSTS_TEMP_FILE)
+  service.backup_file
+  service
 end
 
 describe Fulmar::Infrastructure::Service::SSHConfigService do
+  after :each do
+    FileUtils.rm "#{CONFIG_TEMP_FILE}.bak"
+  end
+
   describe '#edit_host' do
     it 'should create a backup file' do
       service = new_service
@@ -90,6 +96,7 @@ describe Fulmar::Infrastructure::Service::SSHConfigService do
     it 'should not change the file on a second run' do
       service = new_service
       service.edit_host('testhost', {'Hostname' => '123.example.com'})
+      service.backup_file
       service.edit_host('testhost', {'Hostname' => '123.example.com'})
       before = File.read("#{CONFIG_TEMP_FILE}.bak")
       after = File.read(CONFIG_TEMP_FILE)

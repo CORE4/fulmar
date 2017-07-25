@@ -24,4 +24,5 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency 'fulmar-shell', '~>1', '>=1.7.0'
   spec.add_runtime_dependency 'colorize', '~>0'
   spec.add_runtime_dependency 'activesupport', '~> 5.0'
+  spec.add_runtime_dependency 'diffy', '~> 3.2'
 end
