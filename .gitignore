@@ -14,6 +14,8 @@
 mkmf.log
 /.idea/
 *.gem
+*.bak
+spec/fixtures/ssh_config/temp_*
 /.vagrant
 /Vagrantfile
 /vendor

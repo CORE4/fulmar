@@ -1,0 +1,16 @@
+Host testhost examplehost foo-host
+    SendEnv FOO
+
+Host testhost
+    Hostname testhost.example.om
+    Port 1234
+    User nobody
+
+# trailing comment 4711
+
+# host comment 0815
+Host examplehost
+    Hostname example.com
+    IdentityFile /tmp/private.key
+    # ProxyCommand whoop whoop whoop
+    Port 4321
