@@ -167,7 +167,7 @@ module Fulmar
         end
 
         def block_after(data, hostname)
-          data.shift until data.empty? || /^Host\s#{hostname}$/.match(data.first.strip)
+          data = data.drop_while { |i| !/^Host\s#{hostname}$/.match(i.strip) }
           return [] if data.empty?
           data.shift
 
