@@ -11,12 +11,13 @@ module Fulmar
         DEFAULT_CONFIG_FILE = "#{ENV['HOME']}/.ssh/config"
         DEFAULT_KNOWN_HOSTS_FILE = "#{ENV['HOME']}/.ssh/known_hosts"
 
-        attr_accessor :config_file, :known_host_file
+        attr_accessor :config_file, :known_host_file, :quiet
 
         def initialize(config, config_file = DEFAULT_CONFIG_FILE, known_hosts_file = DEFAULT_KNOWN_HOSTS_FILE)
           @config = config
           @config_file = config_file
           @known_hosts_file = known_hosts_file
+          @quiet = false
         end
 
         def changed?
@@ -30,7 +31,7 @@ module Fulmar
         end
 
         def show_diff
-          return unless changed?
+          return if @quiet || !changed?
           puts 'You ssh host configuration changed: '
           puts '--------------- DIFF ---------------'
           puts diff
