@@ -8,11 +8,9 @@ access the current deployment configuration and simplifies especially file trans
 remote shell execution.
 
 A deployment can create a new version folder on the remote system in which you can warm up
-the cache and the publish via a symlink. This avoids an inconsistent state on the production
+the cache and publish via a symlink. This avoids an inconsistent state on the production
 machine and allows a quick revert to the old version, as long as other dependencies are
 compatible (i.e. database).
-
-It has (yet limited) support for MySQL / MariaDB and git.
 
 ## Warning
 
