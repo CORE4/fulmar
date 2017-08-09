@@ -27,7 +27,7 @@ module Fulmar
               @config[:rsync][:exclude_file] = @config[:local_path] + '/.rsyncignore'
             end
 
-            fail 'Hostname not set. Cannot initialize sync.' if @config[:hostname].empty?
+            fail 'Hostname not set. Cannot initialize sync.' if @config[:hostname].nil? || @config[:hostname].empty?
 
             super(@config)
           end
