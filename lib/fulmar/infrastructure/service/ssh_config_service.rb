@@ -116,14 +116,14 @@ module Fulmar
             '', # Add some space between this and the second last entry
             "Host #{hostname}"
           ]
-          ssh_config.keys.each { |key| entry << "    #{key} #{escape_value(ssh_config[key])}" }
+          ssh_config.keys.each { |key| entry << "    #{key} #{escape_value(key, ssh_config[key])}" }
           entry << ''
           entry
         end
 
-        def escape_value(value)
+        def escape_value(key, value)
           value = value.to_s
-          value = "\"#{value.gsub('"', '\\"')}\"" if value.include?(' ')
+          value = "\"#{value.gsub('"', '\\"')}\"" if value.include?(' ') && key.to_s != 'ProxyCommand'
           value
         end
 
