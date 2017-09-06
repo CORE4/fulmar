@@ -8,8 +8,8 @@ module Fulmar
     module Service
       # Adds entries to the ssh config and checks for existing ones
       class SSHConfigService
-        DEFAULT_CONFIG_FILE = "#{ENV['HOME']}/.ssh/config"
-        DEFAULT_KNOWN_HOSTS_FILE = "#{ENV['HOME']}/.ssh/known_hosts"
+        DEFAULT_CONFIG_FILE = "#{ENV['HOME']}/.ssh/config".freeze
+        DEFAULT_KNOWN_HOSTS_FILE = "#{ENV['HOME']}/.ssh/known_hosts".freeze
 
         attr_accessor :config_file, :known_host_file, :quiet
 
@@ -55,7 +55,7 @@ module Fulmar
           input_file = File.open(@known_hosts_file, 'r')
           output_file = File.open(@known_hosts_file + '.temp', 'w')
           while (line = input_file.gets)
-            output_file.puts(line) unless /^\[?#{hostname.gsub('.', '\\.')}(?:\]:\d+)?[ ,]/.match(line)
+            output_file.puts(line) unless /^\[?#{hostname.gsub('.', '\\.')}(?:\]:\d+)?[ ,]/ =~ line
           end
           input_file.close
           output_file.close
@@ -77,7 +77,7 @@ module Fulmar
         def host_exists?(hostname)
           config_file = File.open(@config_file, 'r')
           while (line = config_file.gets)
-            if /\s*Host #{hostname.gsub('.', '\\.')}\s*$/.match(line)
+            if /\s*Host #{hostname.gsub('.', '\\.')}\s*$/ =~ line
               config_file.close
               return true
             end
@@ -91,7 +91,7 @@ module Fulmar
           puts "Adding host #{hostname}..." if @config[:debug]
           config_file = File.open(@config_file, 'a')
 
-          unless ssh_config[:IdentityFile].blank? or ssh_config[:IdentityFile][0, 1] == '/'
+          unless ssh_config[:IdentityFile].blank? || ssh_config[:IdentityFile][0, 1] == '/'
             ssh_config[:IdentityFile] = @config.base_path + '/' + ssh_config[:IdentityFile]
           end
 
@@ -108,7 +108,7 @@ module Fulmar
         protected
 
         def host_entry(hostname, ssh_config = {})
-          unless ssh_config[:IdentityFile].blank? or ssh_config[:IdentityFile][0, 1] == '/'
+          unless ssh_config[:IdentityFile].blank? || ssh_config[:IdentityFile][0, 1] == '/'
             ssh_config[:IdentityFile] = @config.base_path + '/' + ssh_config[:IdentityFile]
           end
 
@@ -142,9 +142,7 @@ module Fulmar
         end
 
         def remove_trailing_newlines(data)
-          while !data.empty? && data.last.strip.empty?
-            data.pop
-          end
+          data.pop while !data.empty? && data.last.strip.empty?
           data
         end
 
@@ -155,9 +153,7 @@ module Fulmar
             if line.strip[0] == '#'
               cache << line
             else
-              if /^Host\s#{hostname}$/.match line.strip
-                return remove_trailing_newlines(before)
-              end
+              return remove_trailing_newlines(before) if /^Host\s#{hostname}$/ =~ line.strip
               before += cache
               cache = []
               before << line
@@ -178,9 +174,7 @@ module Fulmar
             if line.strip[0] == '#'
               cache << line
             else
-              if /^Host\s/.match line.strip
-                write = true
-              end
+              write = true if /^Host\s/ =~ line.strip
               if write
                 after += cache
                 after << line

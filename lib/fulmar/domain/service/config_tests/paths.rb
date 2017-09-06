@@ -8,8 +8,8 @@ target_test 'local path exists' do |config|
 end
 
 target_test 'remote_path is set' do |config|
-  types = %w(rsync rsync_with_version)
+  types = %w[rsync rsync_with_version]
   if types.include?(config[:type]) && config[:remote_path].blank?
-    next {severity: :error, message: 'config is missing a remote path for rsync'}
+    next { severity: :error, message: 'config is missing a remote path for rsync' }
   end
 end

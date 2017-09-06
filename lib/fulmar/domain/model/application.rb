@@ -8,7 +8,7 @@ module Fulmar
       class Application < Rake::Application
         def initialize
           super
-          @rakefiles = %w(fulmarfile Fulmarfile fulmarfile.rb Fulmarfile.rb)
+          @rakefiles = %w[fulmarfile Fulmarfile fulmarfile.rb Fulmarfile.rb]
         end
 
         def name
@@ -71,13 +71,13 @@ module Fulmar
             end
           ]
           options << [
-              '--debug',
-              nil,
-              'Run in debug mode.',
-              lambda do |_value|
-                configuration = Fulmar::Domain::Service::ConfigurationService.instance
-                configuration.debug = true
-              end
+            '--debug',
+            nil,
+            'Run in debug mode.',
+            lambda do |_value|
+              configuration = Fulmar::Domain::Service::ConfigurationService.instance
+              configuration.debug = true
+            end
           ]
           options
         end

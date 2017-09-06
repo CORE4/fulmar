@@ -1,5 +1,4 @@
-relevant_options = [:rsync, :local_path, :remote_path, :host, :hostname, :shared, :templates,
-  :ssh_config, :type]
+relevant_options = %i[rsync local_path remote_path host hostname shared templates ssh_config type]
 relevant_options.each do |option|
   target_test "empty configuration settings #{option}" do |config|
     if config.key?(option) && config[option].nil?

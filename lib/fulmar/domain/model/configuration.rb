@@ -29,8 +29,8 @@ module Fulmar
           if ready?
             @data[:environments][@environment][@target][id] = value
           else
-            fail 'Environment or target not set. Please set both variables via configuration.environment = \'xxx\' / '\
-                 'configuration.target = \'yyy\''
+            raise 'Environment or target not set. Please set both variables via configuration.environment = \'xxx\' / '\
+                  'configuration.target = \'yyy\''
           end
         end
 
@@ -50,8 +50,8 @@ module Fulmar
         # Checks if environment and target are set
         def ready?
           return false if @environment.nil? || @target.nil?
-          fail 'Environment is invalid' if @data[:environments][@environment].nil?
-          fail 'Target is invalid' if @data[:environments][@environment][@target].nil?
+          raise 'Environment is invalid' if @data[:environments][@environment].nil?
+          raise 'Target is invalid' if @data[:environments][@environment][@target].nil?
           true
         end
 

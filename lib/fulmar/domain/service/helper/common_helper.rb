@@ -58,7 +58,7 @@ module Fulmar
           end
 
           def storage
-            fail 'You need to set an environment and a target first' unless config.ready?
+            raise 'You need to set an environment and a target first' unless config.ready?
             @storage ||= {}
             @storage[config.environment] ||= {}
             @storage[config.environment][config.target] ||= {}

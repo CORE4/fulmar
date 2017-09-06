@@ -17,8 +17,8 @@ module Fulmar
           config = ConfigurationService.instance.configuration
 
           if config.plugins.class == Array
-            fail 'Plugin list must not be an array. Have a look at https://github.com/CORE4/fulmar#plugins for ' +
-                   'more information'
+            raise 'Plugin list must not be an array. Have a look at https://github.com/CORE4/fulmar#plugins for ' +
+                  'more information'
           end
 
           config.plugins.each_pair do |name, plugin_config|

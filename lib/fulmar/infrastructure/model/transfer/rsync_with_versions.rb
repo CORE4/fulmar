@@ -12,8 +12,8 @@ module Fulmar
         # Every deployment results in a new directory in the releases directory with the deployment time as
         # the folder name. A symlink 'current' points to this new directory after publish() is called.
         class RsyncWithVersions < Base
-          TIME_FOLDER = '%Y-%m-%d_%H%M%S'
-          TIME_READABLE = '%Y-%m-%d %H:%M:%S'
+          TIME_FOLDER = '%Y-%m-%d_%H%M%S'.freeze
+          TIME_READABLE = '%Y-%m-%d %H:%M:%S'.freeze
 
           DEFAULT_CONFIG = {
             temp_dir: 'temp',
@@ -29,7 +29,7 @@ module Fulmar
             symlinks: {},
             limit_releases: 5,
             shared: []
-          }
+          }.freeze
 
           # @param [Fulmar::Domain::Service::ConfigurationService] config
           def initialize(config)
@@ -56,10 +56,10 @@ module Fulmar
           def transfer
             prepare unless @prepared
 
-            fail 'Deployment failed when trying to prepare remote directories for sync.' unless create_paths
-            fail 'Deployment failed. Cannot sync files.' unless @local_shell.run(rsync_command)
-            fail 'Deployment failed when trying to move file from temporary upload dir.' unless copy_temp_to_release
-            fail 'Deployment failed when creating symlinks for shared folders' unless add_shared
+            raise 'Deployment failed when trying to prepare remote directories for sync.' unless create_paths
+            raise 'Deployment failed. Cannot sync files.' unless @local_shell.run(rsync_command)
+            raise 'Deployment failed when trying to move file from temporary upload dir.' unless copy_temp_to_release
+            raise 'Deployment failed when creating symlinks for shared folders' unless add_shared
           end
 
           # Publishes the current release (i.e. sets the 'current' symlink)
@@ -124,7 +124,7 @@ module Fulmar
             return false if release.nil?
 
             # Convenience: Allow more readable version string from output
-            if release.match(/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}/)
+            if release =~ /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}/
               release = Time.strptime(item, TIME_READABLE).strftime(TIME_FOLDER)
             end
 
@@ -136,15 +136,15 @@ module Fulmar
           def last_release
             list = list_releases
             current = current_release
-            current_index = list.index(current)
-            (current_index.nil? || current_index == 0) ? nil : list[current_index - 1]
+            current_index = list.index(current).to_i
+            current_index.zero? ? nil : list[current_index - 1]
           end
 
           # Creates all necessary paths on the remote machine
           # @return [true, false] success
           def create_paths
             paths = [@config[:releases_dir], @config[:temp_dir], @config[:shared_dir]]
-            @remote_shell.run paths.collect { |path| "mkdir -p '#{@config[:remote_path]}/#{path}'" }
+            @remote_shell.run(paths.collect { |path| "mkdir -p '#{@config[:remote_path]}/#{path}'" })
           end
 
           def rsync_excludes
@@ -156,7 +156,7 @@ module Fulmar
           # Builds the rsync command
           # @return [String] the command
           def rsync_command
-            options = %w(-rl --delete-excluded)
+            options = %w[-rl --delete-excluded]
             options << rsync_excludes if rsync_excludes
             options << "--exclude-from='#{@config[:rsync][:exclude_file]}'" if @config[:rsync][:exclude_file]
             options << "--chown='#{@config[:rsync][:chown]}'" if @config[:rsync][:chown]

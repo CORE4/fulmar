@@ -13,7 +13,7 @@ module Fulmar
             remote_path: nil,
             local_path: '.',
             type: :rsync_with_versions
-          }
+          }.freeze
 
           attr_accessor :config
 
@@ -31,9 +31,9 @@ module Fulmar
 
           # Test the supplied config for required parameters
           def test_config
-            required = [:host, :remote_path, :local_path]
-            required.each { |key| fail "Configuration is missing required setting '#{key}'." if @config.blank? }
-            fail ':remote_path must be absolute' if @config[:remote_path][0, 1] != '/'
+            required = %i[host remote_path local_path]
+            required.each { |key| raise "Configuration is missing required setting '#{key}'." if @config.blank? }
+            raise ':remote_path must be absolute' if @config[:remote_path][0, 1] != '/'
           end
 
           def prepare

@@ -14,11 +14,11 @@ module Fulmar
         end
 
         def target_test(name, &block)
-          @tests[name] = Proc.new do
+          @tests[name] = proc do
             results = []
             @config.each do |env, target, _data|
               @config.set env, target
-              result = block.call(@config)
+              result = yield(@config)
               if result
                 result[:message] = "in [#{env}:#{target}]: #{result[:message]}"
                 results << result

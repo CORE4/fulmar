@@ -22,8 +22,8 @@ module Fulmar
 
         def template_path(template_file)
           template = "#{@config[:local_path]}/#{template_file}"
-          fail "Template filenames must end in .erb - '#{template}' does not" unless template[-4, 4] == '.erb'
-          fail "Cannot render missing config file '#{template}'" unless File.exist? template
+          raise "Template filenames must end in .erb - '#{template}' does not" unless template[-4, 4] == '.erb'
+          raise "Cannot render missing config file '#{template}'" unless File.exist? template
           template
         end
       end
