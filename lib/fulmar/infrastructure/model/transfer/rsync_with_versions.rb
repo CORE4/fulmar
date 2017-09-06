@@ -28,6 +28,7 @@ module Fulmar
             },
             symlinks: {},
             limit_releases: 5,
+            version_name: Time.now.strftime('%Y-%m-%d_%H%M%S'),
             shared: []
           }.freeze
 
@@ -40,8 +41,6 @@ module Fulmar
             if @config[:rsync][:exclude_file].blank? && File.exist?(@config[:local_path] + '/.rsyncignore')
               @config[:rsync][:exclude_file] = @config[:local_path] + '/.rsyncignore'
             end
-
-            @release_time = Time.now
           end
 
           # Ensures all needed services are set up
@@ -49,6 +48,10 @@ module Fulmar
             super
             @remote_shell = Fulmar::Shell.new @config[:remote_path], @config.ssh_user_and_host
             @remote_shell.debug = @config[:debug]
+
+            if /^[A-Z0-9\-_]+$/ =~ @config[:version_name]
+              @config[:version_name] = ENV[@config[:version_name]].split('/').last
+            end
           end
 
           # Copy the files via rsync to the release_path on the remote machine
@@ -78,7 +81,7 @@ module Fulmar
           # Gets the currently generated release directory
           # @return [String] the release directory
           def release_dir
-            @config[:releases_dir] + '/' + @release_time.strftime('%Y-%m-%d_%H%M%S')
+            @config[:releases_dir] + '/' + @config[:version_name]
           end
 
           # Lists the existing releases on the remote machine
@@ -86,13 +89,17 @@ module Fulmar
           # @return [Array] list of dirs or dates/times
           def list_releases(plain = true)
             prepare unless @prepared
-            @remote_shell.run "ls -1 '#{@config[:releases_dir]}'"
-            list = @remote_shell.last_output.select { |dir| dir.match(/^\d{4}-\d{2}-\d{2}_\d{6}/) }
+            @remote_shell.run "ls -1tr '#{@config[:releases_dir]}'"
+            list = @remote_shell.last_output
             return list if plain
 
             current = current_release
             list.collect do |item|
-              Time.strptime(item, TIME_FOLDER).strftime(TIME_READABLE) + (item == current ? ' *' : '')
+              if item =~ /^\d{4}-\d{2}-\d{2}_\d{6}/
+                Time.strptime(item, TIME_FOLDER).strftime(TIME_READABLE) + (item == current ? ' *' : '')
+              else
+                item + (item == current ? ' *' : '')
+              end
             end
           end
 
@@ -101,7 +108,7 @@ module Fulmar
           def cleanup
             limit = @config[:limit_releases].to_i
             return true unless limit > 0
-            releases = list_releases.sort
+            releases = list_releases
             return true if releases.length <= limit
             obsolete_dirs = releases[0, releases.length - limit].collect { |dir| "\"#{@config[:releases_dir]}/#{dir}\"" }
             @remote_shell.run "rm -fr #{obsolete_dirs.join(' ')}"
