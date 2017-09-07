@@ -292,6 +292,34 @@ before calling file_sync.publish to create the symlink (current => releases/2015
 As you probably figured out, your webserver uses the "current" symlink to get the base directory of your web
 application. Here, you would point it to /tmp/current/public or something like that.
 
+### Custom versioning
+
+When deploying via Gitlab CI, the current branch or tag is available in the environment variable `CI_COMMIT_REF_NAME`. You very likely want to use tags here and set something like
+
+```yaml
+  only:
+    - /^live_\d+\.\d+.\d+/
+```
+
+in your .gitlab-ci.yaml. This way, whenever you tag something with e.g. "live_1.2.0" and push it, a deployment will trigger. Fulmar can be configured to read the content of an environment variable and use that as
+the version name. So you can add `version_name` to your config and set it to the gitlab env variable:
+
+```yaml
+environments:
+  all:
+    local_path: .
+  my_server:
+    files:
+      hostname: my-ssh-server
+      remote_path: /tmp
+      type: rsync_with_versions
+      shared:
+        - data
+      version_name: CI_COMMIT_REF_NAME
+```
+
+This way, fulmar will call the release "live_1.2.0" instead of the current timestamp.
+
 ### Configuration templates
 
 Sometimes you need different versions of files on your different environments. An exmaple might be the .htaccess file.
