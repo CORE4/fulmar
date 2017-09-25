@@ -30,7 +30,7 @@ module Fulmar
 
           parent_dir_path = File.expand_path('..', path)
 
-          parent_dir_path == '/' ? paths : get_parent_directory_paths(parent_dir_path, paths)
+          parent_dir_path == '/' || parent_dir_path.include?(':/') ? paths : get_parent_directory_paths(parent_dir_path, paths)
         end
       end
     end
