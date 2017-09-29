@@ -159,7 +159,7 @@ module Fulmar
         # @base_path or the local_path from the environment
         def absolutize_paths
           each do |_env, _target, data|
-            data.keys.each do |key|
+            data.each_key do |key|
               data[:local_path] = absolutize(data[:local_path]) if data[:local_path]
               if local_path?(key) && data[key].class == String
                 data[key] = absolutize(data[key], data[:local_path] || @base_path)
