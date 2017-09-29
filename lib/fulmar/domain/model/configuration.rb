@@ -1,4 +1,5 @@
 require 'yaml'
+require 'pathname'
 require 'fulmar/domain/model/project'
 require 'active_support/core_ext/object/blank'
 require 'active_support/core_ext/hash/deep_merge'
@@ -146,7 +147,7 @@ module Fulmar
         # Prepends the base to the path if it is not already absolute
         def absolutize(path, base = @base_path)
           return base if path == '.'
-          path[0, 1] == '/' ? path : base + '/' + path
+          (Pathname.new path).absolute? ? path : base + '/' + path
         end
 
         # Checks if a key is a local path
