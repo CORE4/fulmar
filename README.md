@@ -15,7 +15,7 @@ compatible (i.e. database).
 ## Warning
 
 Version 1.10.0 of Fulmar removes some features that we (CORE4) rarely used and which
-caused the deployments to slow down the gems needed to be compiled against the
+caused the deployments to slow down. The gems needed to be compiled against the
 installed libraries. If you need support to query databases (more than just dumps)
 or use dependencies, you will need to explicitly specify version `~> 1.9.0`.
 Fulmar 2.0 will support these features via plugins.
@@ -226,14 +226,14 @@ environments:
 
 These are:
 - **delete**: true/false, Should additional files be deleted from the remote host? The default is "true", as you don't
-want to have legacy files opening security holes on your server.
+  want to have legacy files opening security holes on your server.
 - **exclude**: regexp, which works with "--exclude" from rsync. Usually, you should prefer the next option
 - **exclude_file**: Filename of the exclude file relative to "local_path". If you have a file called .rsyncignore in
-"local_path" this will be used automatically.
+  "local_path" this will be used automatically.
 - **chown**: chown files on remote machine to this user
 - **chmod**: change mode of files on remote machines
 - **direction**: up/down, Should the files be uploaded or downloaded? The latter is useful if you want to download
-images created by a cms on the remote machine.
+  images created by a cms on the remote machine.
 
 ### rsync with versions
 
