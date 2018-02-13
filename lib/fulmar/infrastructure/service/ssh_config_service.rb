@@ -55,7 +55,7 @@ module Fulmar
           input_file = File.open(@known_hosts_file, 'r')
           output_file = File.open(@known_hosts_file + '.temp', 'w')
           while (line = input_file.gets)
-            output_file.puts(line) unless /^\[?#{hostname.gsub('.', '\\.')}(?:\]:\d+)?[ ,]/ =~ line
+            output_file.puts(line) unless /^\[?#{Regexp.escape(hostname)}(?:\]:\d+)?[ ,]/ =~ line
           end
           input_file.close
           output_file.close
@@ -77,7 +77,7 @@ module Fulmar
         def host_exists?(hostname)
           config_file = File.open(@config_file, 'r')
           while (line = config_file.gets)
-            if /\s*Host #{hostname.gsub('.', '\\.')}\s*$/ =~ line
+            if /\s*Host #{Regexp.escape(hostname)}\s*$/ =~ line
               config_file.close
               return true
             end
@@ -153,7 +153,7 @@ module Fulmar
             if line.strip[0] == '#'
               cache << line
             else
-              return remove_trailing_newlines(before) if /^Host\s#{hostname}$/ =~ line.strip
+              return remove_trailing_newlines(before) if /^Host\s#{Regexp.escape(hostname)}$/ =~ line.strip
               before += cache
               cache = []
               before << line
@@ -163,7 +163,7 @@ module Fulmar
         end
 
         def block_after(data, hostname)
-          data = data.drop_while { |i| !/^Host\s#{hostname}$/.match(i.strip) }
+          data = data.drop_while { |i| !/^Host\s#{Regexp.escape(hostname)}$/.match(i.strip) }
           return [] if data.empty?
           data.shift
 
