@@ -22,16 +22,20 @@ module Fulmar
 
           # @return [Fulmar::Shell]
           def local_shell
-            storage['local_shell'] ||= new_shell(config[:local_path])
+            cache_id = "local_shell-#{config[:local_path]}"
+            storage[cache_id] ||= new_shell(config[:local_path])
           end
 
           # @return [Fulmar::Shell]
           def remote_shell
-            storage['remote_shell'] ||= new_shell(config[:remote_path], config.ssh_user_and_host)
+            cache_id = "remote_shell-#{config[:remote_path]}-#{config.ssh_user_and_host}"
+            storage[cache_id] ||= new_shell(config[:remote_path], config.ssh_user_and_host)
           end
 
           def file_sync
-            storage['file_sync'] ||= Fulmar::FileSync.get_model config
+            file_sync_model = Fulmar::FileSync.get_class config
+            cache_id = "file_sync-#{file_sync_model.config_hash(config)}"
+            storage[cache_id] ||= file_sync_model.new(config.clone)
           end
 
           def render_templates

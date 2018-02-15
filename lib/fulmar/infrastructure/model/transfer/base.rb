@@ -1,4 +1,5 @@
 require 'fulmar/shell'
+require 'digest'
 
 module Fulmar
   module Infrastructure
@@ -46,6 +47,13 @@ module Fulmar
           def publish
             # Placeholder for consistent api, currently only implemented in rsync_with_versions
             true
+          end
+
+          # Generate a hash over all relevant config values to allow more precise caching
+          def self.config_hash(config)
+            id_string = self.class.to_s
+            id_string << DEFAULT_CONFIG.keys.map { |key| config[key].to_s }.join('-')
+            Digest::SHA256.hexdigest id_string
           end
         end
       end

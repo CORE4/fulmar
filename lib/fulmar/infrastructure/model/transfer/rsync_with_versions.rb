@@ -28,7 +28,7 @@ module Fulmar
             },
             symlinks: {},
             limit_releases: 5,
-            version_name: Time.now.strftime('%Y-%m-%d_%H%M%S'),
+            version_name: 'time',
             shared: []
           }.freeze
 
@@ -49,7 +49,9 @@ module Fulmar
             @remote_shell = Fulmar::Shell.new @config[:remote_path], @config.ssh_user_and_host
             @remote_shell.debug = @config[:debug]
 
-            if /^[A-Z][A-Z0-9\-_]+$/ =~ @config[:version_name]
+            if @config[:version_name] == 'time'
+              @config[:version_name] = Time.now.strftime(TIME_FOLDER)
+            elsif /^[A-Z][A-Z0-9\-_]+$/ =~ @config[:version_name]
               @config[:version_name] = ENV[@config[:version_name]].split('/').last
             end
           end
