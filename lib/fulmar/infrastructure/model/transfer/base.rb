@@ -53,6 +53,7 @@ module Fulmar
           def self.config_hash(config)
             id_string = self.class.to_s
             id_string << DEFAULT_CONFIG.keys.map { |key| config[key].to_s }.join('-')
+            id_string << config[:hostname]
             Digest::SHA256.hexdigest id_string
           end
         end
