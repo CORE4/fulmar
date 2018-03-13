@@ -179,7 +179,8 @@ module Fulmar
           # @return [true, false] success
           def copy_temp_to_release
             @remote_shell.run [
-              "cp -pR #{@config[:temp_dir]} #{release_dir}",
+              "mkdir -p #{release_dir}",
+              "rsync -a --delete #{@config[:temp_dir]}/ #{release_dir}/",
               "touch #{release_dir}"
             ]
           end
